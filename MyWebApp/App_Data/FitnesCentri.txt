@@ -1,0 +1,2 @@
+﻿Fitnes Elastico;Zeleznicka 23;2002;Marko;4000;15000;500;2000;1000
+Compiona;Safarikova 12;1998;null;3000;14000;600;1500;900

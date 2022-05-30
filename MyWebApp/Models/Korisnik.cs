@@ -7,6 +7,22 @@ namespace MyWebApp.Models
 {
     public class Korisnik
     {
+        public Korisnik(string korisnickoIme, string lozinka, string ime, string prezime, string pol, string email, DateTime datumRodjenja, KorisnikType uloga, List<GrupniTrening> listaGrupnihTreninga, List<GrupniTrening> listaTreninziAngazovan, FitnesCentar angazovanNaFitnesCentar, List<FitnesCentar> listaVlasnickiFitnesCentar)
+        {
+            KorisnickoIme = korisnickoIme;
+            Lozinka = lozinka;
+            Ime = ime;
+            Prezime = prezime;
+            Pol = pol;
+            Email = email;
+            DatumRodjenja = datumRodjenja;
+            Uloga = uloga;
+            ListaGrupnihTreninga = listaGrupnihTreninga;
+            ListaTreninziAngazovan = listaTreninziAngazovan;
+            AngazovanNaFitnesCentar = angazovanNaFitnesCentar;
+            ListaVlasnickiFitnesCentar = listaVlasnickiFitnesCentar;
+        }
+
         public string KorisnickoIme { get; set; }
         public string Lozinka { get; set; }
         public string Ime { get; set; }
@@ -19,5 +35,10 @@ namespace MyWebApp.Models
         public List<GrupniTrening> ListaTreninziAngazovan { get; set; }
         public FitnesCentar AngazovanNaFitnesCentar { get; set; }
         public List<FitnesCentar> ListaVlasnickiFitnesCentar { get; set; }
+
+        public Korisnik(string ime)
+        {
+            Ime = ime;
+        }
     }
 }

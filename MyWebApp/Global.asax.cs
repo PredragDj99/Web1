@@ -18,8 +18,8 @@ namespace MyWebApp
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
-            HttpContext.Current.Application["fitnesCentri"] = new List<FitnesCentar>();
-
+            HttpContext.Current.Application["korisnici"] = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
+            HttpContext.Current.Application["fitnesCentri"] = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
         }
     }
 }

@@ -12,31 +12,6 @@ namespace MyWebApp.Controllers
         public ActionResult Index()
         {
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
-            
-            fitnesCentri.Add(new FitnesCentar //primer da bih mogao da testiram dugme
-            {
-                Naziv = "Fitnes Elastico",
-                Adresa="Zeleznicka 23",
-                GodinaOtvaranja=2002,
-                Vlasnik = null,
-                MesecnaClanarina=4000,
-                GodisnjaClanarina=15000,
-                JedanTrening=500,
-                JedanGrupniTrening=2000,
-                JedanSaPersonalnimTrenerom=1000
-            });
-            fitnesCentri.Add(new FitnesCentar //primer da bih mogao da testiram dugme
-            {
-                Naziv = "Compiano",
-                Adresa = "Safarikova 12",
-                GodinaOtvaranja = 1998,
-                Vlasnik = null,
-                MesecnaClanarina = 3000,
-                GodisnjaClanarina = 14000,
-                JedanTrening = 600,
-                JedanGrupniTrening = 1500,
-                JedanSaPersonalnimTrenerom = 900
-            });
 
             List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
             sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
@@ -46,15 +21,16 @@ namespace MyWebApp.Controllers
             return View();
         }
 
-                                     //Nullable int - nije unet u formi
+        #region Pretraga
+                                                //Nullable int - nije unet u formi
         public ActionResult Pretraga(string naziv,string adresa,int? godinaOtvaranjaOd,int? godinaOtvaranjaDo)
         {
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
             List<FitnesCentar> filtrirani = new List<FitnesCentar>();
 
             string godinaOd = godinaOtvaranjaOd.ToString();
             string godinaDo = godinaOtvaranjaDo.ToString();
-
+            
             foreach (var item in fitnesCentri)
             {
                 if (naziv.Equals("") && adresa.Equals("") && godinaOd.Equals("") && godinaDo.Equals(""))
@@ -476,11 +452,11 @@ namespace MyWebApp.Controllers
                     ViewBag.fitnesCentri = filtrirani;
                 }
             }
-
+            
             return View("Index");
         }
-
-
+        #endregion
+        #region Sort
         public ActionResult Sortiraj(string submit, string sort)
         {
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
@@ -524,29 +500,24 @@ namespace MyWebApp.Controllers
 
             return View("Index");
         }
-
-        //treba, forma za link 
-        public ActionResult Detalji()
+        #endregion
+        #region Detalji o fitnes centru
+        //treba, forma za link da bih prikupio ime
+        public ActionResult Detalji(string naziv) //naziv fitnes centra
         {
+            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+
+            foreach (var fc in fitnesCentri)
+            {
+                if (fc.Naziv.ToString().Equals(naziv))
+                {
+                    ViewBag.fitnesCentar = fc;
+                    break;
+                }
+            }
+
             return View("Detalji");
         }
-        
-        /////////////////////////////////////////////////////////////////
-
-
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
-            return View();
-        }
-
+        #endregion
     }
 }

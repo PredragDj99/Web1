@@ -4,5 +4,37 @@
     ViewBag.Title = "Detalji";
 }
 
-<h2>Detalji</h2>
-<p>Hi</p>
+<h2>Detalji o fitnes centru</h2>
+
+<html>
+<head>
+
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Naziv</th>
+            <th>Adresa</th>
+            <th>Godina otvaranja</th>
+            <th>Ime vlasnika</th>
+            <th>Mesecna clanarina</th>
+            <th>Godisnja clanarina</th>
+            <th>Jedan trening</th>
+            <th>Jedan grupni trening</th>
+            <th>Jedan trening sa personalnim trenerom</th>
+        </tr>
+        <tr>
+            <td>@ViewBag.fitnesCentar.Naziv</td>
+            <td>@ViewBag.fitnesCentar.Adresa</td>
+            <td>@ViewBag.fitnesCentar.GodinaOtvaranja</td>
+            <td>@ViewBag.fitnesCentar.Vlasnik.Ime</td>
+            <td>@ViewBag.fitnesCentar.MesecnaClanarina</td>
+            <td>@ViewBag.fitnesCentar.GodisnjaClanarina</td>
+            <td>@ViewBag.fitnesCentar.JedanTrening</td>
+            <td>@ViewBag.fitnesCentar.JedanGrupniTrening</td>
+            <td>@ViewBag.fitnesCentar.JedanSaPersonalnimTrenerom</td>
+        </tr>
+
+    </table>
+</body>
+</html>
