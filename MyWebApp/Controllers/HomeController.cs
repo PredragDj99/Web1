@@ -508,7 +508,18 @@ namespace MyWebApp.Controllers
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
             List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
             ViewBag.grupniTreninzi = grupniTreninzi;
-            
+
+            List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
+            List<Komentar> filtriraniKomentari = new List<Komentar>();
+            foreach (var item in komentari)
+            {
+                if (item.FitnesCentarKomentarisan.ToString().Equals(naziv))
+                {
+                    filtriraniKomentari.Add(item);
+                }
+            }
+            ViewBag.naziv = naziv;
+            ViewBag.komentari = filtriraniKomentari;
 
             foreach (var fc in fitnesCentri)
             {

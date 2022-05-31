@@ -4,23 +4,37 @@
     ViewBag.Title = "Detalji";
 }
 
-<h2>Detalji o fitnes centru</h2>
+<h1>Detalji o fitnes centru</h1>
 
 <html>
 <head>
     <style type="text/css">
         table.detalji {
             border: 2px solid;
+            margin-top: 5px;
+            margin-left: auto;
+            margin-right: auto;
             padding: 5px;
             border-spacing: 20px 0;
             color: mediumblue;
             font-size: medium;
             text-align: center;
         }
-        table.predstojeciTreninzi, th,td{
+        table.predstojeciTreninzi, th, td {
             border: 1px solid;
             padding: 10px;
             text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        h1{
+            text-align: center;
+        }
+        h2.fc{
+            text-shadow: 1px 1px 1px red, 2px 2px 1px red;
+        }
+        p.ocena {
+            text-decoration: underline blue; 
         }
     </style>
 </head>
@@ -49,7 +63,7 @@
             <td>@ViewBag.fitnesCentar.JedanSaPersonalnimTrenerom</td>
         </tr>
     </table>
-
+    <br />
     <table class="predstojeciTreninzi">
         <tr>
             <th>Naziv</th>
@@ -62,16 +76,30 @@
         </tr>
         @foreach (var item in ViewBag.grupniTreninzi)
         {
-        <tr>
-            <td>@item.Naziv</td>
-            <td>@item.TipTreninga</td>
-            <td>@item.FitnesCentarOdrzava.Naziv</td>
-            <td>@item.TrajanjeTreningaMinute</td>
-            <td>@item.DatumIVremeTreninga</td>
-            <td>@item.MaksimalanBrojPosetioca</td>
-            <td>@item.SpisakPosetilaca.Count</td>
-        </tr>
+            <tr>
+                <td>@item.Naziv</td>
+                <td>@item.TipTreninga</td>
+                <td>@item.FitnesCentarOdrzava.Naziv</td>
+                <td>@item.TrajanjeTreningaMinute</td>
+                <td>@item.DatumIVremeTreninga</td>
+                <td>@item.MaksimalanBrojPosetioca</td>
+                <td>@item.SpisakPosetilaca.Count</td>
+            </tr>
         }
     </table>
+    <br /><br />
+
+    <h2 class="fc">@ViewBag.naziv</h2>
+    @foreach (var item in ViewBag.komentari)
+    {
+        <p>
+            Komentar stavio/la: @item.KoJeOstavioKomentar <br />
+            Tekst komentara: @item.TekstKomentara<br />
+        </p>
+        <p class="ocena">
+            Opsti utisak: @item.Ocena<br />
+        </p>
+        <hr />
+    }
 </body>
 </html>

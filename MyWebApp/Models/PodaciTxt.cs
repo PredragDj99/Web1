@@ -85,7 +85,7 @@ namespace MyWebApp.Models
                     Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
                     listaPosetilaca.Add(k);
                 }
-                                                                                            //,"dd/MM/yyyy HH:mm", null
+                
                 GrupniTrening tr = new GrupniTrening(tokens[0],tokens[1],fc,tokens[3],DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),Int32.Parse(tokens[5]),listaPosetilaca);
 
                 grupniTreninzi.Add(tr);
@@ -95,6 +95,30 @@ namespace MyWebApp.Models
             stream.Close();
 
             return grupniTreninzi;
+        }
+
+        public static List<Komentar> procitajKomentare(string path)
+        {
+            List<Komentar> komentari = new List<Komentar>();
+
+            path = HostingEnvironment.MapPath(path);
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] tokens = line.Split(';');
+
+                Komentar kom = new Komentar(tokens[0],tokens[1],tokens[2],Int32.Parse(tokens[3]));
+                
+                komentari.Add(kom);
+            }
+
+            sr.Close();
+            stream.Close();
+
+            return komentari;
         }
     }
 }

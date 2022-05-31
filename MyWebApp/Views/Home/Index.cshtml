@@ -23,47 +23,70 @@
             font-family: Arial;
             font-size:15px;
         }
+        #first {
+            margin-left: 10px; /*od ivice*/
+            padding-left:10px; /*od ivice diva*/
+            padding-right:10px;
+            width: auto;
+            height: auto;
+            float: left;
+            /* border: 3px solid red; */
+        }
+
+        #second {
+            border: 3px solid green;
+            float: left;
+            height: 500px;
+            width: 500px;
+            margin-left: 200px; /*od ivice*/
+            padding-left: 10px; /*od ivice diva*/
+            padding-right: 10px;
+        }
     </style>
 </head>
 <body>
-    <h3>Pretraga</h3>
-    <form action="~/Home/Pretraga" method="post">
-        Naziv:<input type="text" name="naziv" /><br />
-        Adresa:<input type="text" name="adresa" /><br />
-        Godina otvaranja od:<input type="text" name="godinaOtvaranjaOd" /><br />
-        Godina otvaranja do:<input type="text" name="godinaOtvaranjaDo" /><br />
-        <input type="submit" value="Pretrazi" />
-    </form><br />
+    <div id="first">
+        <h3>Pretraga</h3>
+        <form action="~/Home/Pretraga" method="post">
+            Naziv:<input type="text" name="naziv" /><br />
+            Adresa:<input type="text" name="adresa" /><br />
+            Godina otvaranja od:<input type="text" name="godinaOtvaranjaOd" /><br />
+            Godina otvaranja do:<input type="text" name="godinaOtvaranjaDo" /><br />
+            <input type="submit" value="Pretrazi" />
+        </form><br />
 
-    <h3>Sortiraj</h3>
-    <form action="~/Home/Sortiraj" method="post">
-        Rastuce <input type="radio" name="sort" value="rastuce" checked="checked" /><br />
-        Opadajuce <input type="radio" name="sort" value="opadajuce" /><br />
-        <button type="submit" name="submit" value="naziv">Sortiraj po nazivu</button><br />
-        <button type="submit" name="submit" value="adresa">Sortiraj po adresi</button><br />
-        <button type="submit" name="submit" value="godinaOtvaranja">Sortiraj po godini otvaranja</button><br />
-    </form><br />
+        <h3>Sortiraj</h3>
+        <form action="~/Home/Sortiraj" method="post">
+            Rastuce <input type="radio" name="sort" value="rastuce" checked="checked" /><br />
+            Opadajuce <input type="radio" name="sort" value="opadajuce" /><br />
+            <button type="submit" name="submit" value="naziv">Sortiraj po nazivu</button><br />
+            <button type="submit" name="submit" value="adresa">Sortiraj po adresi</button><br />
+            <button type="submit" name="submit" value="godinaOtvaranja">Sortiraj po godini otvaranja</button><br />
+        </form><br />
 
-    <h2>Fitnes centri</h2>
-    <form action="~/Home/Detalji" method="post">
-        <table>
-            <tr class="naslov">
-                <th>Naziv</th>
-                <th>Adresa</th>
-                <th>Godina otvaranja</th>
-                <th></th>
-            </tr>
-            @foreach (var fitnesCentar in ViewBag.fitnesCentri) //moras inicijalizovati(ili u global.asax) bar 1 ako kaze 'Object reference not set to an instance of an object.'
-            {
-                <tr>
-                    <td>@fitnesCentar.Naziv</td>
-                    <td>@fitnesCentar.Adresa</td>
-                    <td>@fitnesCentar.GodinaOtvaranja</td>
-                    <td><a class="linkButton" href="/Home/Detalji?naziv=@fitnesCentar.Naziv">Detalji</a></td>
-               </tr>
-            }
-        </table>
-    </form>
+        <h2>Fitnes centri</h2>
+        <form action="~/Home/Detalji" method="post">
+            <table>
+                <tr class="naslov">
+                    <th>Naziv</th>
+                    <th>Adresa</th>
+                    <th>Godina otvaranja</th>
+                    <th></th>
+                </tr>
+                @foreach (var fitnesCentar in ViewBag.fitnesCentri) //moras inicijalizovati(ili u global.asax) bar 1 ako kaze 'Object reference not set to an instance of an object.'
+                {
+                    <tr>
+                        <td>@fitnesCentar.Naziv</td>
+                        <td>@fitnesCentar.Adresa</td>
+                        <td>@fitnesCentar.GodinaOtvaranja</td>
+                        <td><a class="linkButton" href="/Home/Detalji?naziv=@fitnesCentar.Naziv">Detalji</a></td>
+                    </tr>
+                }
+            </table>
+        </form>
+    </div>
+    <div id="second">
 
+    </div>
 </body>
 </html>

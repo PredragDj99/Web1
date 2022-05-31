@@ -135,6 +135,7 @@
   <ItemGroup>
     <Content Include="App_Data\FitnesCentri.txt" />
     <Content Include="App_Data\GrupniTreninzi.txt" />
+    <Content Include="App_Data\Komentari.txt" />
     <Content Include="App_Data\Korisnici.txt" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
