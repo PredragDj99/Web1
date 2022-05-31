@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 
+using System.Globalization;
+
 namespace MyWebApp.Models
 {
     public class PodaciTxt
@@ -21,7 +23,8 @@ namespace MyWebApp.Models
             while ((line = sr.ReadLine()) != null)
             {
                 string[] tokens = line.Split(';');
-                Korisnik vlasnik = new Korisnik(tokens[3]);
+                string[] podaciOVlasniku = tokens[3].Split('|');
+                Korisnik vlasnik = new Korisnik(podaciOVlasniku[0], podaciOVlasniku[1]);
                 FitnesCentar fc = new FitnesCentar(tokens[0], tokens[1], Int32.Parse(tokens[2]), vlasnik, Double.Parse(tokens[4]), Double.Parse(tokens[5]), Double.Parse(tokens[6]), Double.Parse(tokens[7]), Double.Parse(tokens[8]));
 
                 fitnesCentri.Add(fc);
@@ -56,6 +59,42 @@ namespace MyWebApp.Models
             stream.Close();
 
             return korisnici;
+        }
+
+        public static List<GrupniTrening> procitajGrupneTreninge(string path)
+        {
+            List<GrupniTrening> grupniTreninzi = new List<GrupniTrening>();
+
+            path = HostingEnvironment.MapPath(path);
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] tokens = line.Split(';');
+
+                FitnesCentar fc = new FitnesCentar(tokens[2]);
+
+                string[] posetioci = tokens[6].Split('|');
+                List<Korisnik> listaPosetilaca = new List<Korisnik>();
+
+                foreach(var posetilac in posetioci)
+                {
+                    string[] korisnik = posetilac.Split('-');
+                    Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
+                    listaPosetilaca.Add(k);
+                }
+                                                                                            //,"dd/MM/yyyy HH:mm", null
+                GrupniTrening tr = new GrupniTrening(tokens[0],tokens[1],fc,tokens[3],DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),Int32.Parse(tokens[5]),listaPosetilaca);
+
+                grupniTreninzi.Add(tr);
+            }
+
+            sr.Close();
+            stream.Close();
+
+            return grupniTreninzi;
         }
     }
 }

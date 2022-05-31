@@ -36,9 +36,10 @@ namespace MyWebApp.Models
         public FitnesCentar AngazovanNaFitnesCentar { get; set; }
         public List<FitnesCentar> ListaVlasnickiFitnesCentar { get; set; }
 
-        public Korisnik(string ime)
+        public Korisnik(string ime, string prezime)
         {
             Ime = ime;
+            Prezime = prezime;
         }
     }
 }

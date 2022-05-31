@@ -1,0 +1,2 @@
+﻿Grupa pocetnici;HIT;Compiona;90 minuta;27/07/2022 12:30;30;Ivana-Mihajlovic|Dejana-Zivkovic|Maja-Radovanovic
+Profesionalni sportisti;Pripreme za takmicenja;Fitnes Elastico;120 minuta;25/08/2022 10:00;15;Dejan-Djero|Ilija-Pasic|Irena-Ladja|Stanko-Djokic

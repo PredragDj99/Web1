@@ -506,6 +506,9 @@ namespace MyWebApp.Controllers
         public ActionResult Detalji(string naziv) //naziv fitnes centra
         {
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
+            ViewBag.grupniTreninzi = grupniTreninzi;
+            
 
             foreach (var fc in fitnesCentri)
             {

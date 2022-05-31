@@ -8,10 +8,24 @@
 
 <html>
 <head>
-
+    <style type="text/css">
+        table.detalji {
+            border: 2px solid;
+            padding: 5px;
+            border-spacing: 20px 0;
+            color: mediumblue;
+            font-size: medium;
+            text-align: center;
+        }
+        table.predstojeciTreninzi, th,td{
+            border: 1px solid;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <table border="1">
+    <table class="detalji">
         <tr>
             <th>Naziv</th>
             <th>Adresa</th>
@@ -27,14 +41,37 @@
             <td>@ViewBag.fitnesCentar.Naziv</td>
             <td>@ViewBag.fitnesCentar.Adresa</td>
             <td>@ViewBag.fitnesCentar.GodinaOtvaranja</td>
-            <td>@ViewBag.fitnesCentar.Vlasnik.Ime</td>
+            <td>@ViewBag.fitnesCentar.Vlasnik.Ime  @ViewBag.fitnesCentar.Vlasnik.Prezime</td>
             <td>@ViewBag.fitnesCentar.MesecnaClanarina</td>
             <td>@ViewBag.fitnesCentar.GodisnjaClanarina</td>
             <td>@ViewBag.fitnesCentar.JedanTrening</td>
             <td>@ViewBag.fitnesCentar.JedanGrupniTrening</td>
             <td>@ViewBag.fitnesCentar.JedanSaPersonalnimTrenerom</td>
         </tr>
+    </table>
 
+    <table class="predstojeciTreninzi">
+        <tr>
+            <th>Naziv</th>
+            <th>Tip treninga</th>
+            <th>Odrzava fitnes centar</th>
+            <th>Trajanje</th>
+            <th>Datum i vreme</th>
+            <th>Maksimalan broj posetioca</th>
+            <th>Broj posetioca</th>
+        </tr>
+        @foreach (var item in ViewBag.grupniTreninzi)
+        {
+        <tr>
+            <td>@item.Naziv</td>
+            <td>@item.TipTreninga</td>
+            <td>@item.FitnesCentarOdrzava.Naziv</td>
+            <td>@item.TrajanjeTreningaMinute</td>
+            <td>@item.DatumIVremeTreninga</td>
+            <td>@item.MaksimalanBrojPosetioca</td>
+            <td>@item.SpisakPosetilaca.Count</td>
+        </tr>
+        }
     </table>
 </body>
 </html>

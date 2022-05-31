@@ -29,5 +29,10 @@ namespace MyWebApp.Models
         public double JedanTrening { get; set; }
         public double JedanGrupniTrening { get; set; }
         public double JedanSaPersonalnimTrenerom { get; set; }
+
+        public FitnesCentar(string naziv)
+        {
+            Naziv = naziv;
+        }
     }
 }
