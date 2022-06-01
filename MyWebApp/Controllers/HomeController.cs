@@ -506,9 +506,12 @@ namespace MyWebApp.Controllers
         public ActionResult Detalji(string naziv) //naziv fitnes centra
         {
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
-            List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
-            ViewBag.grupniTreninzi = grupniTreninzi;
 
+            List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
+            List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
+            //ViewBag.grupniTreninzi = grupniTreninzi;
+
+            //komentari
             List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
             List<Komentar> filtriraniKomentari = new List<Komentar>();
             foreach (var item in komentari)
@@ -520,7 +523,18 @@ namespace MyWebApp.Controllers
             }
             ViewBag.naziv = naziv;
             ViewBag.komentari = filtriraniKomentari;
+            
+            //grupni treninzi ovog fitnes centra
+            foreach (var item in grupniTreninzi)
+            {
+                if (item.FitnesCentarOdrzava.Naziv.ToString().Equals(naziv))
+                {
+                    listaGrupnihTreninga.Add(item);
+                }
+            }
+            ViewBag.grupniTreninzi = listaGrupnihTreninga;
 
+            //detalji za ovaj fitnes centar
             foreach (var fc in fitnesCentri)
             {
                 if (fc.Naziv.ToString().Equals(naziv))
@@ -531,6 +545,88 @@ namespace MyWebApp.Controllers
             }
 
             return View("Detalji");
+        }
+        #endregion
+
+        #region Registracija
+        public ActionResult Registracija(Korisnik korisnik)
+        {
+            //za slucaj da pukne registracija imam default view
+            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
+            sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
+            ViewBag.fitnesCentri = sortiraniLista;
+            //
+            List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+
+            //ako korisnicko ime vec postoji
+            foreach (Korisnik kor in registrovaniKorisnici)
+            {
+                if (kor.KorisnickoIme == korisnik.KorisnickoIme)
+                {
+                    ViewBag.korisnik = $"Korisnik sa imenom {korisnik.KorisnickoIme} vec postoji";
+                    return View("Index");
+                }
+            }
+
+
+            //provera da li je sve popunjeno
+            if (korisnik.KorisnickoIme == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za korisnicko ime";
+                return View("Index");
+            }
+            if (korisnik.Lozinka == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za lozinku";
+                return View("Index");
+            }
+            if (korisnik.Ime == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za ime";
+                return View("Index");
+            }
+            if (korisnik.Prezime == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za prezime";
+                return View("Index");
+            }
+            if (korisnik.Pol == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za pol";
+                return View("Index");
+            }
+            if (korisnik.Email == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za email";
+                return View("Index");
+            }
+            if (korisnik.DatumRodjenja == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za datum rodjenja";
+                return View("Index");
+            }
+
+            //ogranicenja
+            if (korisnik.KorisnickoIme.Length < 3)
+            {
+                ViewBag.Message = "Korisnicko ime mora biti imati bar 3 karaktera";
+                return View("Index");
+            }
+            if (korisnik.Lozinka.Length < 4)
+            {
+                ViewBag.Message = "Lozinka mora imati bar 5 karaktera";
+                return View("Index");
+            }
+
+            korisnik.Uloga = (KorisnikType)Enum.ToObject(typeof(KorisnikType),0);
+            korisnik.ListaGrupnihTreninga = null;
+            korisnik.ListaTreninziAngazovan = null;
+            korisnik.AngazovanNaFitnesCentar = null;
+            korisnik.ListaVlasnickiFitnesCentar = null;
+
+            ViewBag.korisnik = "Uspesno ste se registrovali!";
+            return View("Index");
         }
         #endregion
     }

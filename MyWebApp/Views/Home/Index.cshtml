@@ -23,8 +23,25 @@
             font-family: Arial;
             font-size:15px;
         }
+        /*
+        a.registracija:link, a.registracija:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid blue;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        a.registracija:hover, a.registracija:active {
+            background-color: blue;
+            color: white;
+        }
+            */
         #first {
-            margin-left: 10px; /*od ivice*/
+            margin-top: 20px;
+            margin-left: 40px; /*od ivice*/
             padding-left:10px; /*od ivice diva*/
             padding-right:10px;
             width: auto;
@@ -34,10 +51,11 @@
         }
 
         #second {
-            border: 3px solid green;
+            /* border: 3px solid red; */
             float: left;
-            height: 500px;
-            width: 500px;
+            height: 800px;
+            width: 700px;
+            margin-top: 20px;
             margin-left: 200px; /*od ivice*/
             padding-left: 10px; /*od ivice diva*/
             padding-right: 10px;
@@ -86,7 +104,19 @@
         </form>
     </div>
     <div id="second">
-
+        <form action="~/Home/Registracija" method="post">
+            <h1>Registruj novog clana:</h1><br />
+            Korisnicko ime:<input type="text" name="korisnickoIme" /><br />
+            Lozinka:<input type="password" name="lozinka" /><br />
+            Ime:<input type="text" name="ime" /><br />
+            Prezime:<input type="text" name="prezime" /><br />
+            Pol:<input type="radio" id="muski" name="pol" value="Muski" /><label id="muski">Muski</label>
+            <input type="radio" id="zenski" name="pol" value="Zenski" /><label id="zenski">Zenski</label><br />
+            Email:<input type="email" name="email" /><br />
+            Datum rodjenja:<input type="date" name="datumRodjenja" /><br /><br />
+            <input type="submit" value="Registruj se" />
+        </form>
+        <h2> @ViewBag.korisnik</h2>
     </div>
 </body>
 </html>

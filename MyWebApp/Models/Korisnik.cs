@@ -41,5 +41,10 @@ namespace MyWebApp.Models
             Ime = ime;
             Prezime = prezime;
         }
+
+        public Korisnik()
+        {
+
+        }
     }
 }

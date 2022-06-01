@@ -22,6 +22,7 @@ namespace MyWebApp
             HttpContext.Current.Application["fitnesCentri"] = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
             HttpContext.Current.Application["grupniTreninzi"] = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
             HttpContext.Current.Application["komentari"] = PodaciTxt.procitajKomentare("~/App_Data/Komentari.txt");
+
         }
     }
 }

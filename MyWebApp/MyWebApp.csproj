@@ -171,6 +171,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Detalji.cshtml" />
+    <Content Include="Views\Home\Registracija.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

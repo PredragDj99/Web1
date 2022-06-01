@@ -4,14 +4,12 @@
     ViewBag.Title = "Detalji";
 }
 
-<h1>Detalji o fitnes centru</h1>
-
 <html>
 <head>
     <style type="text/css">
         table.detalji {
             border: 2px solid;
-            margin-top: 5px;
+            margin-top: 20px;
             margin-left: auto;
             margin-right: auto;
             padding: 5px;
@@ -20,6 +18,7 @@
             font-size: medium;
             text-align: center;
         }
+
         table.predstojeciTreninzi, th, td {
             border: 1px solid;
             padding: 10px;
@@ -27,18 +26,27 @@
             margin-left: auto;
             margin-right: auto;
         }
-        h1{
+
+        h1 {
             text-align: center;
+            margin-top: 20px;
         }
-        h2.fc{
+
+        h2.fc {
             text-shadow: 1px 1px 1px red, 2px 2px 1px red;
         }
+
         p.ocena {
-            text-decoration: underline blue; 
+            text-decoration: underline blue;
+        }
+
+        h2, p {
+            margin-left: 40px;
         }
     </style>
 </head>
 <body>
+    <h1>Detalji o fitnes centru</h1>
     <table class="detalji">
         <tr>
             <th>Naziv</th>
@@ -93,7 +101,7 @@
     @foreach (var item in ViewBag.komentari)
     {
         <p>
-            Komentar stavio/la: @item.KoJeOstavioKomentar <br />
+            Komentar ostavio/la: @item.KoJeOstavioKomentar <br />
             Tekst komentara: @item.TekstKomentara<br />
         </p>
         <p class="ocena">
