@@ -112,7 +112,7 @@
             Prezime:<input type="text" name="prezime" /><br />
             Pol:<input type="radio" id="muski" name="pol" value="Muski" /><label id="muski">Muski</label>
             <input type="radio" id="zenski" name="pol" value="Zenski" /><label id="zenski">Zenski</label><br />
-            Email:<input type="email" name="email" /><br />
+            Email:<input type="email" name="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" /><br />
             Datum rodjenja:<input type="date" name="datumRodjenja" /><br /><br />
             <input type="submit" value="Registruj se" />
         </form>

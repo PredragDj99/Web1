@@ -89,7 +89,7 @@
                 <td>@item.TipTreninga</td>
                 <td>@item.FitnesCentarOdrzava.Naziv</td>
                 <td>@item.TrajanjeTreningaMinute</td>
-                <td>@item.DatumIVremeTreninga</td>
+                <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@item.MaksimalanBrojPosetioca</td>
                 <td>@item.SpisakPosetilaca.Count</td>
             </tr>

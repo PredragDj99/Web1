@@ -456,6 +456,7 @@ namespace MyWebApp.Controllers
             return View("Index");
         }
         #endregion
+
         #region Sort
         public ActionResult Sortiraj(string submit, string sort)
         {
@@ -501,6 +502,7 @@ namespace MyWebApp.Controllers
             return View("Index");
         }
         #endregion
+
         #region Detalji o fitnes centru
         //treba, forma za link da bih prikupio ime
         public ActionResult Detalji(string naziv) //naziv fitnes centra
@@ -509,7 +511,6 @@ namespace MyWebApp.Controllers
 
             List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
-            //ViewBag.grupniTreninzi = grupniTreninzi;
 
             //komentari
             List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
@@ -527,7 +528,7 @@ namespace MyWebApp.Controllers
             //grupni treninzi ovog fitnes centra
             foreach (var item in grupniTreninzi)
             {
-                if (item.FitnesCentarOdrzava.Naziv.ToString().Equals(naziv))
+                if (item.FitnesCentarOdrzava.Naziv.ToString().Equals(naziv) && item.DatumIVremeTreninga>DateTime.Now)
                 {
                     listaGrupnihTreninga.Add(item);
                 }
