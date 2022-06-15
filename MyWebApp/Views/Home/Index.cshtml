@@ -54,7 +54,17 @@
             /* border: 3px solid red; */
             float: left;
             height: 800px;
-            width: 700px;
+            width: 400px;
+            margin-top: 20px;
+            margin-left: 200px; /*od ivice*/
+            padding-left: 10px; /*od ivice diva*/
+            padding-right: 10px;
+        }
+        #third {
+            border: 3px solid red;
+            float: left;
+            height: 500px;
+            width: 350px;
             margin-top: 20px;
             margin-left: 200px; /*od ivice*/
             padding-left: 10px; /*od ivice diva*/
@@ -118,5 +128,32 @@
         </form>
         <h2> @ViewBag.korisnik</h2>
     </div>
+    @if (ViewBag.uspesnaPrijava == "jeste")
+    {
+        <div id="third">
+            <form action="~/Home/Logout" method="post">
+                <h1>Izloguj se:</h1><br />
+                <input type="submit" value="Izloguj se" />
+            </form>
+
+            <form action="~/Home/UrediProfil" method="post">
+                <h1>Uredi svoj profil:</h1><br />
+                <input type="submit" value="Moj profil" />
+            </form>
+        </div>
+    }
+    else
+    {
+        <div id="third">
+            <form action="~/Home/Prijava" method="post">
+                <h1>Prijavi se:</h1><br />
+                Korisnicko ime:<input type="text" name="korisnickoIme" /><br />
+                Lozinka:<input type="password" name="lozinka" /><br /><br />
+                <input type="submit" value="Prijavi se" />
+                <br />
+                <h2> @ViewBag.prijavljen</h2>
+            </form>
+        </div>
+    }
 </body>
 </html>

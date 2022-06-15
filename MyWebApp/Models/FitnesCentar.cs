@@ -34,5 +34,7 @@ namespace MyWebApp.Models
         {
             Naziv = naziv;
         }
+
+        public FitnesCentar() { }
     }
 }

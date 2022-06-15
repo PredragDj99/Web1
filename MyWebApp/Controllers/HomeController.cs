@@ -11,6 +11,12 @@ namespace MyWebApp.Controllers
     {
         public ActionResult Index()
         {
+            Korisnik user = (Korisnik)Session["user"];
+            if(user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
 
             List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
@@ -25,6 +31,12 @@ namespace MyWebApp.Controllers
                                                 //Nullable int - nije unet u formi
         public ActionResult Pretraga(string naziv,string adresa,int? godinaOtvaranjaOd,int? godinaOtvaranjaDo)
         {
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
             List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
             List<FitnesCentar> filtrirani = new List<FitnesCentar>();
 
@@ -460,6 +472,12 @@ namespace MyWebApp.Controllers
         #region Sort
         public ActionResult Sortiraj(string submit, string sort)
         {
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
             List<FitnesCentar> sortiraniCentri = new List<FitnesCentar>();
 
@@ -507,6 +525,12 @@ namespace MyWebApp.Controllers
         //treba, forma za link da bih prikupio ime
         public ActionResult Detalji(string naziv) //naziv fitnes centra
         {
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
 
             List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
@@ -552,12 +576,19 @@ namespace MyWebApp.Controllers
         #region Registracija
         public ActionResult Registracija(Korisnik korisnik)
         {
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
             //za slucaj da pukne registracija imam default view
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
             List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
             sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
             ViewBag.fitnesCentri = sortiraniLista;
-            //
+            //kraj
+
             List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
 
             //ako korisnicko ime vec postoji
@@ -626,9 +657,80 @@ namespace MyWebApp.Controllers
             korisnik.AngazovanNaFitnesCentar = null;
             korisnik.ListaVlasnickiFitnesCentar = null;
 
+            registrovaniKorisnici.Add(korisnik);
+            PodaciTxt.SacuvajKorisnika(korisnik);
+
             ViewBag.korisnik = "Uspesno ste se registrovali!";
             return View("Index");
         }
         #endregion
+
+        #region Prijava
+        public ActionResult Prijava(string korisnickoIme,string lozinka)
+        {
+            //za slucaj da pukne prijava imam default view
+            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
+            sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
+            ViewBag.fitnesCentri = sortiraniLista;
+            //kraj
+
+            List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+            ViewBag.uspesnaPrijava = "nije";
+
+            //ako korisnicko ime vec postoji
+            foreach (Korisnik kor in registrovaniKorisnici)
+            {
+                if (kor.KorisnickoIme == korisnickoIme && kor.Lozinka==lozinka)
+                {
+                    ViewBag.uspesnaPrijava = "jeste";
+                    Session["user"] = kor;
+                    return View("Index");
+                }
+            }
+            ViewBag.prijavljen = "Niste uneli dobre podatke!";
+
+            return View("Index");
+        }
+        #endregion
+
+        #region Logout
+        public ActionResult Logout()
+        {
+            //za slucaj da pukne imam default view
+            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
+            sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
+            ViewBag.fitnesCentri = sortiraniLista;
+            //kraj
+
+            ViewBag.uspesnaPrijava = "nije";
+            Session["user"] = null;
+
+            return View("Index");
+        }
+        #endregion
+
+        #region Logout
+        public ActionResult UrediProfil() //OVO TREBA ODRADITI
+        {
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
+            //za slucaj da pukne imam default view
+            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
+            sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
+            ViewBag.fitnesCentri = sortiraniLista;
+            //kraj
+
+            return View("Index");
+        }
+        #endregion  //OVO TREBA ODRADITI
+
+        //MOZE DA IZVRSAVA AKTIVNOSTI U SKLADU SA ULOGOM KADA SE PRIAJAVI
     }
 }
