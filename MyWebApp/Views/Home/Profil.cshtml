@@ -1,0 +1,99 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Profil";
+}
+
+<html>
+<head>
+    <style type="text/css">
+        h1{
+            text-align:center;
+            margin-top: 20px;
+        }
+        #firstdiv {
+            margin-top: 20px;
+            margin-left: 350px; /*od ivice*/
+            padding-left: 10px; /*od ivice diva*/
+            padding-right: 10px;
+            width: auto;
+            height: auto;
+            float: left;
+        }
+        #seconddiv {
+            /* border: 3px solid red; */
+            float: right;
+            height: 300px;
+            width: 350px;
+            margin-top: 20px;
+            margin-right: 400px; /*od ivice*/
+            padding-left: 10px; /*od ivice diva*/
+            padding-right: 10px;
+        }
+        input[type=submit] {
+            border: none;
+            background-color: blue;
+            color: white;
+            padding: 10px 32px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-left: 30px;
+        }
+
+        table, th, td {
+            border: 1px solid;
+            text-align: center;
+        }
+        a.linkZaPocetnu:link, a.linkZaPocetnu:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid green;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 350px;
+            justify-content: center;
+            display: grid;
+        }
+
+        a.linkZaPocetnu:hover, a.linkZaPocetnu:active {
+            background-color: green;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Uredite svoj profil</h1>
+    <div id="firstdiv">
+        <table>
+            <tr>
+                <th>Trenutan izgled profila</th>
+            </tr>
+            <tr><td>@ViewBag.trenutniProfil.KorisnickoIme</td></tr>
+            <tr><td>@ViewBag.trenutniProfil.Lozinka</td></tr>
+            <tr><td>@ViewBag.trenutniProfil.Ime</td></tr>
+            <tr><td>@ViewBag.trenutniProfil.Prezime</td></tr>
+            <tr><td>@ViewBag.trenutniProfil.Pol</td></tr>
+            <tr><td>@ViewBag.trenutniProfil.Email</td></tr>
+            <tr><td>@Convert.ToDateTime(@ViewBag.trenutniProfil.DatumRodjenja).ToString("dd/MM/yyyy")</td></tr>
+        </table>
+    </div>
+    <div id="seconddiv">
+        <form action="~/Home/IzmeniProfil" method="post">
+            Korisnicko ime:<input type="text" name="korisnickoIme" /><br />
+            Lozinka:<input type="password" name="lozinka" /><br />
+            Ime:<input type="text" name="ime" /><br />
+            Prezime:<input type="text" name="prezime" /><br />
+            Pol:<input type="radio" id="muski" name="pol" value="Muski" /><label id="muski">Muski</label>
+            <input type="radio" id="zenski" name="pol" value="Zenski" /><label id="zenski">Zenski</label><br />
+            Email:<input type="email" name="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" /><br />
+            Datum rodjenja:<input type="date" name="datumRodjenja" /><br /><br />
+            <input type="submit" value="Potvrdi izmenu" />
+        </form>
+        <h2>@ViewBag.izmena</h2>
+        <h2>@ViewBag.korisnik</h2>
+    </div>
+    <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+</body>
+</html>

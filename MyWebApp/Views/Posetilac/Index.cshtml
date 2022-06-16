@@ -1,7 +1,7 @@
 ﻿
 @{
     Layout = null;
-    ViewBag.Title = "Detalji";
+    ViewBag.Title = "Index";
 }
 
 <html>
@@ -43,6 +43,7 @@
         h2, p {
             margin-left: 40px;
         }
+
         a.linkZaPocetnu:link, a.linkZaPocetnu:visited {
             background-color: white;
             color: black;
@@ -58,17 +59,22 @@
             background-color: red;
             color: white;
         }
+
         .linkButton {
-            background-color: lightgrey;
+            background-color: greenyellow;
             color: black;
             text-decoration: none;
             font-family: Arial;
             font-size: 15px;
+            padding: 10px 20px;
         }
-
+        .linkButton:hover{
+            background-color: green;
+        }
     </style>
 </head>
 <body>
+    <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
     <h1>Detalji o fitnes centru</h1>
     <table class="detalji">
         <tr>
@@ -108,15 +114,28 @@
         </tr>
         @foreach (var item in ViewBag.grupniTreninzi)
         {
-        <tr>
-            <td>@item.Naziv</td>
-            <td>@item.TipTreninga</td>
-            <td>@item.FitnesCentarOdrzava.Naziv</td>
-            <td>@item.TrajanjeTreningaMinute</td>
-            <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
-            <td>@item.MaksimalanBrojPosetioca</td>
-            <td>@item.SpisakPosetilaca.Count</td>
-        </tr>
+            <tr>
+                <td>@item.Naziv</td>
+                <td>@item.TipTreninga</td>
+                <td>@item.FitnesCentarOdrzava.Naziv</td>
+                <td>@item.TrajanjeTreningaMinute</td>
+                <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.MaksimalanBrojPosetioca</td>
+                <td>@item.SpisakPosetilaca.Count</td>
+                @if (ViewBag.uspesnaPrijava == "jeste" && ViewBag.prijavljenTrening != "Prijavljeni ste" && ViewBag.imaMesta == "true")
+                {
+                    <td><a class="linkButton" href="/Posetilac/PrijavaZaTrening?naziv=@item.FitnesCentarOdrzava.Naziv&&datumVreme=@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")
+                           &&maxPosetioca=@item.MaksimalanBrojPosetioca&&brojPosetioca=@item.SpisakPosetilaca.Count">Prijavi se za trening</a></td>
+                }
+                else if (ViewBag.uspesnaPrijava == "jeste" && ViewBag.prijavljenTrening == "Prijavljeni ste")
+                {
+                    <td>Prijavljeni ste</td>
+                }
+                else if (ViewBag.imaMesta == "false")
+                {
+                    <td>Mesta su popunjena</td>
+                }
+            </tr>
         }
     </table>
     <br /><br />
@@ -132,7 +151,6 @@
         </p>
         <hr />
     }
-    <hr />
-    <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+
 </body>
 </html>

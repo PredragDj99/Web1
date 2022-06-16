@@ -569,6 +569,15 @@ namespace MyWebApp.Controllers
                 }
             }
 
+            //AKO JE KORISNIK PRIJAVLJEN KAO POSETILAC PRELAZIMO NA NJEGOVU STRANICU
+            if (user != null)
+            {
+                if(user.Uloga.ToString() == "POSETILAC")
+                {
+                    return RedirectToAction("Index", "Posetilac", new { naziv });
+                }
+            }
+
             return View("Detalji");
         }
         #endregion
@@ -711,8 +720,8 @@ namespace MyWebApp.Controllers
         }
         #endregion
 
-        #region Logout
-        public ActionResult UrediProfil() //OVO TREBA ODRADITI
+        #region Uredi profil
+        public ActionResult UrediProfil()
         {
             Korisnik user = (Korisnik)Session["user"];
             if (user != null)
@@ -720,17 +729,101 @@ namespace MyWebApp.Controllers
                 ViewBag.uspesnaPrijava = "jeste";
             }
 
-            //za slucaj da pukne imam default view
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
-            List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
-            sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
-            ViewBag.fitnesCentri = sortiraniLista;
-            //kraj
+            ViewBag.trenutniProfil = user;
 
-            return View("Index");
+            return View("Profil");
         }
-        #endregion  //OVO TREBA ODRADITI
+        #endregion
 
+        #region Izmeni profil
+        public ActionResult IzmeniProfil(Korisnik korisnik)
+        {
+            Korisnik user = (Korisnik)Session["user"];
+            List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+
+            //ako korisnicko ime vec postoji
+            foreach (Korisnik kor in registrovaniKorisnici)
+            {
+                if (kor.KorisnickoIme == korisnik.KorisnickoIme && kor.KorisnickoIme!=user.KorisnickoIme) //ako je zauzeto, a nije trenutni korisnik
+                {
+                    ViewBag.korisnik = $"Korisnik sa imenom {korisnik.KorisnickoIme} vec postoji";
+                    return View("Profil");
+                }
+            }
+
+
+            //provera da li je sve popunjeno
+            if (korisnik.KorisnickoIme == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za korisnicko ime";
+                return View("Index");
+            }
+            if (korisnik.Lozinka == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za lozinku";
+                return View("Index");
+            }
+            if (korisnik.Ime == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za ime";
+                return View("Index");
+            }
+            if (korisnik.Prezime == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za prezime";
+                return View("Index");
+            }
+            if (korisnik.Pol == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za pol";
+                return View("Index");
+            }
+            if (korisnik.Email == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za email";
+                return View("Index");
+            }
+            if (korisnik.DatumRodjenja == null)
+            {
+                ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za datum rodjenja";
+                return View("Index");
+            }
+
+            //ogranicenja
+            if (korisnik.KorisnickoIme.Length < 3)
+            {
+                ViewBag.Message = "Korisnicko ime mora biti imati bar 3 karaktera";
+                return View("Index");
+            }
+            if (korisnik.Lozinka.Length < 4)
+            {
+                ViewBag.Message = "Lozinka mora imati bar 5 karaktera";
+                return View("Index");
+            }
+
+            korisnik.Uloga = (KorisnikType)Enum.ToObject(typeof(KorisnikType), 0);
+            korisnik.ListaGrupnihTreninga = null;
+            korisnik.ListaTreninziAngazovan = null;
+            korisnik.AngazovanNaFitnesCentar = null;
+            korisnik.ListaVlasnickiFitnesCentar = null;
+
+            //brisem starog
+            registrovaniKorisnici.Remove(user);
+            //dodajem novog
+            registrovaniKorisnici.Add(korisnik);
+            PodaciTxt.IzmeniKorisnika(korisnik, user); //izmenikorisnika
+            
+            //novi podaci
+            Session["user"] = korisnik;
+
+            ViewBag.izmena = "Uspesno izmenjeni detalji profila!";
+            ViewBag.trenutniProfil = korisnik;
+
+            return View("Profil");
+        }
+        #endregion
+        
         //MOZE DA IZVRSAVA AKTIVNOSTI U SKLADU SA ULOGOM KADA SE PRIAJAVI
+
     }
 }

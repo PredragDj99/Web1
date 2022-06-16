@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Hosting;
 
 using System.Globalization;
+using System.Text;
 
 namespace MyWebApp.Models
 {
@@ -210,6 +211,141 @@ namespace MyWebApp.Models
 
             sw.Close();
             stream.Close();
+        }
+        #endregion
+
+        #region Izmeni profil korisnika
+        public static void IzmeniKorisnika(Korisnik korisnik, Korisnik preIzmeneKorisnik)
+        {
+            #region Brisanje starih podataka
+            /*
+            string tempFile = Path.GetTempFileName();
+
+            var path2 = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream fsRead = new FileStream(path2, FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fsRead, Encoding.UTF8);
+
+            using (var sww = new StreamWriter(tempFile))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (line != "removeme")
+                        sww.WriteLine(line);
+                }
+            }
+            sr.Close();
+            fsRead.Close();
+            File.Delete(path2);
+            File.Move(tempFile, path2);
+            */
+
+            //Brisanje starog
+            string tempFile2 = Path.GetTempFileName();
+
+            var path3 = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream fsRead2 = new FileStream(path3, FileMode.Open, FileAccess.Read);
+            StreamReader sr2 = new StreamReader(fsRead2, Encoding.UTF8);
+
+            string[] stariKorisnik = new string[8];
+
+            stariKorisnik[0] = preIzmeneKorisnik.KorisnickoIme;
+            stariKorisnik[1] = preIzmeneKorisnik.Lozinka;
+            stariKorisnik[2] = preIzmeneKorisnik.Ime;
+            stariKorisnik[3] = preIzmeneKorisnik.Prezime;
+            stariKorisnik[4] = preIzmeneKorisnik.Pol;
+            stariKorisnik[5] = preIzmeneKorisnik.Email;
+            stariKorisnik[6] = preIzmeneKorisnik.DatumRodjenja.ToString("dd/MM/yyyy");
+
+            string stariKorisnikLinija = stariKorisnik[0] + ";" + stariKorisnik[1] + ";" + stariKorisnik[2] + ";" + stariKorisnik[3] + ";" + stariKorisnik[4] + ";" + stariKorisnik[5] + ";" + stariKorisnik[6];
+
+            using (var sww = new StreamWriter(tempFile2))
+            {
+                string line;
+
+                while ((line = sr2.ReadLine()) != null)
+                {
+                    if (!line.Contains(stariKorisnikLinija)) //zbog ovoga brise liniju u kojoj se nalazi stari
+                        sww.WriteLine(line);
+                }
+            }
+            sr2.Close();
+            fsRead2.Close();
+            File.Delete(path3);
+            File.Move(tempFile2, path3);
+            #endregion
+
+            //Ako ovo nemam obrisace mi tog jednog kog sam promenio
+            #region Dodavanje novih podataka
+            var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            string[] linija = new string[12];
+
+            linija[0] = korisnik.KorisnickoIme;
+            linija[1] = korisnik.Lozinka;
+            linija[2] = korisnik.Ime;
+            linija[3] = korisnik.Prezime;
+            linija[4] = korisnik.Pol;
+            linija[5] = korisnik.Email;
+            linija[6] = korisnik.DatumRodjenja.ToString("dd/MM/yyyy");
+            linija[7] = korisnik.Uloga.ToString();
+
+            string prazno = "";
+            if (korisnik.ListaGrupnihTreninga == null)
+            {
+                linija[8] = prazno;
+            }
+            else
+            {
+                linija[8] = korisnik.ListaGrupnihTreninga.ToString();
+            }
+
+            if (korisnik.ListaTreninziAngazovan == null)
+            {
+                linija[9] = prazno;
+            }
+            else
+            {
+                linija[9] = korisnik.ListaTreninziAngazovan.ToString();
+            }
+
+            if (korisnik.AngazovanNaFitnesCentar == null)
+            {
+                linija[10] = prazno;
+            }
+            else
+            {
+                linija[10] = korisnik.AngazovanNaFitnesCentar.ToString();
+            }
+
+            if (korisnik.ListaVlasnickiFitnesCentar == null)
+            {
+                linija[11] = prazno;
+            }
+            else
+            {
+                linija[11] = korisnik.ListaVlasnickiFitnesCentar.ToString();
+            }
+
+            for (int i = 0; i < 12; i++)
+            {
+                sw.Write(linija[i]);
+                if (i == 11)
+                {
+                    sw.WriteLine();
+                }
+                else
+                {
+                    sw.Write(";");
+                }
+            }
+
+            sw.Close();
+            stream.Close();
+            #endregion
         }
         #endregion
     }
