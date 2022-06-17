@@ -158,9 +158,89 @@ namespace MyWebApp.Controllers
         }
         #endregion
 
+        #region Tabela ranijih treninga
         public ActionResult RanijiTreninzi()
         {
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
+            List<GrupniTrening> grupniTreninziNaKojimaJePrisustvovao = PodaciTxt.prisustvovaoGrupnomTreningu("~/App_Data/GrupniTreninzi.txt", user.Ime, user.Prezime);
+            List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
+
+            //grupni treninzi na kojima je ucestvovao
+            foreach (var item in grupniTreninziNaKojimaJePrisustvovao)
+            {
+                if (item.DatumIVremeTreninga < DateTime.Now)
+                {
+                    listaGrupnihTreninga.Add(item);
+                }
+            }
+            ViewBag.grupniTreninzi = listaGrupnihTreninga;
+
             return View("RanijiTreninzi");
         }
+        #endregion
+
+        #region Pretraga
+        public ActionResult Pretraga(string naziv, string fitnesCentarOdrzava, string tipTreninga)
+        {
+            #region Grupni treninzi na kojima je ucestvovao
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
+            List<GrupniTrening> grupniTreninziNaKojimaJePrisustvovao = PodaciTxt.prisustvovaoGrupnomTreningu("~/App_Data/GrupniTreninzi.txt", user.Ime, user.Prezime);
+            List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
+
+            //grupni treninzi na kojima je ucestvovao
+            foreach (var item in grupniTreninziNaKojimaJePrisustvovao)
+            {
+                if (item.DatumIVremeTreninga < DateTime.Now)
+                {
+                    listaGrupnihTreninga.Add(item);
+                }
+            }
+            ViewBag.grupniTreninzi = listaGrupnihTreninga;
+            #endregion
+
+            //mozda da procitam sve treninge pa onda pokupim sve tipove Treninga i izbacim ih u listBox
+            //kombinovana pretraga
+            return View("RanijiTreninzi");
+        }
+        #endregion
+
+        #region Sortiranje
+        public ActionResult Sortiraj(string sort,string submit)
+        {
+            #region Grupni treninzi na kojima je ucestvovao
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
+            List<GrupniTrening> grupniTreninziNaKojimaJePrisustvovao = PodaciTxt.prisustvovaoGrupnomTreningu("~/App_Data/GrupniTreninzi.txt", user.Ime, user.Prezime);
+            List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
+
+            //grupni treninzi na kojima je ucestvovao
+            foreach (var item in grupniTreninziNaKojimaJePrisustvovao)
+            {
+                if (item.DatumIVremeTreninga < DateTime.Now)
+                {
+                    listaGrupnihTreninga.Add(item);
+                }
+            }
+            ViewBag.grupniTreninzi = listaGrupnihTreninga;
+            #endregion
+
+            //Odradi sortiranje po parametrima
+            return View("RanijiTreninzi");
+        }
+        #endregion
     }
 }

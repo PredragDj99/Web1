@@ -4,5 +4,96 @@
     ViewBag.Title = "RanijiTreninzi";
 }
 
-<h1>RanijiTreninzi</h1>
+<html>
+<head>
+    <style type="text/css">
+        a.linkZaPocetnu:link, a.linkZaPocetnu:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid red;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+            float: left;
+        }
+
+        a.linkZaPocetnu:hover, a.linkZaPocetnu:active {
+            background-color: red;
+            color: white;
+        }
+        h1{
+            text-align:center;
+            margin-top: 30px;
+        }
+        table.detalji, tr.detalji {
+            border: 2px solid;
+            border: inset;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 5px;
+            border-spacing: 20px 0;
+            color:blueviolet;
+            font-size: medium;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid;
+            padding: 10px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+    <br /><br />
+    <h1>Treninzi na kojima ste bili</h1>
+    <br />
+    <h3>Pretraga</h3>
+    <form action="~/Posetilac/Pretraga" method="post">
+        Naziv grupe:<input type="text" name="naziv" /><br />
+        Naziv fitnes centra:<input type="text" name="fitnesCentarOdrzava" /><br />
+        Tip treninga (napravi listu za odabirrr):<input type="text" name="tipTreninga" /><br />
+        <input type="submit" value="Pretrazi" />
+    </form><br />
+
+    <h3>Sortiraj</h3>
+    <form action="~/Posetilac/Sortiraj" method="post">
+        Rastuce <input type="radio" name="sort" value="rastuce" checked="checked" /><br />
+        Opadajuce <input type="radio" name="sort" value="opadajuce" /><br />
+        <button type="submit" name="submit" value="naziv">Sortiraj po nazivu</button><br />
+        <button type="submit" name="submit" value="tipTreninga">Sortiraj po tipu treninga</button><br />
+        <button type="submit" name="submit" value="datumIVremeTreninga">Sortiraj po datumu i vremenu</button><br />
+    </form><br />
+
+    <table class="detalji">
+        <tr>
+            <th>Naziv</th>
+            <th>Tip treninga</th>
+            <th>Odrzava fitnes centar</th>
+            <th>Trajanje</th>
+            <th>Datum i vreme</th>
+            <th>Maksimalan broj posetioca</th>
+            <th>Broj posetioca</th>
+        </tr>
+        @foreach (var item in ViewBag.grupniTreninzi)
+        {
+            <tr>
+                <td>@item.Naziv</td>
+                <td>@item.TipTreninga</td>
+                <td>@item.FitnesCentarOdrzava.Naziv</td>
+                <td>@item.TrajanjeTreningaMinute</td>
+                <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.MaksimalanBrojPosetioca</td>
+                <td>@item.SpisakPosetilaca.Count</td>
+            </tr>
+        }
+    </table>
+</body>
+</html>
+
 

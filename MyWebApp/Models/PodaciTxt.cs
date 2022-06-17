@@ -418,5 +418,47 @@ namespace MyWebApp.Models
             return false;
         }
         #endregion
+
+        #region Prisustvovao treningu
+        public static List<GrupniTrening> prisustvovaoGrupnomTreningu(string path, string ime, string prezime)
+        {
+            List<GrupniTrening> grupniTreninzi = new List<GrupniTrening>();
+
+            path = HostingEnvironment.MapPath(path);
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] tokens = line.Split(';');
+
+                FitnesCentar fc = new FitnesCentar(tokens[2]);
+
+                string[] posetioci = tokens[6].Split('|');
+                List<Korisnik> listaPosetilaca = new List<Korisnik>();
+
+                foreach (var posetilac in posetioci)
+                {
+                    string[] korisnik = posetilac.Split('-');
+                    Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
+                    listaPosetilaca.Add(k);
+                }
+
+                GrupniTrening tr = new GrupniTrening(tokens[0], tokens[1], fc, tokens[3], DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture), Int32.Parse(tokens[5]), listaPosetilaca);
+
+                foreach (var posetilac in listaPosetilaca)
+                {
+                    if (posetilac.Ime == ime && posetilac.Prezime == prezime)
+                        grupniTreninzi.Add(tr);
+                }
+            }
+
+            sr.Close();
+            stream.Close();
+
+            return grupniTreninzi;
+        }
+        #endregion
     }
 }
