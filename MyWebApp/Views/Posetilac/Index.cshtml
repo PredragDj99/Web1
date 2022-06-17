@@ -53,6 +53,7 @@
             text-decoration: none;
             display: inline-block;
             margin-left: 40px;
+            float: left;
         }
 
         a.linkZaPocetnu:hover, a.linkZaPocetnu:active {
@@ -75,6 +76,8 @@
 </head>
 <body>
     <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+    <h3><a href="~/Posetilac/RanijiTreninzi" class="linkZaPocetnu">Pogledaj prethodne grupne treninge treninge</a></h3>
+    <br /><br />
     <h1>Detalji o fitnes centru</h1>
     <table class="detalji">
         <tr>
@@ -122,18 +125,26 @@
                 <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@item.MaksimalanBrojPosetioca</td>
                 <td>@item.SpisakPosetilaca.Count</td>
-                @if (ViewBag.uspesnaPrijava == "jeste" && ViewBag.prijavljenTrening != "Prijavljeni ste" && ViewBag.imaMesta == "true")
-                {
-                    <td><a class="linkButton" href="/Posetilac/PrijavaZaTrening?naziv=@item.FitnesCentarOdrzava.Naziv&&datumVreme=@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")
-                           &&maxPosetioca=@item.MaksimalanBrojPosetioca&&brojPosetioca=@item.SpisakPosetilaca.Count">Prijavi se za trening</a></td>
-                }
-                else if (ViewBag.uspesnaPrijava == "jeste" && ViewBag.prijavljenTrening == "Prijavljeni ste")
-                {
-                    <td>Prijavljeni ste</td>
-                }
-                else if (ViewBag.imaMesta == "false")
+
+                @{string datum = Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm"); }
+                @if (ViewBag.imaMesta == "false" && datum == ViewBag.ovajJeKliknutVreme)
                 {
                     <td>Mesta su popunjena</td>
+                }
+                else if (ViewBag.uspesnaPrijava == "jeste" && ViewBag.prijavljenTrening == "Prijavljeni ste" && datum == (ViewBag.ovajJeKliknutVreme))
+                {
+                    <td>Uspesno ste prijavljeni</td>
+                }
+                else if (ViewBag.uspesnaPrijava == "jeste" && ViewBag.ranijePrijavljen == "jeste" && datum == (ViewBag.ovajJeKliknutVreme))
+                {
+                    <td>Vec ste prijavljeni</td>
+                }
+                else if (ViewBag.uspesnaPrijava == "jeste")
+                {
+                    <td>
+                        <a class="linkButton" href="/Posetilac/PrijavaZaTrening?naziv=@item.FitnesCentarOdrzava.Naziv&&datumVreme=@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")
+                           &&maxPosetioca=@item.MaksimalanBrojPosetioca&&brojPosetioca=@item.SpisakPosetilaca.Count&&spisakPosetioca=@item.SpisakPosetilaca">Prijavi se za trening</a>
+                    </td>
                 }
             </tr>
         }

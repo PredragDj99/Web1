@@ -25,5 +25,6 @@ namespace MyWebApp.Models
         public DateTime DatumIVremeTreninga { get; set; }
         public Int32 MaksimalanBrojPosetioca { get; set; }
         public List<Korisnik> SpisakPosetilaca { get; set; }
+
     }
 }

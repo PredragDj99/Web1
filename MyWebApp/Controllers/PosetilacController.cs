@@ -70,8 +70,9 @@ namespace MyWebApp.Controllers
             return View();
         }
 
+        #region Prijava za trening
         //Dodatne opcije za posetioca
-        public ActionResult PrijavaZaTrening(string naziv, string datumVreme,int maxPosetioca, int brojPosetioca) //ne mogu vise parametara
+        public ActionResult PrijavaZaTrening(string naziv, string datumVreme,int maxPosetioca, int brojPosetioca,List<Korisnik> spisakPosetilaca) //ne mogu vise parametara
         {
             #region Isto kao home controller -> stranica detalji
             Korisnik user = (Korisnik)Session["user"];
@@ -120,31 +121,46 @@ namespace MyWebApp.Controllers
             }
             #endregion
 
+            #region Ako je vec prijavljen 
 
-            ///////////////////////////////////////////////////////////////OVDE TREBA SREDITI
-            //Isti fitnes centar ne moze imati 2 treninga istovremeno
-            //ViewBag.ovajJeKliknutNaziv = naziv;
-            //ViewBag.ovajJeKliknutVreme = datumVreme;
-
-            //Mozda stranicu za potvrdjivanje prijave i onda on prebaci u novu akciju koja kaze jel moze ili ne
-
-            #region Ako je mesto popunjeno
-            //ne moze da se prijavi ako je vec popunjeno
-            ViewBag.imaMesta = "true";
-            if (maxPosetioca == brojPosetioca)
+            datumVreme = datumVreme.Substring(0, datumVreme.Length - 27); //moram iseci jer napravi space neki
+            ViewBag.ovajJeKliknutVreme = datumVreme;
+            bool vecPrijavljen = PodaciTxt.procitajJedanGrupniTrening("~/App_Data/GrupniTreninzi.txt",naziv,datumVreme,user.Ime,user.Prezime);
+            if (vecPrijavljen)
             {
-                ViewBag.imaMesta = "false";
+                 ViewBag.ranijePrijavljen = "jeste";
+            }else{
+                 ViewBag.ranijePrijavljen = "nije";
             }
             #endregion
 
-            ViewBag.trenutnoPrijavljen = user;
-
-            //if (ne moze dvaput da se prijavi)
+            //AKO JE VEC PRIJAVLJEN PRESKOCI OVE KORAKE
+            if (ViewBag.ranijePrijavljen == "nije")
             {
-                // ViewBag.prijavljenTrening = "Prijavljeni ste";
+                //Isti fitnes centar ne moze imati 2 treninga istovremeno(zato gledam datum i vreme); ne moze da se prijavi ako je popunjeno
+                #region Ako je mesto popunjeno
+
+                ViewBag.imaMesta = "true";
+                if (maxPosetioca == brojPosetioca)
+                {
+                    ViewBag.imaMesta = "false";
+                }
+                else
+                {
+                    //Dodajem korisnika na kraj liste za taj trening; proveravam da li je to taj trening
+                    ViewBag.prijavljenTrening = "Prijavljeni ste";
+                    PodaciTxt.DodajUGrupniTrening(user.Ime, user.Prezime, naziv, datumVreme);
+                }
+                #endregion
             }
 
             return View("Index");
+        }
+        #endregion
+
+        public ActionResult RanijiTreninzi()
+        {
+            return View("RanijiTreninzi");
         }
     }
 }

@@ -348,5 +348,75 @@ namespace MyWebApp.Models
             #endregion
         }
         #endregion
+
+        #region Dodaj korisnika u grupni trening
+        public static void DodajUGrupniTrening(string ime, string prezime, string naziv, string datumVreme)
+        {
+            string tempFile = Path.GetTempFileName();
+
+            var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+
+            using (var sw = new StreamWriter(tempFile))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    sw.Write(line);
+                    //Proveravam koji je to grupni trening i onda ga dodajem na kraj te linije
+                    if (line.Contains(naziv) && line.Contains(datumVreme))
+                    {
+                        sw.Write("|");
+                        sw.Write(ime);
+                        sw.Write("-");
+                        sw.Write(prezime);
+                    }
+                    sw.WriteLine();
+                }
+            }
+            sr.Close();
+            fs.Close();
+            File.Delete(path);
+            File.Move(tempFile, path);
+        }
+        #endregion
+
+        #region Procitaj jedan grupni trening
+        public static bool procitajJedanGrupniTrening(string path,string naziv, string datumVreme,string ime,string prezime)
+        {
+            path = HostingEnvironment.MapPath(path);
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (line.Contains(naziv) && line.Contains(datumVreme))
+                {
+                    string[] tokens = line.Split(';');
+                    string[] posetioci = tokens[6].Split('|');
+
+                    foreach (var posetilac in posetioci)
+                    {
+                        string[] korisnik = posetilac.Split('-');
+                        Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
+
+                        if (korisnik[0]==ime && korisnik[1] == prezime)
+                        {
+                            sr.Close();
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            sr.Close();
+            stream.Close();
+
+            return false;
+        }
+        #endregion
     }
 }
