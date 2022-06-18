@@ -205,11 +205,112 @@ namespace MyWebApp.Controllers
                     listaGrupnihTreninga.Add(item);
                 }
             }
-            ViewBag.grupniTreninzi = listaGrupnihTreninga;
+
+            //Ovde vrsim kombinovanu pretragu
+            List<GrupniTrening> filtrirani = new List<GrupniTrening>();
+            List<GrupniTrening> konacniPrikaz = new List<GrupniTrening>();
+
+            #region Pretrazi po kriterijumu
+            //kod za pretragu
+            foreach (var item in listaGrupnihTreninga)
+            {
+                if(naziv.Equals("") && fitnesCentarOdrzava.Equals("") && tipTreninga.Equals(""))
+                {
+                    konacniPrikaz = listaGrupnihTreninga;
+                }
+                //prazan naziv
+                else if (naziv.Equals(""))
+                {
+                    if (fitnesCentarOdrzava.Equals(""))
+                    {
+                        if (item.TipTreninga == tipTreninga)
+                        {
+                            filtrirani.Add(item);
+                        }
+                    }
+                    else if (tipTreninga.Equals(""))
+                    {
+                        if (item.FitnesCentarOdrzava.Naziv == fitnesCentarOdrzava)
+                        {
+                            filtrirani.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        if (item.FitnesCentarOdrzava.Naziv == fitnesCentarOdrzava && item.TipTreninga == tipTreninga)
+                        {
+                            filtrirani.Add(item);
+                        }
+                    }
+                }
+                //prazan fitnes centar
+                else if (fitnesCentarOdrzava.Equals(""))
+                {
+                    if (naziv.Equals(""))
+                    {
+                        if (item.TipTreninga == tipTreninga)
+                        {
+                            filtrirani.Add(item);
+                        }
+                    }
+                    else if (tipTreninga.Equals(""))
+                    {
+                        if (item.Naziv == naziv)
+                        {
+                            filtrirani.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        if (item.Naziv == naziv && item.TipTreninga == tipTreninga)
+                        {
+                            filtrirani.Add(item);
+                        }
+                    }
+                }
+                //prazan tip treninga
+                else if (tipTreninga.Equals(""))
+                {
+                    if (naziv.Equals(""))
+                    {
+                        if (item.FitnesCentarOdrzava.Naziv == fitnesCentarOdrzava)
+                        {
+                            filtrirani.Add(item);
+                        }
+                    }
+                    else if (fitnesCentarOdrzava.Equals(""))
+                    {
+                        if (item.Naziv == naziv)
+                        {
+                            filtrirani.Add(item);
+                        }
+                    }
+                    else
+                    {
+                        if (item.Naziv == naziv && item.FitnesCentarOdrzava.Naziv == fitnesCentarOdrzava)
+                        {
+                            filtrirani.Add(item);
+                        }
+
+                    }
+                }
+                else if(item.Naziv == naziv && item.FitnesCentarOdrzava.Naziv==fitnesCentarOdrzava && item.TipTreninga == tipTreninga)
+                {
+                    filtrirani.Add(item);
+                }
+            }
             #endregion
 
-            //mozda da procitam sve treninge pa onda pokupim sve tipove Treninga i izbacim ih u listBox
-            //kombinovana pretraga
+            foreach (var item in listaGrupnihTreninga)
+            {
+                if (filtrirani.Contains(item))
+                {
+                    konacniPrikaz.Add(item);
+                }
+            }
+            ViewBag.grupniTreninzi = konacniPrikaz;
+            #endregion
+
             return View("RanijiTreninzi");
         }
         #endregion
@@ -235,12 +336,53 @@ namespace MyWebApp.Controllers
                     listaGrupnihTreninga.Add(item);
                 }
             }
-            ViewBag.grupniTreninzi = listaGrupnihTreninga;
             #endregion
 
-            //Odradi sortiranje po parametrima
+            List<GrupniTrening> sortiraniGrupniTreninzi = new List<GrupniTrening>();
+            if (sort.Equals("rastuce"))
+            {
+                switch (submit)
+                {
+                    case "naziv":
+                        sortiraniGrupniTreninzi = listaGrupnihTreninga.OrderBy(f => f.Naziv).ToList();
+                        break;
+                    case "tipTreninga":
+                        sortiraniGrupniTreninzi = listaGrupnihTreninga.OrderBy(f => f.TipTreninga).ToList();
+                        break;
+                    case "datumIVremeTreninga":
+                        sortiraniGrupniTreninzi = listaGrupnihTreninga.OrderBy(f => f.DatumIVremeTreninga).ToList();
+                        break;
+                }
+            }
+            else if (sort.Equals("opadajuce"))
+            {
+                switch (submit)
+                {
+                    case "naziv":
+                        sortiraniGrupniTreninzi = listaGrupnihTreninga.OrderByDescending(f => f.Naziv).ToList();
+                        break;
+                    case "tipTreninga":
+                        sortiraniGrupniTreninzi = listaGrupnihTreninga.OrderByDescending(f => f.TipTreninga).ToList();
+                        break;
+                    case "datumIVremeTreninga":
+                        sortiraniGrupniTreninzi = listaGrupnihTreninga.OrderByDescending(f => f.DatumIVremeTreninga).ToList();
+                        break;
+                }
+            }
+            else
+            {
+                ViewBag.grupniTreninzi = listaGrupnihTreninga;
+            }
+            ViewBag.grupniTreninzi = sortiraniGrupniTreninzi;
+
+
             return View("RanijiTreninzi");
         }
         #endregion
+
+        //Za poslednju tacku napravi jos jedno polje. Nazoves "odobren" i stavis tipa int
+        //Dodas u txt to jedno polje da je 0 ili 1
+        // kada je 1 onda je odobren i prikazuje, a ako je 0 onda ne prikazuje
+        //vrv i na onoj pocetnoj strani menjam pa dodam ako je odobren==1 prikaze tekst
     }
 }

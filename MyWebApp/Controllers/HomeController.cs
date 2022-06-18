@@ -47,7 +47,7 @@ namespace MyWebApp.Controllers
             {
                 if (naziv.Equals("") && adresa.Equals("") && godinaOd.Equals("") && godinaDo.Equals(""))
                 {
-                    ViewBag.fitnesCentri = filtrirani;
+                    ViewBag.fitnesCentri = fitnesCentri;
                 }
                 //Prazan naziv
                 else if (naziv.Equals(""))

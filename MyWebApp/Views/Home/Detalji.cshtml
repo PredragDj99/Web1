@@ -69,6 +69,7 @@
     </style>
 </head>
 <body>
+    <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
     <h1>Detalji o fitnes centru</h1>
     <table class="detalji">
         <tr>
@@ -108,15 +109,15 @@
         </tr>
         @foreach (var item in ViewBag.grupniTreninzi)
         {
-        <tr>
-            <td>@item.Naziv</td>
-            <td>@item.TipTreninga</td>
-            <td>@item.FitnesCentarOdrzava.Naziv</td>
-            <td>@item.TrajanjeTreningaMinute</td>
-            <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
-            <td>@item.MaksimalanBrojPosetioca</td>
-            <td>@item.SpisakPosetilaca.Count</td>
-        </tr>
+            <tr>
+                <td>@item.Naziv</td>
+                <td>@item.TipTreninga</td>
+                <td>@item.FitnesCentarOdrzava.Naziv</td>
+                <td>@item.TrajanjeTreningaMinute</td>
+                <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.MaksimalanBrojPosetioca</td>
+                <td>@item.SpisakPosetilaca.Count</td>
+            </tr>
         }
     </table>
     <br /><br />
@@ -132,7 +133,6 @@
         </p>
         <hr />
     }
-    <hr />
-    <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+
 </body>
 </html>
