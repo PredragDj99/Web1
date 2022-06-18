@@ -1,2 +1,4 @@
 Kosta123;kosta123;Kosta;Milenkovic;Muski;kostamilenkovic@gmail.com;31/12/2003;POSETILAC;;;;
 Zika123;zika123;Zika;Zikic;Muski;zikazikic@gmail.com;12/01/1994;POSETILAC;;;;
+Admin;admin;Marko;Markovic;Muski;markomarkovic@gmail.com;10/10/1980;VLASNIK;;;;Best Fit|MuscleMotion|Fitnes Elastico
+trener1;trener1;Milorad;Milidrag;Muski;miloradmilidrag@gmail.com;20/08/1990;TRENER;;body pump_25/08/2022 10:00|Kardio_10/08/2022 09:00;Fitnes Elastico;

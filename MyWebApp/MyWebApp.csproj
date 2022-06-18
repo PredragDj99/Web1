@@ -122,6 +122,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PosetilacController.cs" />
+    <Compile Include="Controllers\TrenerController.cs" />
+    <Compile Include="Controllers\VlasnikController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -175,6 +177,8 @@
     <Content Include="Views\Home\Profil.cshtml" />
     <Content Include="Views\Posetilac\Index.cshtml" />
     <Content Include="Views\Posetilac\RanijiTreninzi.cshtml" />
+    <Content Include="Views\Trener\Index.cshtml" />
+    <Content Include="Views\Vlasnik\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

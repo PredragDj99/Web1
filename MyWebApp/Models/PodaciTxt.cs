@@ -128,9 +128,11 @@ namespace MyWebApp.Models
             {
                 string[] tokens = line.Split(';');
 
-                Komentar kom = new Komentar(tokens[0],tokens[1],tokens[2],Int32.Parse(tokens[3]));
-                
-                komentari.Add(kom);
+                Komentar kom = new Komentar(tokens[0],tokens[1],tokens[2],Int32.Parse(tokens[3]),tokens[4]);
+                if (tokens[4] == "odobren")
+                {
+                    komentari.Add(kom);
+                }
             }
 
             sr.Close();
@@ -349,6 +351,7 @@ namespace MyWebApp.Models
         }
         #endregion
 
+        //Ova 2 dodavanja idu zajedno
         #region Dodaj korisnika u grupni trening
         public static void DodajUGrupniTrening(string ime, string prezime, string naziv, string datumVreme)
         {
@@ -380,6 +383,113 @@ namespace MyWebApp.Models
             fs.Close();
             File.Delete(path);
             File.Move(tempFile, path);
+        }
+        #endregion
+        #region Dodaje grupni trening u fajl korisnika
+        public static void DodajGrupniTreningKorisniku(Korisnik posetilac,string lepoFormatiranDatumRodjenja,string tipTreninga, string datumVreme)
+        {
+            string tempFile = Path.GetTempFileName();
+
+            var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+
+            string[] podaciPosetioca=new string[12];
+
+            podaciPosetioca[0] = posetilac.KorisnickoIme;
+            podaciPosetioca[1] = posetilac.Lozinka;
+            podaciPosetioca[2] = posetilac.Ime;
+            podaciPosetioca[3] = posetilac.Prezime;
+            podaciPosetioca[4] = posetilac.Pol;
+            podaciPosetioca[5] = posetilac.Email;
+            podaciPosetioca[6] = lepoFormatiranDatumRodjenja;
+            podaciPosetioca[7] = "POSETILAC";
+            if (posetilac.ListaGrupnihTreninga.Count == 0)
+            {
+                podaciPosetioca[8] = "";
+            }
+            else
+            {
+                foreach (var item in posetilac.ListaGrupnihTreninga)
+                {
+                    podaciPosetioca[8] += item;
+                }
+            }
+            podaciPosetioca[9] = "";
+            podaciPosetioca[10] = "";
+            podaciPosetioca[11] = "";
+
+            using (var sw = new StreamWriter(tempFile))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (line.Contains(posetilac.KorisnickoIme))
+                    {
+                        if (podaciPosetioca[8] == "")
+                        {
+                            podaciPosetioca[8] += tipTreninga + "_" + datumVreme;
+                        }
+                        else
+                        {
+                            podaciPosetioca[8] += "|"+tipTreninga + "_" + datumVreme;
+                        }
+
+                        for (int i = 0; i < 12; i++)
+                        {
+                            sw.Write(podaciPosetioca[i]);
+                            if (i == 11)
+                            {
+                                sw.WriteLine();
+                            }
+                            else
+                            {
+                                sw.Write(";");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        sw.Write(line);
+                        sw.WriteLine();
+                    }
+                }
+            }
+            sr.Close();
+            fs.Close();
+            File.Delete(path);
+            File.Move(tempFile, path);
+        }
+        #endregion
+        #region Procitaj korisnikov datum rodjenja
+        public static string pronadjiDatumRodjenjaKorisnika(string korisnickoIme) //Nikako drugacije ne mogu da izvadim validan datum
+        {
+            List<Korisnik> korisnici = new List<Korisnik>();
+
+            var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            string datumRodjenja;
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] tokens = line.Split(';');
+
+                if (tokens[0] == korisnickoIme)
+                {
+                    datumRodjenja = tokens[6];
+                    sr.Close();
+                    stream.Close();
+                    return datumRodjenja;
+                }
+            }
+            sr.Close();
+            stream.Close();
+
+            return "";
         }
         #endregion
 
@@ -458,6 +568,39 @@ namespace MyWebApp.Models
             stream.Close();
 
             return grupniTreninzi;
+        }
+        #endregion
+
+        #region Sacuvaj komentar
+        public static void SacuvajKomentar(string koJeOstavioKomentar,string fitnesCentarKomentarisan,Int32 ocena,string tekstKomentara)
+        {
+            var path = HostingEnvironment.MapPath("~/App_Data/Komentari.txt");
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            string[] linija = new string[5];
+
+            linija[0] = koJeOstavioKomentar;
+            linija[1] = fitnesCentarKomentarisan;
+            linija[2] = tekstKomentara;
+            linija[3] = ocena.ToString();
+            linija[4] = "NIJE ODOBREN";
+
+            for (int i = 0; i < 5; i++)
+            {
+                sw.Write(linija[i]);
+                if (i == 4)
+                {
+                    sw.WriteLine();
+                }
+                else
+                {
+                    sw.Write(";");
+                }
+            }
+
+            sw.Close();
+            stream.Close();
         }
         #endregion
     }

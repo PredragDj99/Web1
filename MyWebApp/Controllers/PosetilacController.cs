@@ -1,6 +1,7 @@
 ﻿using MyWebApp.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -72,7 +73,7 @@ namespace MyWebApp.Controllers
 
         #region Prijava za trening
         //Dodatne opcije za posetioca
-        public ActionResult PrijavaZaTrening(string naziv, string datumVreme,int maxPosetioca, int brojPosetioca,List<Korisnik> spisakPosetilaca) //ne mogu vise parametara
+        public ActionResult PrijavaZaTrening(string naziv, string datumVreme,int maxPosetioca, int brojPosetioca,List<Korisnik> spisakPosetilaca,string tipTreninga) //ne mogu vise parametara
         {
             #region Isto kao home controller -> stranica detalji
             Korisnik user = (Korisnik)Session["user"];
@@ -150,6 +151,24 @@ namespace MyWebApp.Controllers
                     //Dodajem korisnika na kraj liste za taj trening; proveravam da li je to taj trening
                     ViewBag.prijavljenTrening = "Prijavljeni ste";
                     PodaciTxt.DodajUGrupniTrening(user.Ime, user.Prezime, naziv, datumVreme);
+
+
+                    string lepoFormatiran = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
+
+                    /* OVO MORA DA SE POPRAVI
+                     * 
+                     * SVUDA GDE SU LISTE MORAM PONOVO SVE PRECI I POPUNITI IH A NE SAMO CITATI PDF
+                     * 
+                    foreach (var item in listaGrupnihTreninga)
+                    {
+                        //Ovo mora da se popravi
+                        if(item.SpisakPosetilaca.Contains(user.Ime)  item.Naziv==naziv && item.DatumIVremeTreninga.ToString() == datumVreme)
+                        {
+                            user.ListaGrupnihTreninga.Add(item);
+                        }
+                    }
+                    */
+                    PodaciTxt.DodajGrupniTreningKorisniku(user,lepoFormatiran, tipTreninga,datumVreme);
                 }
                 #endregion
             }
@@ -380,9 +399,83 @@ namespace MyWebApp.Controllers
         }
         #endregion
 
-        //Za poslednju tacku napravi jos jedno polje. Nazoves "odobren" i stavis tipa int
-        //Dodas u txt to jedno polje da je 0 ili 1
-        // kada je 1 onda je odobren i prikazuje, a ako je 0 onda ne prikazuje
-        //vrv i na onoj pocetnoj strani menjam pa dodam ako je odobren==1 prikaze tekst
+        #region Ostavi komentar
+        public ActionResult OstaviKomentar(string fitnesCentarKomentarisan, int? ocena, string tekstKomentara)
+        {
+            #region Ucitavanje posecenih treninga
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
+            List<GrupniTrening> grupniTreninziNaKojimaJePrisustvovao = PodaciTxt.prisustvovaoGrupnomTreningu("~/App_Data/GrupniTreninzi.txt", user.Ime, user.Prezime);
+            List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
+
+            //grupni treninzi na kojima je ucestvovao
+            foreach (var item in grupniTreninziNaKojimaJePrisustvovao)
+            {
+                if (item.DatumIVremeTreninga < DateTime.Now)
+                {
+                    listaGrupnihTreninga.Add(item);
+                }
+            }
+            ViewBag.grupniTreninzi = listaGrupnihTreninga;
+            #endregion
+
+            string pamtiNaziv="nijeBio";
+
+            bool bio = true;
+            foreach (var item in listaGrupnihTreninga)
+            {
+                if (item.FitnesCentarOdrzava.Naziv.Equals(fitnesCentarKomentarisan))
+                {
+                    pamtiNaziv = fitnesCentarKomentarisan;
+                }
+            }
+            //Moze da komentarise samo ako je bio i ako je uneo validnu ocenu
+            if (pamtiNaziv.Equals("nijeBio"))
+            {
+                ViewBag.poslatNaPregled = "Moze komentarisati samo ukoliko ste bili u fitnes centru!";
+                bio = false;
+            }
+
+            if (bio == true)
+            {
+                bool poslat = true;
+                if (ocena == null)
+                {
+                    poslat = false;
+                }
+                if (poslat)
+                {
+                    if (!tekstKomentara.Equals(""))
+                    {
+                        if (!tekstKomentara.Contains(";"))
+                        {
+                            ViewBag.poslatNaPregled = "Vas komentar je uspesno poslat vlasniku!";
+                            Int32 oc = (Int32)ocena;
+                            PodaciTxt.SacuvajKomentar(user.Ime, fitnesCentarKomentarisan, oc, tekstKomentara);
+                        }
+                        else
+                        {
+                            ViewBag.poslatNaPregled = "Molimo Vas nemojte koristiti znak  ;  ";
+                        }
+                    }
+                    else
+                    {
+                        ViewBag.poslatNaPregled = "Niste uneli tekst komentara";
+                    }
+                }
+                else
+                {
+                    ViewBag.poslatNaPregled = "Potrebno je da ocena bude 1-5";
+                }
+            }
+
+
+            return View("RanijiTreninzi");
+        }
+        #endregion
     }
 }

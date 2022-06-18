@@ -521,6 +521,7 @@ namespace MyWebApp.Controllers
         }
         #endregion
 
+        //Nakon klika na detalje ukoliko je logovan ide se na POSETILAC/TRENER/VLASNIK
         #region Detalji o fitnes centru
         //treba, forma za link da bih prikupio ime
         public ActionResult Detalji(string naziv) //naziv fitnes centra
@@ -575,6 +576,14 @@ namespace MyWebApp.Controllers
                 if(user.Uloga.ToString() == "POSETILAC")
                 {
                     return RedirectToAction("Index", "Posetilac", new { naziv });
+                }
+                else if (user.Uloga.ToString() == "TRENER")
+                {
+                    return RedirectToAction("Index", "Trener", new { naziv });
+                }
+                else if(user.Uloga.ToString() == "VLASNIK")
+                {
+                    return RedirectToAction("Index", "Vlasnik", new { naziv });
                 }
             }
 
@@ -822,8 +831,5 @@ namespace MyWebApp.Controllers
             return View("Profil");
         }
         #endregion
-        
-        //MOZE DA IZVRSAVA AKTIVNOSTI U SKLADU SA ULOGOM KADA SE PRIAJAVI
-
     }
 }

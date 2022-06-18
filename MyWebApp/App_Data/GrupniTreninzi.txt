@@ -2,7 +2,8 @@ Grupa A7;Istezanje misica;Compiona;75 minuta;12/12/2021 17:50;10;Zika-Zikic|Mark
 Grupa A7;Body pump;Compiona;75 minuta;26/02/2022 18:00;15;Zika-Zikic|Marko-Dejanic|Zdravko-Pesic|Nastasija-Kalem|Teodora-Ninkovic|Sandra-Stepavcevic|Milan-Sobus|Zivko-Maric
 Grupa B2;Kondicioni trening;Fitnes Elastico;60 minuta;18/04/2022 10:00;10;Zika-Zikic|Marko-Dejanic|Zdravko-Pesic|Nenad-Stefanovic|Ljubica-Zivkovic|Nastasija-Kalem|Teodora-Ninkovic|Sandra-Stepavcevic|Milan-Sobus|Zivko-Maric
 Grupa pocetnici;HIT;Compiona;90 minuta;27/07/2022 12:30;30;Ivana-Mihajlovic|Dejana-Zivkovic|Maja-Radovanovic
-Profesionalni sportisti;body pump;Fitnes Elastico;120 minuta;25/08/2022 10:00;15;Dejan-Djero|Ilija-Pasic|Irena-Ladja|Stanko-Djokic|Zika-Zikic
+Profesionalni sportisti;body pump;Fitnes Elastico;120 minuta;25/08/2022 10:00;15;Dejan-Djero|Ilija-Pasic|Irena-Ladja|Stanko-Djokic
+Grupa B2;body pump;Fitnes Elastico;120 minuta;14/09/2022 15:00;15;Dejan-Djero|Ilija-Pasic|Irena-Ladja|Stanko-Djokic
 Grupa za decu;Razgibavanje;Compiona;60 minuta;17/01/2022 18:30;20;Radoslava-Zivic|Ivan-Zdravkovic|Bozidar-Zdela|Marija-Kis|Zarko-Atanasijevic|Jovan-Tomic|Milorad-Pesic|Dunja-Ivanovic|Jelica-Klica|Ana-Artemic|Zeljana-Pegledovic|Dimitrije-Ruzic|Vasilije-Zaric
-Profesionalni sportisti;Pripreme za takmicenja;Fitnes Elastico;60 minuta;10/08/2022 09:00;5;Radoslava-Zivic|Ivan-Zdravkovic|Bozidar-Zdela|Marija-Kis|Zarko-Atanasijevic
+Profesionalni sportisti;Kardio;Fitnes Elastico;60 minuta;10/08/2022 09:00;5;Radoslava-Zivic|Ivan-Zdravkovic|Bozidar-Zdela|Marija-Kis|Zarko-Atanasijevic
 Grupa za decu;les mills tone;Compiona;60 minuta;15/08/2022 18:00;10;Radoslava-Zivic|Ivan-Zdravkovic|Bozidar-Zdela|Marija-Kis|Zarko-Atanasijevic|Jovan-Tomic|Milorad-Pesic|Dunja-Ivanovic|Jelica-Klica|Ana-Artemic

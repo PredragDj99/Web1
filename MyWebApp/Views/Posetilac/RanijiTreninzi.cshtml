@@ -27,6 +27,9 @@
             text-align:center;
             margin-top: 30px;
         }
+        #komentar{
+            color: crimson;
+        }
         table.detalji, tr.detalji {
             border: 2px solid;
             border: inset;
@@ -46,6 +49,14 @@
             margin-left: auto;
             margin-right: auto;
         }
+        #pomeriLevo{
+            margin-left:100px;
+            padding-left:10px;
+            width:460px;
+            border: 2px solid blue; 
+            float:left;
+            height:370px;
+        }
     </style>
 </head>
 <body>
@@ -53,22 +64,6 @@
     <br /><br />
     <h1>Treninzi na kojima ste bili</h1>
     <br />
-    <h3>Pretraga</h3>
-    <form action="~/Posetilac/Pretraga" method="post">
-        Naziv grupe:<input type="text" name="naziv" /><br />
-        Naziv fitnes centra:<input type="text" name="fitnesCentarOdrzava" /><br />
-        Tip treninga (napravi listu za odabirrr):<input type="text" name="tipTreninga" /><br />
-        <input type="submit" value="Pretrazi" />
-    </form><br />
-
-    <h3>Sortiraj</h3>
-    <form action="~/Posetilac/Sortiraj" method="post">
-        Rastuce <input type="radio" name="sort" value="rastuce" checked="checked" /><br />
-        Opadajuce <input type="radio" name="sort" value="opadajuce" /><br />
-        <button type="submit" name="submit" value="naziv">Sortiraj po nazivu</button><br />
-        <button type="submit" name="submit" value="tipTreninga">Sortiraj po tipu treninga</button><br />
-        <button type="submit" name="submit" value="datumIVremeTreninga">Sortiraj po datumu i vremenu</button><br />
-    </form><br />
 
     <table class="detalji">
         <tr>
@@ -93,6 +88,41 @@
             </tr>
         }
     </table>
+
+    <br /><br />
+    <div id="pomeriLevo">
+        <h2>Pretraga</h2>
+        <form action="~/Posetilac/Pretraga" method="post">
+            Naziv grupe:<input type="text" name="naziv" /><br />
+            Naziv fitnes centra:<input type="text" name="fitnesCentarOdrzava" /><br />
+            Tip treninga:<input type="text" name="tipTreninga" /><br />
+            <input type="submit" value="Pretrazi" />
+        </form><br />
+    </div>
+
+    <div id="pomeriLevo">
+        <h2>Sortiraj</h2>
+        <form action="~/Posetilac/Sortiraj" method="post">
+            Rastuce <input type="radio" name="sort" value="rastuce" checked="checked" /><br />
+            Opadajuce <input type="radio" name="sort" value="opadajuce" /><br />
+            <button type="submit" name="submit" value="naziv">Sortiraj po nazivu</button><br />
+            <button type="submit" name="submit" value="tipTreninga">Sortiraj po tipu treninga</button><br />
+            <button type="submit" name="submit" value="datumIVremeTreninga">Sortiraj po datumu i vremenu</button><br />
+        </form>
+    </div>
+
+    <div id="pomeriLevo">
+        <h2>Ostavite komentar o fitnes centru:</h2>
+        <form action="~/Posetilac/OstaviKomentar" method="post">
+            Naziv fitnes centra:<input type="text" name="fitnesCentarKomentarisan" /><br />
+            Ocena fitnes centra:<input type="number" name="ocena" min="1" max="5" /><br /><br />
+            Komentar:<textarea type="text" name="tekstKomentara" cols="55" rows="8" ></textarea><br /><br />
+            <input type="submit" value="Posalji komentar" />
+        </form>
+        <h3 id="komentar">@ViewBag.poslatNaPregled</h3>
+    </div>
+    <br />
+
 </body>
 </html>
 
