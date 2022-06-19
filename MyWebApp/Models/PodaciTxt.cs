@@ -353,7 +353,7 @@ namespace MyWebApp.Models
 
         //Ova 2 dodavanja idu zajedno
         #region Dodaj korisnika u grupni trening
-        public static void DodajUGrupniTrening(string ime, string prezime, string naziv, string datumVreme)
+        public static void DodajUGrupniTrening(string ime, string prezime, string naziv, string datumVreme) //ovo dodaje u txt
         {
             string tempFile = Path.GetTempFileName();
 
@@ -386,13 +386,13 @@ namespace MyWebApp.Models
         }
         #endregion
         #region Dodaje grupni trening u fajl korisnika
-        public static void DodajGrupniTreningKorisniku(Korisnik posetilac,string lepoFormatiranDatumRodjenja,string tipTreninga, string datumVreme)
+        public static void DodajGrupniTreningKorisniku(Korisnik posetilac,GrupniTrening gt,string lepoFormatiranDatumRodjenja,string tipTreninga, string datumVreme)
         {
             string tempFile = Path.GetTempFileName();
 
-            var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
-            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+            var path1 = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream fs1 = new FileStream(path1, FileMode.Open, FileAccess.Read);
+            StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
 
             string[] podaciPosetioca=new string[12];
 
@@ -404,20 +404,34 @@ namespace MyWebApp.Models
             podaciPosetioca[5] = posetilac.Email;
             podaciPosetioca[6] = lepoFormatiranDatumRodjenja;
             podaciPosetioca[7] = "POSETILAC";
-            if (posetilac.ListaGrupnihTreninga.Count == 0)
+            if (posetilac.ListaGrupnihTreninga.Count == 1)
             {
                 podaciPosetioca[8] = "";
             }
             else
             {
-                foreach (var item in posetilac.ListaGrupnihTreninga)
+                string line = "";
+                while ((line = sr1.ReadLine()) != null)
                 {
-                    podaciPosetioca[8] += item;
+                    string[] tokens = line.Split(';');
+
+                    if (tokens[0] == posetilac.KorisnickoIme)
+                    {
+                        podaciPosetioca[8] = tokens[8];
+                    }
                 }
             }
             podaciPosetioca[9] = "";
             podaciPosetioca[10] = "";
             podaciPosetioca[11] = "";
+
+
+            sr1.Close();
+            fs1.Close();
+
+            var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
 
             using (var sw = new StreamWriter(tempFile))
             {
@@ -433,7 +447,7 @@ namespace MyWebApp.Models
                         }
                         else
                         {
-                            podaciPosetioca[8] += "|"+tipTreninga + "_" + datumVreme;
+                            podaciPosetioca[8] = podaciPosetioca[8]+"|"+tipTreninga + "_" + datumVreme;
                         }
 
                         for (int i = 0; i < 12; i++)
@@ -462,6 +476,7 @@ namespace MyWebApp.Models
             File.Move(tempFile, path);
         }
         #endregion
+        //Ovo mi je potrebno zbog ovih gore
         #region Procitaj korisnikov datum rodjenja
         public static string pronadjiDatumRodjenjaKorisnika(string korisnickoIme) //Nikako drugacije ne mogu da izvadim validan datum
         {
@@ -484,6 +499,34 @@ namespace MyWebApp.Models
                     sr.Close();
                     stream.Close();
                     return datumRodjenja;
+                }
+            }
+            sr.Close();
+            stream.Close();
+
+            return "";
+        }
+        #endregion
+        #region Procitaj datum odrzavanja treninga
+        public static string pronadjiDatumIVremeTreninga(string naziv,string tip,string trajanje, string nazivFC) //Nikako drugacije ne mogu da izvadim validan datum
+        {
+            var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            string datumTreninga;
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] tokens = line.Split(';');
+
+                if (tokens[0] == naziv && tokens[1]==tip && tokens[2]== nazivFC && tokens[3]== trajanje)
+                {
+                    datumTreninga = tokens[4];
+                    sr.Close();
+                    stream.Close();
+                    return datumTreninga;
                 }
             }
             sr.Close();

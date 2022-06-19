@@ -73,7 +73,7 @@ namespace MyWebApp.Controllers
 
         #region Prijava za trening
         //Dodatne opcije za posetioca
-        public ActionResult PrijavaZaTrening(string naziv, string datumVreme,int maxPosetioca, int brojPosetioca,List<Korisnik> spisakPosetilaca,string tipTreninga) //ne mogu vise parametara
+        public ActionResult PrijavaZaTrening(string naziv, string datumVreme,int maxPosetioca, int brojPosetioca,List<Korisnik> spisakPosetilaca,string tipTreninga,string nazivTreninga,string trajanjeMinute) //ne mogu vise parametara
         {
             #region Isto kao home controller -> stranica detalji
             Korisnik user = (Korisnik)Session["user"];
@@ -148,27 +148,40 @@ namespace MyWebApp.Controllers
                 }
                 else
                 {
-                    //Dodajem korisnika na kraj liste za taj trening; proveravam da li je to taj trening
+                    string praviTip = tipTreninga.Substring(0, tipTreninga.Length-27);
+                    string formatiranDatumTreninga = PodaciTxt.pronadjiDatumIVremeTreninga(nazivTreninga,praviTip,trajanjeMinute,naziv);
+                    DateTime grupniTreningVreme = DateTime.ParseExact(formatiranDatumTreninga, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
+                    List<Korisnik> listaPosetilaca = new List<Korisnik>(); //Ovde ce mi biti svi koji prisustvuju
+
+                    List<GrupniTrening> listaaa = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
+                    foreach (var item in listaaa)
+                    {
+                        if (item.DatumIVremeTreninga==grupniTreningVreme && item.TipTreninga == praviTip)
+                        {
+                            item.SpisakPosetilaca.Add(user);
+                            listaPosetilaca = item.SpisakPosetilaca; 
+                        }
+                        else
+                        {
+                            listaPosetilaca = item.SpisakPosetilaca;
+                        }
+                    }
+
+
+                    FitnesCentar fc = new FitnesCentar(naziv);
+                    //treningu dodajem spisak posetioca
+                    GrupniTrening gt = new GrupniTrening(nazivTreninga,tipTreninga,fc,trajanjeMinute, grupniTreningVreme,maxPosetioca, listaPosetilaca);
+                    //korisniku dodajem taj trening
+                    user.ListaGrupnihTreninga.Add(gt);
+
+                    //Dodajem korisnika na kraj liste(txt) za taj trening; proveravam da li je to taj trening
                     ViewBag.prijavljenTrening = "Prijavljeni ste";
                     PodaciTxt.DodajUGrupniTrening(user.Ime, user.Prezime, naziv, datumVreme);
 
 
                     string lepoFormatiran = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
-
-                    /* OVO MORA DA SE POPRAVI
-                     * 
-                     * SVUDA GDE SU LISTE MORAM PONOVO SVE PRECI I POPUNITI IH A NE SAMO CITATI PDF
-                     * 
-                    foreach (var item in listaGrupnihTreninga)
-                    {
-                        //Ovo mora da se popravi
-                        if(item.SpisakPosetilaca.Contains(user.Ime)  item.Naziv==naziv && item.DatumIVremeTreninga.ToString() == datumVreme)
-                        {
-                            user.ListaGrupnihTreninga.Add(item);
-                        }
-                    }
-                    */
-                    PodaciTxt.DodajGrupniTreningKorisniku(user,lepoFormatiran, tipTreninga,datumVreme);
+                    PodaciTxt.DodajGrupniTreningKorisniku(user,gt,lepoFormatiran, praviTip, datumVreme);
                 }
                 #endregion
             }
