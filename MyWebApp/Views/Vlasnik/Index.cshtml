@@ -1,7 +1,147 @@
 ﻿
 @{
+    Layout = null;
     ViewBag.Title = "Index";
 }
 
-<h2>Vlasnik</h2>
 
+<html>
+<head>
+    <style type="text/css">
+        table.detalji {
+            border: 2px solid;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 5px;
+            border-spacing: 20px 0;
+            color: mediumblue;
+            font-size: medium;
+            text-align: center;
+        }
+
+        table.predstojeciTreninzi, th, td {
+            border: 1px solid;
+            padding: 10px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h2.fc {
+            text-shadow: 1px 1px 1px red, 2px 2px 1px red;
+        }
+
+        p.ocena {
+            text-decoration: underline blue;
+        }
+
+        h2, p {
+            margin-left: 40px;
+        }
+
+        a.linkZaPocetnu:link, a.linkZaPocetnu:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid red;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+            float: left;
+        }
+
+        a.linkZaPocetnu:hover, a.linkZaPocetnu:active {
+            background-color: red;
+            color: white;
+        }
+
+        .linkButton {
+            background-color: greenyellow;
+            color: black;
+            text-decoration: none;
+            font-family: Arial;
+            font-size: 15px;
+            padding: 10px 20px;
+        }
+
+            .linkButton:hover {
+                background-color: green;
+            }
+    </style>
+</head>
+<body>
+    <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+    <br /><br />
+    <h1>Detalji o fitnes centru</h1>
+    <table class="detalji">
+        <tr>
+            <th>Naziv</th>
+            <th>Adresa</th>
+            <th>Godina otvaranja</th>
+            <th>Ime vlasnika</th>
+            <th>Mesecna clanarina</th>
+            <th>Godisnja clanarina</th>
+            <th>Jedan trening</th>
+            <th>Jedan grupni trening</th>
+            <th>Jedan trening sa personalnim trenerom</th>
+        </tr>
+        <tr>
+            <td>@ViewBag.fitnesCentar.Naziv</td>
+            <td>@ViewBag.fitnesCentar.Adresa</td>
+            <td>@ViewBag.fitnesCentar.GodinaOtvaranja</td>
+            <td>@ViewBag.fitnesCentar.Vlasnik.Ime  @ViewBag.fitnesCentar.Vlasnik.Prezime</td>
+            <td>@ViewBag.fitnesCentar.MesecnaClanarina</td>
+            <td>@ViewBag.fitnesCentar.GodisnjaClanarina</td>
+            <td>@ViewBag.fitnesCentar.JedanTrening</td>
+            <td>@ViewBag.fitnesCentar.JedanGrupniTrening</td>
+            <td>@ViewBag.fitnesCentar.JedanSaPersonalnimTrenerom</td>
+        </tr>
+    </table>
+    <br />
+    <h1>Predstojeci treninzi</h1>
+    <table class="predstojeciTreninzi">
+        <tr>
+            <th>Naziv</th>
+            <th>Tip treninga</th>
+            <th>Odrzava fitnes centar</th>
+            <th>Trajanje</th>
+            <th>Datum i vreme</th>
+            <th>Maksimalan broj posetioca</th>
+            <th>Broj posetioca</th>
+        </tr>
+        @foreach (var item in ViewBag.grupniTreninzi)
+        {
+            <tr>
+                <td>@item.Naziv</td>
+                <td>@item.TipTreninga</td>
+                <td>@item.FitnesCentarOdrzava.Naziv</td>
+                <td>@item.TrajanjeTreningaMinute</td>
+                <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.MaksimalanBrojPosetioca</td>
+                <td>@item.SpisakPosetilaca.Count</td>
+            </tr>
+        }
+    </table>
+    <br /><br />
+    <h2 class="fc">@ViewBag.naziv</h2>
+    @foreach (var item in ViewBag.komentari)
+    {
+        <p>
+            Komentar ostavio/la: @item.KoJeOstavioKomentar <br />
+            Tekst komentara: @item.TekstKomentara<br />
+        </p>
+        <p class="ocena">
+            Opsti utisak: @item.Ocena<br />
+        </p>
+        <hr />
+    }
+
+</body>
+</html>

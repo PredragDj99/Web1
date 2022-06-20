@@ -179,6 +179,7 @@
     <Content Include="Views\Posetilac\RanijiTreninzi.cshtml" />
     <Content Include="Views\Trener\Index.cshtml" />
     <Content Include="Views\Vlasnik\Index.cshtml" />
+    <Content Include="Views\Trener\Dodavanje.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -22,7 +22,9 @@ namespace MyWebApp.Controllers
 
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
 
-            List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
+            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
+            //Kada obrisem jedan trening onda se prcitaju ponovo da bih lepo prikazao
+            List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
 
             //komentari
@@ -73,7 +75,7 @@ namespace MyWebApp.Controllers
 
         #region Prijava za trening
         //Dodatne opcije za posetioca
-        public ActionResult PrijavaZaTrening(string naziv, string datumVreme,int maxPosetioca, int brojPosetioca,List<Korisnik> spisakPosetilaca,string tipTreninga,string nazivTreninga,string trajanjeMinute) //ne mogu vise parametara
+        public ActionResult PrijavaZaTrening(string naziv, string datumVreme,int maxPosetioca, int brojPosetioca,List<Korisnik> spisakPosetilaca,string tipTreninga,string nazivTreninga,string trajanjeMinute,string obris) //ne mogu vise parametara
         {
             #region Isto kao home controller -> stranica detalji
             Korisnik user = (Korisnik)Session["user"];
@@ -171,7 +173,7 @@ namespace MyWebApp.Controllers
 
                     FitnesCentar fc = new FitnesCentar(naziv);
                     //treningu dodajem spisak posetioca
-                    GrupniTrening gt = new GrupniTrening(nazivTreninga,tipTreninga,fc,trajanjeMinute, grupniTreningVreme,maxPosetioca, listaPosetilaca);
+                    GrupniTrening gt = new GrupniTrening(nazivTreninga,tipTreninga,fc,trajanjeMinute, grupniTreningVreme,maxPosetioca, listaPosetilaca,obris);
                     //korisniku dodajem taj trening
                     user.ListaGrupnihTreninga.Add(gt);
 

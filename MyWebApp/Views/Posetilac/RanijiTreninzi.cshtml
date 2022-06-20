@@ -77,6 +77,8 @@
         </tr>
         @foreach (var item in ViewBag.grupniTreninzi)
         {
+            if (item.Obrisan == "AKTIVAN")
+            {
             <tr>
                 <td>@item.Naziv</td>
                 <td>@item.TipTreninga</td>
@@ -86,6 +88,7 @@
                 <td>@item.MaksimalanBrojPosetioca</td>
                 <td>@item.SpisakPosetilaca.Count</td>
             </tr>
+            }
         }
     </table>
 

@@ -117,6 +117,8 @@
         </tr>
         @foreach (var item in ViewBag.grupniTreninzi)
         {
+            if (item.Obrisan == "AKTIVAN")
+            {
             <tr>
                 <td>@item.Naziv</td>
                 <td>@item.TipTreninga</td>
@@ -144,11 +146,12 @@
                     <td>
                         <a class="linkButton" href="/Posetilac/PrijavaZaTrening?naziv=@item.FitnesCentarOdrzava.Naziv&&datumVreme=@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")
                            &&maxPosetioca=@item.MaksimalanBrojPosetioca&&brojPosetioca=@item.SpisakPosetilaca.Count&&spisakPosetioca=@item.SpisakPosetilaca&&tipTreninga=@item.TipTreninga
-                           &&nazivTreninga=@item.Naziv&&trajanjeMinute=@item.TrajanjeTreningaMinute">Prijavi se za trening</a>
+                           &&nazivTreninga=@item.Naziv&&trajanjeMinute=@item.TrajanjeTreningaMinute&&obris=@item.Obrisan">Prijavi se za trening</a>
                     </td>
                 }
             </tr>
-        }
+            }
+         }
     </table>
     <br /><br />
     <h2 class="fc">@ViewBag.naziv</h2>

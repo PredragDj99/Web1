@@ -109,6 +109,8 @@
         </tr>
         @foreach (var item in ViewBag.grupniTreninzi)
         {
+            if (item.Obrisan == "AKTIVAN")
+            {
             <tr>
                 <td>@item.Naziv</td>
                 <td>@item.TipTreninga</td>
@@ -117,8 +119,10 @@
                 <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@item.MaksimalanBrojPosetioca</td>
                 <td>@item.SpisakPosetilaca.Count</td>
+
             </tr>
-        }
+            }
+         }
     </table>
     <br /><br />
     <h2 class="fc">@ViewBag.naziv</h2>

@@ -1,0 +1,96 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "Dodavanje";
+}
+
+<html>
+<head>
+    <style type="text/css">
+        table.detalji {
+            border: 2px solid;
+            margin-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 5px;
+            border-spacing: 20px 0;
+            color: mediumblue;
+            font-size: medium;
+            text-align: center;
+        }
+
+        table.predstojeciTreninzi, th, td {
+            border: 1px solid;
+            padding: 10px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        h2.fc {
+            text-shadow: 1px 1px 1px red, 2px 2px 1px red;
+        }
+
+        p.ocena {
+            text-decoration: underline blue;
+        }
+
+        h2, p {
+            margin-left: 40px;
+        }
+
+        a.linkZaPocetnu:link, a.linkZaPocetnu:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid red;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+            float: left;
+        }
+
+        a.linkZaPocetnu:hover, a.linkZaPocetnu:active {
+            background-color: red;
+            color: white;
+        }
+
+        .linkButton {
+            background-color: greenyellow;
+            color: black;
+            text-decoration: none;
+            font-family: Arial;
+            font-size: 15px;
+            padding: 10px 20px;
+        }
+
+            .linkButton:hover {
+                background-color: green;
+            }
+        #centar{
+            margin-left: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div id="centar">
+        <br />
+        <h1>Kreirajte trening</h1>
+        <form action="~/Trener/DodajTreningTxt" method="post">
+            Grupa:<input type="text" name="naziv" /><br />
+            Tip treninga u minutama:<input type="text" name="tipTreninga" /><br />
+            Trajanje:<input type="text" name="trajanjeTreningaMinute" /><br />
+            Datum i vreme odrzavanja:<input type="text" name="datumIVremeTreninga" pattern="^([0123]{1}[0-9]{1}\/[0123]{1}[0-9]{1}\/[2]{1}[0]{1}[0-9]{2}\ [0-9]{2}\:[0-9]{2})" /><br />
+            Maksimalan broj posetioca:<input type="number" name="maksimalanBrojPosetioca" /><br /><br />
+            <input type="submit" value="Dodaj novi trening" />
+        </form>
+        <h2>@ViewBag.dodajTrening</h2>
+    </div>
+</body>
+</html>

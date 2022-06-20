@@ -60,11 +60,30 @@ namespace MyWebApp.Models
                 string[] AngazovanNaFitnesCentar = tokens[10].Split('|');
                 string[] ListaVlasnickiFitnesCentar = tokens[11].Split('|');
                 */
+                //ovo sam odradio kod posetioca
                 List <GrupniTrening> grupniTrening = new List<GrupniTrening>();
+
                 List<GrupniTrening> treninziAngazovan = new List<GrupniTrening>();
+                
+                string[] listaTreninziAngazovan = tokens[9].Split('|');
+                for (int i = 0; i < listaTreninziAngazovan.Count(); i++)
+                {
+                    if (tokens[7] == "TRENER")
+                    {
+                        string[] podeli = listaTreninziAngazovan[i].Split('_');
+                        DateTime date = DateTime.ParseExact(podeli[1], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
+                        FitnesCentar nazivFitnesCentra = new FitnesCentar(tokens[10]);
+                        //Prodji grupne treninge i za onaj koji ima ove parametre pokupi ostalo
+
+                        GrupniTrening g = new GrupniTrening(podeli[0], date, nazivFitnesCentra);
+                        treninziAngazovan.Add(g);
+                    }
+                }
+                
                 FitnesCentar fc = new FitnesCentar();
                 List<FitnesCentar> listaFitnesCentara = new List<FitnesCentar>();
-
+                
                 Korisnik k = new Korisnik(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4],tokens[5], DateTime.ParseExact(tokens[6], "dd/MM/yyyy", CultureInfo.InvariantCulture), (KorisnikType)Enum.Parse(typeof(KorisnikType), tokens[7]), grupniTrening,treninziAngazovan,fc,listaFitnesCentara);
                 korisnici.Add(k);
             }
@@ -98,11 +117,19 @@ namespace MyWebApp.Models
                 foreach(var posetilac in posetioci)
                 {
                     string[] korisnik = posetilac.Split('-');
-                    Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
-                    listaPosetilaca.Add(k);
+                    if (korisnik[0] != "")
+                    {
+                        Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
+                        listaPosetilaca.Add(k);
+                    }
+                    else
+                    {
+                        Korisnik k = new Korisnik();    //Ako ne postoji ni jedan korisnik(slucaj kada trener brise)
+                        listaPosetilaca.Add(k);
+                    }
                 }
-                
-                GrupniTrening tr = new GrupniTrening(tokens[0],tokens[1],fc,tokens[3],DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),Int32.Parse(tokens[5]),listaPosetilaca);
+
+                GrupniTrening tr = new GrupniTrening(tokens[0],tokens[1],fc,tokens[3],DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),Int32.Parse(tokens[5]),listaPosetilaca,tokens[7]);
 
                 grupniTreninzi.Add(tr);
             }
@@ -220,28 +247,6 @@ namespace MyWebApp.Models
         public static void IzmeniKorisnika(Korisnik korisnik, Korisnik preIzmeneKorisnik)
         {
             #region Brisanje starih podataka
-            /*
-            string tempFile = Path.GetTempFileName();
-
-            var path2 = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
-            FileStream fsRead = new FileStream(path2, FileMode.Open, FileAccess.Read);
-            StreamReader sr = new StreamReader(fsRead, Encoding.UTF8);
-
-            using (var sww = new StreamWriter(tempFile))
-            {
-                string line;
-
-                while ((line = sr.ReadLine()) != null)
-                {
-                    if (line != "removeme")
-                        sww.WriteLine(line);
-                }
-            }
-            sr.Close();
-            fsRead.Close();
-            File.Delete(path2);
-            File.Move(tempFile, path2);
-            */
 
             //Brisanje starog
             string tempFile2 = Path.GetTempFileName();
@@ -598,7 +603,7 @@ namespace MyWebApp.Models
                     listaPosetilaca.Add(k);
                 }
 
-                GrupniTrening tr = new GrupniTrening(tokens[0], tokens[1], fc, tokens[3], DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture), Int32.Parse(tokens[5]), listaPosetilaca);
+                GrupniTrening tr = new GrupniTrening(tokens[0], tokens[1], fc, tokens[3], DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture), Int32.Parse(tokens[5]), listaPosetilaca,tokens[7]);
 
                 foreach (var posetilac in listaPosetilaca)
                 {
@@ -644,6 +649,127 @@ namespace MyWebApp.Models
 
             sw.Close();
             stream.Close();
+        }
+        #endregion
+
+        #region Procitaj jedan grupni trening trenera
+        public static GrupniTrening procitajJedanGrupniTreningTrenera(string nazivFC, string datumVreme)
+        {
+            var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (line.Contains(nazivFC) && line.Contains(datumVreme))
+                {
+                    string[] tokens = line.Split(';');
+                    string[] korisnici = tokens[6].Split('|');
+                    
+                    List<Korisnik> listaKorisnika = new List<Korisnik>();
+
+                    for (int i = 0; i < korisnici.Length; i++)
+                    {
+                        string[] imePrz = korisnici[i].Split('-');
+
+                        if (imePrz[0] != "") //ako je prazno polje, tj. nema posetioca jos uvek
+                        {
+                            Korisnik k = new Korisnik(imePrz[0], imePrz[1]);
+                            listaKorisnika.Add(k);
+                        }
+                        else
+                        {
+                            Korisnik k = new Korisnik();    //Ako ne postoji ni jedan korisnik(slucaj kada trener brise)
+                            listaKorisnika.Add(k);
+                        }
+                    }
+
+                    FitnesCentar fc = new FitnesCentar(nazivFC);
+                    DateTime d = DateTime.ParseExact(datumVreme, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+
+                    GrupniTrening gt = new GrupniTrening(tokens[0], tokens[1], fc,tokens[3],d,Int32.Parse(tokens[5]),listaKorisnika,tokens[7]);
+                    sr.Close();
+                    return gt; //nesto vrati
+                }
+            }
+
+            sr.Close();
+            stream.Close();
+
+            GrupniTrening grupni = new GrupniTrening();
+            return grupni; //nesto vrati
+        }
+        #endregion
+        #region Procitaj datum
+        public static string pronadjiDatumIVremeTreningaTrener(string naziv, string tip, string losDatum) //Nikako drugacije ne mogu da izvadim validan datum
+        {
+            var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            string datumTreninga;
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] tokens = line.Split(';');
+                string[] datum = tokens[4].Split(' ');
+
+                string[] losDatumPodela = losDatum.Split(' ');
+                string vreme = losDatumPodela[1].Substring(0, losDatumPodela[1].Length-3);
+
+                //uzeo sam samo vreme datuma jer u tom FC ne moze biti 2 trneinga u isto vreme
+                if (tokens[2] == naziv && tokens[1] == tip && datum[1].Equals(vreme))
+                {
+                    datumTreninga = tokens[4];
+                    sr.Close();
+                    stream.Close();
+                    return datumTreninga;
+                }
+            }
+            sr.Close();
+            stream.Close();
+
+            return "";
+        }
+        #endregion
+
+        #region ObrisiTrening
+        public static void ObrisiTrening(string naziv,string datum)
+        {
+            #region Brisanje starog
+            string tempFile = Path.GetTempFileName();
+
+            var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+
+            string linijaKojuMenjam = "";
+            using (var sww = new StreamWriter(tempFile))
+            {
+                string line;
+
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (!(line.Contains(naziv) && line.Contains(datum)))
+                    {
+                        sww.WriteLine(line);
+                    }
+                    else //Dodavanje dela za neaktivnu liniju
+                    {
+                        linijaKojuMenjam = line;
+                        linijaKojuMenjam = linijaKojuMenjam.Substring(0, linijaKojuMenjam.Length-7);
+                        linijaKojuMenjam = linijaKojuMenjam + "NeAkt!!";
+                        sww.WriteLine(linijaKojuMenjam);
+                    }
+                }
+            }
+            sr.Close();
+            stream.Close();
+            File.Delete(path);
+            File.Move(tempFile, path);
+            #endregion
         }
         #endregion
     }
