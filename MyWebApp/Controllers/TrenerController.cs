@@ -84,6 +84,17 @@ namespace MyWebApp.Controllers
                 item.DatumIVremeTreninga = trebajuMiOviPodaci.DatumIVremeTreninga;
                 item.Obrisan = trebajuMiOviPodaci.Obrisan;
 
+                //za pretragu
+                List<FitnesCentar> sviFC= PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
+                foreach (var jedanFC in sviFC)
+                {
+                    if (jedanFC.Naziv == trebajuMiOviPodaci.FitnesCentarOdrzava.Naziv)
+                    {
+                        item.FitnesCentarOdrzava.GodinaOtvaranja = jedanFC.GodinaOtvaranja;
+                        break;
+                    }
+                }
+                
                 //Da bi mogao da ih vidi
                 for (int i = 0; i < trebajuMiOviPodaci.SpisakPosetilaca.Count; i++)
                 {
@@ -656,30 +667,30 @@ namespace MyWebApp.Controllers
             ViewBag.stariTreninzi = stari;
             #endregion
 
-            List<FitnesCentar> filtrirani = new List<FitnesCentar>();
-            //Po godini otvaranja znaci da pristupa svakom treninku i gleda njegov fitnes centar i kada je on otvoren
+            List<GrupniTrening> filtrirani = new List<GrupniTrening>();
+            //Po godini otvaranja znaci da pristupa svakom treningu, gleda njegov fitnes centar i kada je on otvoren
             string godinaOd = godinaOtvaranjaOd.ToString();
             string godinaDo = godinaOtvaranjaDo.ToString();
 
-            //znaci pristupam i fitnes centru i listi ovih starih
-            //adresu zameniti sa tipomTreninga
+            //naziv imam vec
+            //item.TipTreninga -> zameniti sa adresom
+            //item.FitnesCentarOdrzava.GodinaOtvaranja -> godina otvaranja
 
             #region Kombinovana pretraga
-            /*
             foreach (var item in stari)
             {
-                if (naziv.Equals("") && adresa.Equals("") && godinaOd.Equals("") && godinaDo.Equals(""))
+                if (naziv.Equals("") && tipTreninga.Equals("") && godinaOd.Equals("") && godinaDo.Equals(""))
                 {
                     ViewBag.stariTreninzi = stari;
                 }
                 //Prazan naziv
                 else if (naziv.Equals(""))
                 {
-                    if (adresa.Equals(""))
+                    if (tipTreninga.Equals(""))
                     {
                         if (godinaOd.Equals(""))
                         {
-                            if (item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                            if (item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -693,7 +704,7 @@ namespace MyWebApp.Controllers
                         {
                             if (godinaDo.Equals(""))
                             {
-                                if (item.GodinaOtvaranja >= godinaOtvaranjaOd)
+                                if (item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -705,7 +716,7 @@ namespace MyWebApp.Controllers
                             }
                             else
                             {
-                                if (item.GodinaOtvaranja >= godinaOtvaranjaOd && item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                                if (item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd && item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -722,7 +733,7 @@ namespace MyWebApp.Controllers
                     {
                         if (godinaDo.Equals(""))
                         {
-                            if (item.Adresa.Equals(adresa))
+                            if (item.TipTreninga.Equals(tipTreninga))
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -734,7 +745,7 @@ namespace MyWebApp.Controllers
                         }
                         else
                         {
-                            if (item.Adresa.Equals(adresa) && item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                            if (item.TipTreninga.Equals(tipTreninga) && item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -749,7 +760,7 @@ namespace MyWebApp.Controllers
                     {
                         if (godinaOd.Equals(""))
                         {
-                            if (item.Adresa.Equals(adresa))
+                            if (item.TipTreninga.Equals(tipTreninga))
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -761,7 +772,7 @@ namespace MyWebApp.Controllers
                         }
                         else
                         {
-                            if (item.Adresa.Equals(adresa) && item.GodinaOtvaranja >= godinaOtvaranjaOd)
+                            if (item.TipTreninga.Equals(tipTreninga) && item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd)
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -774,13 +785,13 @@ namespace MyWebApp.Controllers
                     }
                 }
                 //Prazna adresa
-                else if (adresa.Equals(""))
+                else if (tipTreninga.Equals(""))
                 {
                     if (naziv.Equals(""))
                     {
                         if (godinaOd.Equals(""))
                         {
-                            if (item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                            if (item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -794,7 +805,7 @@ namespace MyWebApp.Controllers
                         {
                             if (godinaDo.Equals(""))
                             {
-                                if (item.GodinaOtvaranja >= godinaOtvaranjaOd)
+                                if (item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -806,7 +817,7 @@ namespace MyWebApp.Controllers
                             }
                             else
                             {
-                                if (item.GodinaOtvaranja >= godinaOtvaranjaOd && item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                                if (item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd && item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -823,7 +834,7 @@ namespace MyWebApp.Controllers
                     {
                         if (godinaDo.Equals(""))
                         {
-                            if (item.Naziv.Equals(naziv))
+                            if (item.FitnesCentarOdrzava.Naziv.Equals(naziv))
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -835,7 +846,7 @@ namespace MyWebApp.Controllers
                         }
                         else
                         {
-                            if (item.Naziv.Equals(naziv) && item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                            if (item.FitnesCentarOdrzava.Naziv.Equals(naziv) && item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -850,7 +861,7 @@ namespace MyWebApp.Controllers
                     {
                         if (godinaOd.Equals(""))
                         {
-                            if (item.Naziv.Equals(naziv))
+                            if (item.FitnesCentarOdrzava.Naziv.Equals(naziv))
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -862,7 +873,7 @@ namespace MyWebApp.Controllers
                         }
                         else
                         {
-                            if (item.Naziv.Equals(naziv) && item.GodinaOtvaranja >= godinaOtvaranjaOd)
+                            if (item.FitnesCentarOdrzava.Naziv.Equals(naziv) && item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd)
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -879,9 +890,9 @@ namespace MyWebApp.Controllers
                 {
                     if (naziv.Equals(""))
                     {
-                        if (adresa.Equals(""))
+                        if (tipTreninga.Equals(""))
                         {
-                            if (item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                            if (item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -895,7 +906,7 @@ namespace MyWebApp.Controllers
                         {
                             if (godinaDo.Equals(""))
                             {
-                                if (item.Adresa.Equals(adresa))
+                                if (item.TipTreninga.Equals(tipTreninga))
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -907,7 +918,7 @@ namespace MyWebApp.Controllers
                             }
                             else
                             {
-                                if (item.Adresa.Equals(adresa) && item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                                if (item.TipTreninga.Equals(tipTreninga) && item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -921,11 +932,11 @@ namespace MyWebApp.Controllers
                     }
                     else
                     {
-                        if (adresa.Equals(""))
+                        if (tipTreninga.Equals(""))
                         {
                             if (godinaDo.Equals(""))
                             {
-                                if (item.Naziv.Equals(naziv))
+                                if (item.FitnesCentarOdrzava.Naziv.Equals(naziv))
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -937,7 +948,7 @@ namespace MyWebApp.Controllers
                             }
                             else
                             {
-                                if (item.Naziv.Equals(naziv) && item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                                if (item.FitnesCentarOdrzava.Naziv.Equals(naziv) && item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -952,7 +963,7 @@ namespace MyWebApp.Controllers
                         {
                             if (godinaDo.Equals(""))
                             {
-                                if (item.Naziv.Equals(naziv) && item.Adresa.Equals(adresa))
+                                if (item.FitnesCentarOdrzava.Naziv.Equals(naziv) && item.TipTreninga.Equals(tipTreninga))
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -964,7 +975,7 @@ namespace MyWebApp.Controllers
                             }
                             else
                             {
-                                if (item.Naziv.Equals(naziv) && item.Adresa.Equals(adresa) && item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                                if (item.FitnesCentarOdrzava.Naziv.Equals(naziv) && item.TipTreninga.Equals(tipTreninga) && item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -983,9 +994,9 @@ namespace MyWebApp.Controllers
                     ///krece
                     if (naziv.Equals(""))
                     {
-                        if (adresa.Equals(""))
+                        if (tipTreninga.Equals(""))
                         {
-                            if (item.GodinaOtvaranja >= godinaOtvaranjaOd)
+                            if (item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd)
                             {
                                 filtrirani.Add(item);
                                 ViewBag.stariTreninzi = filtrirani;
@@ -999,7 +1010,7 @@ namespace MyWebApp.Controllers
                         {
                             if (godinaOd.Equals(""))
                             {
-                                if (item.Adresa.Equals(adresa))
+                                if (item.TipTreninga.Equals(tipTreninga))
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -1011,7 +1022,7 @@ namespace MyWebApp.Controllers
                             }
                             else
                             {
-                                if (item.Adresa.Equals(adresa) && item.GodinaOtvaranja >= godinaOtvaranjaOd)
+                                if (item.TipTreninga.Equals(tipTreninga) && item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -1025,11 +1036,11 @@ namespace MyWebApp.Controllers
                     }
                     else
                     {
-                        if (adresa.Equals(""))
+                        if (tipTreninga.Equals(""))
                         {
                             if (godinaOd.Equals(""))
                             {
-                                if (item.Naziv.Equals(naziv))
+                                if (item.FitnesCentarOdrzava.Naziv.Equals(naziv))
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -1041,7 +1052,7 @@ namespace MyWebApp.Controllers
                             }
                             else
                             {
-                                if (item.Naziv.Equals(naziv) && item.GodinaOtvaranja >= godinaOtvaranjaOd)
+                                if (item.FitnesCentarOdrzava.Naziv.Equals(naziv) && item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -1056,7 +1067,7 @@ namespace MyWebApp.Controllers
                         {
                             if (godinaOd.Equals(""))
                             {
-                                if (item.Naziv.Equals(naziv) && item.Adresa.Equals(adresa))
+                                if (item.FitnesCentarOdrzava.Naziv.Equals(naziv) && item.TipTreninga.Equals(tipTreninga))
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -1068,7 +1079,7 @@ namespace MyWebApp.Controllers
                             }
                             else
                             {
-                                if (item.Naziv.Equals(naziv) && item.Adresa.Equals(adresa) && item.GodinaOtvaranja >= godinaOtvaranjaOd)
+                                if (item.FitnesCentarOdrzava.Naziv.Equals(naziv) && item.TipTreninga.Equals(tipTreninga) && item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd)
                                 {
                                     filtrirani.Add(item);
                                     ViewBag.stariTreninzi = filtrirani;
@@ -1081,13 +1092,12 @@ namespace MyWebApp.Controllers
                         }
                     }
                 }
-                else if (item.Naziv == naziv && item.Adresa == adresa && item.GodinaOtvaranja >= godinaOtvaranjaOd && item.GodinaOtvaranja <= godinaOtvaranjaDo)
+                else if (item.FitnesCentarOdrzava.Naziv == naziv && item.TipTreninga == tipTreninga && item.FitnesCentarOdrzava.GodinaOtvaranja >= godinaOtvaranjaOd && item.FitnesCentarOdrzava.GodinaOtvaranja <= godinaOtvaranjaDo)
                 {
                     filtrirani.Add(item);
                     ViewBag.stariTreninzi = filtrirani;
                 }
             }
-            */
             #endregion
 
 
