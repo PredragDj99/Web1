@@ -180,6 +180,8 @@
     <Content Include="Views\Trener\Index.cshtml" />
     <Content Include="Views\Vlasnik\Index.cshtml" />
     <Content Include="Views\Trener\Dodavanje.cshtml" />
+    <Content Include="Views\Trener\Modifikuj.cshtml" />
+    <Content Include="Views\Trener\SpisakPosetilaca.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

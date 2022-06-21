@@ -125,7 +125,7 @@ namespace MyWebApp.Models
                     else
                     {
                         Korisnik k = new Korisnik();    //Ako ne postoji ni jedan korisnik(slucaj kada trener brise)
-                        listaPosetilaca.Add(k);
+                        //listaPosetilaca.Add(k);
                     }
                 }
 
@@ -372,15 +372,27 @@ namespace MyWebApp.Models
 
                 while ((line = sr.ReadLine()) != null)
                 {
-                    sw.Write(line);
+                    string[] delovi = line.Split(';');
+                    string[] posetioci = delovi[6].Split('|');
+
+                    //sw.Write(line);
                     //Proveravam koji je to grupni trening i onda ga dodajem na kraj te linije
                     if (line.Contains(naziv) && line.Contains(datumVreme))
                     {
-                        sw.Write("|");
-                        sw.Write(ime);
-                        sw.Write("-");
-                        sw.Write(prezime);
+                        string novi = "|" + ime + "-" + prezime;
+                        string proba = delovi[6] + novi;
+                        delovi[6] = proba;
                     }
+
+                    for (int i = 0; i < delovi.Length; i++)
+                    {
+                        sw.Write(delovi[i]);
+                        if (i!=7)
+                        {
+                            sw.Write(';');
+                        }
+                    }
+
                     sw.WriteLine();
                 }
             }
@@ -593,16 +605,20 @@ namespace MyWebApp.Models
 
                 FitnesCentar fc = new FitnesCentar(tokens[2]);
 
-                string[] posetioci = tokens[6].Split('|');
                 List<Korisnik> listaPosetilaca = new List<Korisnik>();
 
-                foreach (var posetilac in posetioci)
+                string temp= tokens[6];
+                if (temp != "")
                 {
-                    string[] korisnik = posetilac.Split('-');
-                    Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
-                    listaPosetilaca.Add(k);
-                }
+                    string[] posetioci = tokens[6].Split('|');
 
+                    foreach (var posetilac in posetioci)
+                    {
+                        string[] korisnik = posetilac.Split('-');
+                        Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
+                        listaPosetilaca.Add(k);
+                    }
+                }
                 GrupniTrening tr = new GrupniTrening(tokens[0], tokens[1], fc, tokens[3], DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture), Int32.Parse(tokens[5]), listaPosetilaca,tokens[7]);
 
                 foreach (var posetilac in listaPosetilaca)
@@ -681,7 +697,7 @@ namespace MyWebApp.Models
                         else
                         {
                             Korisnik k = new Korisnik();    //Ako ne postoji ni jedan korisnik(slucaj kada trener brise)
-                            listaKorisnika.Add(k);
+                         //   listaKorisnika.Add(k);
                         }
                     }
 

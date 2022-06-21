@@ -1,0 +1,60 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "SpisakPosetilaca";
+}
+
+<html>
+<head>
+    <style type="text/css">
+        #pomeri{
+            margin-left: 20px;
+            text-align:center;
+        }
+        h1{
+            color:firebrick;
+            text-align:center;
+        }
+        h2{
+            color:blue;
+        }
+
+        a.linkZaPocetnu:link, a.linkZaPocetnu:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid red;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 20px;
+            float: left;
+        }
+
+        a.linkZaPocetnu:hover, a.linkZaPocetnu:active {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="pomeri">
+        <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+        <h3><a href="~/Trener/Index?naziv=@ViewBag.naziv" class="linkZaPocetnu">Nazad na prethodnu stranicu</a></h3>
+        <br /><br />
+        <h1>Spisak posetilaca odabranog treninga</h1>
+
+        @if (ViewBag.spisakPosetilaca.Count == 0)
+        {
+            <h2>- Na ovom treningu nema posetioca</h2>
+        }
+
+        @foreach (var item in ViewBag.spisakPosetilaca)
+        {
+            <h2>@item.Ime &nbsp; @item.Prezime</h2>
+        }
+    </div>
+
+</body>
+</html>
+

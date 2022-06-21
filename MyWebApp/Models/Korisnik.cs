@@ -31,10 +31,10 @@ namespace MyWebApp.Models
         public string Email { get; set; }
         public DateTime DatumRodjenja { get; set; }
         public KorisnikType Uloga { get; set; }
-        public List<GrupniTrening> ListaGrupnihTreninga { get; set; } //na koje je prijavljen posetioc
-        public List<GrupniTrening> ListaTreninziAngazovan { get; set; } //ako je trener
+        public List<GrupniTrening> ListaGrupnihTreninga { get; set; } = new List<GrupniTrening>(); //na koje je prijavljen posetioc
+        public List<GrupniTrening> ListaTreninziAngazovan { get; set; } = new List<GrupniTrening>(); //ako je trener
         public FitnesCentar AngazovanNaFitnesCentar { get; set; } //ako je trener
-        public List<FitnesCentar> ListaVlasnickiFitnesCentar { get; set; } //ako je vlasnik
+        public List<FitnesCentar> ListaVlasnickiFitnesCentar { get; set; } = new List<FitnesCentar>(); //ako je vlasnik
 
         public Korisnik(string ime, string prezime)
         {

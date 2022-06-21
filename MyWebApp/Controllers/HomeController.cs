@@ -42,7 +42,8 @@ namespace MyWebApp.Controllers
 
             string godinaOd = godinaOtvaranjaOd.ToString();
             string godinaDo = godinaOtvaranjaDo.ToString();
-            
+
+            #region Kombinovana pretraga
             foreach (var item in fitnesCentri)
             {
                 if (naziv.Equals("") && adresa.Equals("") && godinaOd.Equals("") && godinaDo.Equals(""))
@@ -464,7 +465,8 @@ namespace MyWebApp.Controllers
                     ViewBag.fitnesCentri = filtrirani;
                 }
             }
-            
+            #endregion
+
             return View("Index");
         }
         #endregion

@@ -68,6 +68,7 @@
             font-family: Arial;
             font-size: 15px;
             padding: 10px 20px;
+            margin:auto;
         }
 
         .linkButton:hover {
@@ -194,15 +195,22 @@
                                 <a class="linkButton" href="/Trener/ObrisiTrening?naziv=@item.FitnesCentarOdrzava.Naziv&&spisakPosetilacaCount=@item.SpisakPosetilaca.Count&&datum=@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")">Obrisi trening</a>
                             </td>
                         }
+                        <td>
+                            <a class="linkButton" href="/Trener/PrikaziPosetioce?naziv=@item.FitnesCentarOdrzava.Naziv&&spisakPosetilaca=@item.SpisakPosetilaca&&datum=@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")">Prikazi posetioce treninga</a>
+                        </td>
                     </tr>
                 }
             }
         }
     </table><br />
-    <form action="~/Trener/DodajTrening" method="post">
-        <input type="submit" value="Dodaj novi trening" />
-    </form>
-
+    <div id="pomeriDesno">
+        <form action="~/Trener/DodajTrening" method="post">
+            <input type="submit" value="Dodaj novi trening" />
+        </form>
+        <form action="~/Trener/ModifikujTrening" method="post">
+            <input type="submit" value="Modifikuj trening" />
+        </form><br /><br />
+    </div>
 
     <br />
     <hr />
@@ -232,6 +240,9 @@
                         <td>@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")</td>
                         <td>@item.MaksimalanBrojPosetioca</td>
                         <td>@item.SpisakPosetilaca.Count</td>
+                        <td>
+                            <a class="linkButton" href="/Trener/PrikaziPosetioce?naziv=@item.FitnesCentarOdrzava.Naziv&&spisakPosetilaca=@item.SpisakPosetilaca&&datum=@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")">Prikazi posetioce treninga</a>
+                        </td>
                     </tr>
                 }
             }
@@ -246,6 +257,17 @@
             <button type="submit" name="submit" value="naziv">Sortiraj po nazivu</button><br />
             <button type="submit" name="submit" value="tipTreninga">Sortiraj po tipu treninga</button><br />
             <button type="submit" name="submit" value="datumIVremeTreninga">Sortiraj po datumu i vremenu</button><br />
+        </form>
+    </div>
+
+    <div id="pomeriDesno">
+        <h2>Pretraga</h2>
+        <form action="~/Trener/Pretraga?nazivFC=@ViewBag.fitnesCentar.Naziv" method="post">
+            Naziv fitnes centra:<input type="text" name="naziv" /><br />
+            Tip treninga:<input type="text" name="tipTreninga" /><br />
+            Godina otvaranja od:<input type="text" name="godinaOtvaranjaOd" /><br />
+            Godina otvaranja do:<input type="text" name="godinaOtvaranjaDo" /><br />
+            <input type="submit" value="Pretrazi" />
         </form>
     </div>
 </body>

@@ -67,6 +67,8 @@ namespace MyWebApp.Controllers
 
             ViewBag.prijavljenTrening = "Niste prijavljeni";
             ViewBag.imaMesta = "true";
+            //Po defaultu nije prijavljen dok se ne utvrdi
+            ViewBag.ranijePrijavljen = "nije";
 
             #endregion
 
@@ -175,6 +177,11 @@ namespace MyWebApp.Controllers
                     //treningu dodajem spisak posetioca
                     GrupniTrening gt = new GrupniTrening(nazivTreninga,tipTreninga,fc,trajanjeMinute, grupniTreningVreme,maxPosetioca, listaPosetilaca,obris);
                     //korisniku dodajem taj trening
+                    if (user.ListaGrupnihTreninga == null)
+                    {
+                        List<GrupniTrening> grupniTrenings = new List<GrupniTrening>();
+                        user.ListaGrupnihTreninga = grupniTrenings;
+                    }
                     user.ListaGrupnihTreninga.Add(gt);
 
                     //Dodajem korisnika na kraj liste(txt) za taj trening; proveravam da li je to taj trening
