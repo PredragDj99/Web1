@@ -5,11 +5,12 @@ Grupa pocetnici;HIT;Compiona;90 minuta;27/07/2022 12:30;30;Ivana-Mihajlovic|Deja
 Profesionalni sportisti;body pump;Fitnes Elastico;120 minuta;25/08/2022 10:00;15;Dejan-Djero|Ilija-Pasic|Zika-Zikic|Marko-Markoni|Nedeljko-Nedeljkovic|Nevena-Djenov|Milojko-Milojkovic;AKTIVAN
 Grupa B2;body pump;Fitnes Elastico;120 minuta;14/09/2022 15:00;15;Dejan-Djero|Zika-Zikic|Marko-Markoni|Nedeljko-Nedeljkovic|Milunka-Maric|Milica-Milicic|Nevena-Djenov|Ivana-Ivanic|Milojko-Milojkovic;AKTIVAN
 Grupa za decu;Razgibavanje;Compiona;60 minuta;17/01/2022 18:30;20;Radoslava-Zivic|Jovan-Tomic|Milorad-Pesic|Dunja-Ivanovic|Jelica-Klica|Ana-Artemic|Zeljana-Pegledovic|Dimitrije-Ruzic|Vasilije-Zaric;AKTIVAN
-Profesionalni sportisti;Kardio;Fitnes Elastico;60 minuta;10/08/2022 09:00;5;Radoslava-Zivic|Marija-Kis|Zarko-Atanasijevic;AKTIVAN
 Grupa za decu;les mills tone;Compiona;60 minuta;15/08/2022 18:00;10;Radoslava-Zivic|Ivan-Zdravkovic|Bozidar-Zdela|Marija-Kis|Zarko-Atanasijevic|Jovan-Tomic|Milorad-Pesic|Dunja-Ivanovic|Jelica-Klica|Ana-Artemic;AKTIVAN
 Grupa D;yoga;MuscleMotion;60 minuta;15/08/2022 20:00;10;;NeAkt!!
 Grupa D;yoga;MuscleMotion;90 minuta;12/10/2022 20:00;15;;AKTIVAN
 Grupa D;yoga;Fitnes Elastico;60 minuta;14/02/2022 17:00;10;;AKTIVAN
 Deca;Skolica sporta;Fitnes Elastico;45 minuta;14/07/2021 17:00;10;;AKTIVAN
 Grupa D;yoga;Fitnes Elastico;60 minuta;24/10/2022 14:00;10;;AKTIVAN
-Rekreativna grupa;Istezanje misica;Fitnes Elastico;70 minuta;29/06/2022 13:27;12;;AKTIVAN
+Rekreativna grupa;Istezanje misica;Fitnes Elastico;70 minuta;30/06/2022 14:21;12;;AKTIVAN
+Grupa A7;Istezanje misica;Fitnes Elastico;90 minuta;08/07/2022 18:45;15;;AKTIVAN
+Profesionalni sportisti;Kardio;Fitnes Elastico;65 minuta;29/06/2022 20:50;15;Radoslava-Zivic|Marija-Kis|Zarko-Atanasijevic;AKTIVAN

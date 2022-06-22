@@ -409,6 +409,11 @@ namespace MyWebApp.Controllers
             string treningAktivan = "AKTIVAN";
             string maxBrojPosetioca = maksimalanBrojPosetioca.ToString();
 
+            if (datumIVremeTreninga == "")
+            {
+                ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za datum i vreme treninga";
+                return View("Dodavanje");
+            }
             #region 3 dana unapred
             //termin novog treninga
             string[] datumVreme = datumIVremeTreninga.Split('T');
@@ -463,11 +468,6 @@ namespace MyWebApp.Controllers
                 ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za trajanje treninga";
                 return View("Dodavanje");
             }
-            if (datumIVremeTreninga == "")
-            {
-                ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za datum i vreme treninga";
-                return View("Dodavanje");
-            }
             if (maksimalanBrojPosetioca == null || maksimalanBrojPosetioca.ToString().StartsWith("0") || maksimalanBrojPosetioca.ToString().StartsWith("-"))
             {
                 ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za max broj posetioca";
@@ -484,7 +484,7 @@ namespace MyWebApp.Controllers
             }
             //Idi u listu korisnika i dopisi ga treneru
             string lepoFormatiranDatumRodjenja = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
-            PodaciTxt.DodajGrupniTreningTreneru(user,lepoFormatiranDatumRodjenja,naziv,datumIVremeTreninga);
+            PodaciTxt.DodajGrupniTreningTreneru(user,lepoFormatiranDatumRodjenja,tipTreninga,datumIVremeTreninga);
 
             ViewBag.dodajTrening = "Trening uspesno napravljen!";
             
@@ -498,11 +498,315 @@ namespace MyWebApp.Controllers
         {
             ViewBag.naziv = naziv;
             nazi = naziv;
+
+            //ViewBag.treninziAngazovan
+            #region Isto kao home controller -> stranica detalji
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
+            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+
+            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
+            //Kada obrisem jedan trening onda se prcitaju ponovo da bih lepo prikazao
+            List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
+
+            List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
+
+            //komentari
+            List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
+            List<Komentar> filtriraniKomentari = new List<Komentar>();
+
+            foreach (var item in komentari)
+            {
+                if (item.FitnesCentarKomentarisan.ToString().Equals(naziv))
+                {
+                    filtriraniKomentari.Add(item);
+                }
+            }
+            ViewBag.naziv = naziv;
+            ViewBag.komentari = filtriraniKomentari;
+
+            //grupni treninzi ovog fitnes centra
+            foreach (var item in grupniTreninzi)
+            {
+                if (item.FitnesCentarOdrzava.Naziv.ToString().Equals(naziv) && item.DatumIVremeTreninga > DateTime.Now)
+                {
+                    if (item.Obrisan == "AKTIVAN")
+                    {
+                        listaGrupnihTreninga.Add(item);
+                    }
+                }
+            }
+            ViewBag.grupniTreninzi = listaGrupnihTreninga;
+
+            //detalji za ovaj fitnes centar
+            foreach (var fc in fitnesCentri)
+            {
+                if (fc.Naziv.ToString().Equals(naziv))
+                {
+                    ViewBag.fitnesCentar = fc;
+                    break;
+                }
+            }
+            #endregion
+            #region Prikaz trenerskih tabela
+            List<Korisnik> korisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+
+            List<GrupniTrening> gt = new List<GrupniTrening>();
+            foreach (var item in user.ListaTreninziAngazovan)
+            {
+                //imam datum,tip
+                string dat = PodaciTxt.pronadjiDatumIVremeTreningaTrener(item.FitnesCentarOdrzava.Naziv, item.TipTreninga, item.DatumIVremeTreninga.ToString());
+                GrupniTrening trebajuMiOviPodaci = PodaciTxt.procitajJedanGrupniTreningTrenera(item.FitnesCentarOdrzava.Naziv, dat);
+                //pribavljam
+                item.MaksimalanBrojPosetioca = trebajuMiOviPodaci.MaksimalanBrojPosetioca;
+                item.SpisakPosetilaca = trebajuMiOviPodaci.SpisakPosetilaca;
+                item.TrajanjeTreningaMinute = trebajuMiOviPodaci.TrajanjeTreningaMinute;
+                item.Naziv = trebajuMiOviPodaci.Naziv;
+                item.DatumIVremeTreninga = trebajuMiOviPodaci.DatumIVremeTreninga;
+                item.Obrisan = trebajuMiOviPodaci.Obrisan;
+
+                //za pretragu
+                List<FitnesCentar> sviFC = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
+                foreach (var jedanFC in sviFC)
+                {
+                    if (jedanFC.Naziv == trebajuMiOviPodaci.FitnesCentarOdrzava.Naziv)
+                    {
+                        item.FitnesCentarOdrzava.GodinaOtvaranja = jedanFC.GodinaOtvaranja;
+                        break;
+                    }
+                }
+
+                //Da bi mogao da ih vidi
+                for (int i = 0; i < trebajuMiOviPodaci.SpisakPosetilaca.Count; i++)
+                {
+                    item.SpisakPosetilaca[i].Ime = trebajuMiOviPodaci.SpisakPosetilaca[i].Ime;
+                    item.SpisakPosetilaca[i].Prezime = trebajuMiOviPodaci.SpisakPosetilaca[i].Prezime;
+                }
+
+                user.AngazovanNaFitnesCentar.Naziv = item.FitnesCentarOdrzava.Naziv;
+                if (item.Obrisan == "AKTIVAN")
+                {
+                    gt.Add(item);
+                }
+            }
+
+            List<GrupniTrening> angazovan = new List<GrupniTrening>();
+            List<GrupniTrening> stari = new List<GrupniTrening>();
+
+            //Ovo je konacan ispis grupnih treninga ovog trenera
+            foreach (var item in gt)
+            {
+                if (item.DatumIVremeTreninga > DateTime.Now)
+                {
+                    angazovan.Add(item);
+                }
+                else
+                {
+                    stari.Add(item);
+                }
+            }
+            ViewBag.treninziAngazovan = angazovan;
+            ViewBag.stariTreninzi = stari;
+            #endregion
+
             return View("Modifikuj");
         }
-        public ActionResult ModifikujTreningTxt(string naziv, string tipTreninga, string trajanjeTreningaMinute, string datumIVremeTreninga, int? maksimalanBrojPosetioca)
+        public ActionResult ModifikujTreningTxt(string stariDatum, string naziv, string tipTreninga, string trajanjeTreningaMinute, string datumIVremeTreninga, int? maksimalanBrojPosetioca)
         {
             ViewBag.naziv = nazi;
+
+            //ViewBag.treninziAngazovan
+            #region Isto kao home controller -> stranica detalji
+            Korisnik user = (Korisnik)Session["user"];
+            if (user != null)
+            {
+                ViewBag.uspesnaPrijava = "jeste";
+            }
+
+            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+
+            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
+            //Kada obrisem jedan trening onda se prcitaju ponovo da bih lepo prikazao
+            List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
+
+            List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
+
+            //komentari
+            List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
+            List<Komentar> filtriraniKomentari = new List<Komentar>();
+
+            foreach (var item in komentari)
+            {
+                if (item.FitnesCentarKomentarisan.ToString().Equals(naziv))
+                {
+                    filtriraniKomentari.Add(item);
+                }
+            }
+            ViewBag.naziv = naziv;
+            ViewBag.komentari = filtriraniKomentari;
+
+            //grupni treninzi ovog fitnes centra
+            foreach (var item in grupniTreninzi)
+            {
+                if (item.FitnesCentarOdrzava.Naziv.ToString().Equals(naziv) && item.DatumIVremeTreninga > DateTime.Now)
+                {
+                    if (item.Obrisan == "AKTIVAN")
+                    {
+                        listaGrupnihTreninga.Add(item);
+                    }
+                }
+            }
+            ViewBag.grupniTreninzi = listaGrupnihTreninga;
+
+            //detalji za ovaj fitnes centar
+            foreach (var fc in fitnesCentri)
+            {
+                if (fc.Naziv.ToString().Equals(naziv))
+                {
+                    ViewBag.fitnesCentar = fc;
+                    break;
+                }
+            }
+            #endregion
+            #region Prikaz trenerskih tabela
+            List<Korisnik> korisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+
+            List<GrupniTrening> gt = new List<GrupniTrening>();
+            foreach (var item in user.ListaTreninziAngazovan)
+            {
+                //imam datum,tip
+                string dat = PodaciTxt.pronadjiDatumIVremeTreningaTrener(item.FitnesCentarOdrzava.Naziv, item.TipTreninga, item.DatumIVremeTreninga.ToString());
+                GrupniTrening trebajuMiOviPodaci = PodaciTxt.procitajJedanGrupniTreningTrenera(item.FitnesCentarOdrzava.Naziv, dat);
+                //pribavljam
+                item.MaksimalanBrojPosetioca = trebajuMiOviPodaci.MaksimalanBrojPosetioca;
+                item.SpisakPosetilaca = trebajuMiOviPodaci.SpisakPosetilaca;
+                item.TrajanjeTreningaMinute = trebajuMiOviPodaci.TrajanjeTreningaMinute;
+                item.Naziv = trebajuMiOviPodaci.Naziv;
+                item.DatumIVremeTreninga = trebajuMiOviPodaci.DatumIVremeTreninga;
+                item.Obrisan = trebajuMiOviPodaci.Obrisan;
+
+                //za pretragu
+                List<FitnesCentar> sviFC = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
+                foreach (var jedanFC in sviFC)
+                {
+                    if (jedanFC.Naziv == trebajuMiOviPodaci.FitnesCentarOdrzava.Naziv)
+                    {
+                        item.FitnesCentarOdrzava.GodinaOtvaranja = jedanFC.GodinaOtvaranja;
+                        break;
+                    }
+                }
+
+                //Da bi mogao da ih vidi
+                for (int i = 0; i < trebajuMiOviPodaci.SpisakPosetilaca.Count; i++)
+                {
+                    item.SpisakPosetilaca[i].Ime = trebajuMiOviPodaci.SpisakPosetilaca[i].Ime;
+                    item.SpisakPosetilaca[i].Prezime = trebajuMiOviPodaci.SpisakPosetilaca[i].Prezime;
+                }
+
+                user.AngazovanNaFitnesCentar.Naziv = item.FitnesCentarOdrzava.Naziv;
+                if (item.Obrisan == "AKTIVAN")
+                {
+                    gt.Add(item);
+                }
+            }
+
+            List<GrupniTrening> angazovan = new List<GrupniTrening>();
+            List<GrupniTrening> stari = new List<GrupniTrening>();
+
+            //Ovo je konacan ispis grupnih treninga ovog trenera
+            foreach (var item in gt)
+            {
+                if (item.DatumIVremeTreninga > DateTime.Now)
+                {
+                    angazovan.Add(item);
+                }
+                else
+                {
+                    stari.Add(item);
+                }
+            }
+            ViewBag.treninziAngazovan = angazovan;
+            ViewBag.stariTreninzi = stari;
+            #endregion
+
+            trajanjeTreningaMinute = trajanjeTreningaMinute + " minuta";
+            string maxBrojPosetioca = maksimalanBrojPosetioca.ToString();
+
+            if (datumIVremeTreninga == "")
+            {
+                ViewBag.modifikujTrening = "Popunite sva polja. Morate popuniti polje za datum i vreme treninga";
+                return View("Modifikuj");
+            }
+            #region 3 dana unapred
+            //termin novog treninga
+            string[] datumVreme = datumIVremeTreninga.Split('T');
+            string d = datumVreme[0];
+            string[] date = d.Split('-');
+            datumIVremeTreninga = date[2] + "/" + date[1] + "/" + date[0] + " " + datumVreme[1];
+            //trenutni
+            DateTime trenutni = DateTime.Now;
+            string danasnjiDatum = trenutni.ToString();
+            danasnjiDatum = danasnjiDatum.Substring(0, danasnjiDatum.Length - 3);
+            string[] datumVreme2 = danasnjiDatum.ToString().Split(' ');
+            string d2 = datumVreme2[0];
+            string[] date2 = d2.Split('/');
+            int dan = Int32.Parse(date2[1]);        //provera da li je datum 3 dana kasnije
+            dan = dan + 3;
+            date2[1] = dan.ToString();
+            if (date2[0].Count() == 1)
+            {
+                date2[0] = "0" + date2[0];
+            }
+            if (date2[1].Count() == 1)
+            {
+                date2[1] = "0" + date2[1];
+            }
+            string uporedi = date2[1] + "/" + date2[0] + "/" + date2[2] + " " + datumVreme2[1];
+
+            //provera da li je datum 3 dana kasnije
+            DateTime zakazano = DateTime.ParseExact(datumIVremeTreninga, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            DateTime moraBitiBar = DateTime.ParseExact(uporedi, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            if (zakazano < moraBitiBar)
+            {
+                ViewBag.modifikujTrening = "Datum mora biti bar 3 dana unapred";
+                return View("Modifikuj");
+            }
+
+            #endregion
+            #region Provera ima li praznih unosa
+            //provera da li je sve popunjeno
+            if (naziv == "")
+            {
+                ViewBag.modifikujTrening = "Popunite sva polja. Morate popuniti polje za naziv grupe";
+                return View("Modifikuj");
+            }
+            if (tipTreninga == "")
+            {
+                ViewBag.modifikujTrening = "Popunite sva polja. Morate popuniti polje za tip treninga";
+                return View("Modifikuj");
+            }
+            if (trajanjeTreningaMinute == " minuta" || trajanjeTreningaMinute.StartsWith("-") || trajanjeTreningaMinute.StartsWith("0"))
+            {
+                ViewBag.modifikujTrening = "Popunite sva polja. Morate popuniti polje za trajanje treninga";
+                return View("Modifikuj");
+            }
+            if (maksimalanBrojPosetioca == null || maksimalanBrojPosetioca.ToString().StartsWith("0") || maksimalanBrojPosetioca.ToString().StartsWith("-"))
+            {
+                ViewBag.modifikujTrening = "Popunite sva polja. Morate popuniti polje za max broj posetioca";
+                return View("Modifikuj");
+            }
+            #endregion
+
+            string prazniPosetioci = "";
+            string treningAktivan = "AKTIVAN";
+            PodaciTxt.ModifikujTrening(stariDatum,naziv, tipTreninga, user.AngazovanNaFitnesCentar.Naziv, trajanjeTreningaMinute, datumIVremeTreninga, maxBrojPosetioca, prazniPosetioci, treningAktivan);
+            string lepoFormatiranDatumRodjenja = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
+            PodaciTxt.ModifikujGrupniTreningTreneru(user, lepoFormatiranDatumRodjenja, tipTreninga, stariDatum,datumIVremeTreninga);
+
             ViewBag.modifikujTrening = "Trening uspesno modifikovan!";
 
             return View("Modifikuj");
