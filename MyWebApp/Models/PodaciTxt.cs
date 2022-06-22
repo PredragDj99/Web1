@@ -379,9 +379,20 @@ namespace MyWebApp.Models
                     //Proveravam koji je to grupni trening i onda ga dodajem na kraj te linije
                     if (line.Contains(naziv) && line.Contains(datumVreme))
                     {
-                        string novi = "|" + ime + "-" + prezime;
-                        string proba = delovi[6] + novi;
-                        delovi[6] = proba;
+                        string novi;
+                        string proba;
+                        if (delovi[6] != "")
+                        {
+                            novi = "|" + ime + "-" + prezime;
+                            proba = delovi[6] + novi;
+                            delovi[6] = proba;
+                        }
+                        else
+                        {
+                            novi = ime + "-" + prezime;
+                            proba = delovi[6] + novi;
+                            delovi[6] = proba;
+                        }
                     }
 
                     for (int i = 0; i < delovi.Length; i++)
@@ -421,7 +432,7 @@ namespace MyWebApp.Models
             podaciPosetioca[5] = posetilac.Email;
             podaciPosetioca[6] = lepoFormatiranDatumRodjenja;
             podaciPosetioca[7] = "POSETILAC";
-            if (posetilac.ListaGrupnihTreninga.Count == 1)
+            if (posetilac.ListaGrupnihTreninga.Count == 0)
             {
                 podaciPosetioca[8] = "";
             }
@@ -568,6 +579,13 @@ namespace MyWebApp.Models
                     string[] tokens = line.Split(';');
                     string[] posetioci = tokens[6].Split('|');
 
+                    //Popravljam bug
+                    if (posetioci[0] == "")
+                    {
+                        sr.Close();
+                        return false;
+                    }
+
                     foreach (var posetilac in posetioci)
                     {
                         string[] korisnik = posetilac.Split('-');
@@ -615,6 +633,10 @@ namespace MyWebApp.Models
                     foreach (var posetilac in posetioci)
                     {
                         string[] korisnik = posetilac.Split('-');
+
+                        //Popravljam bug
+                        if (korisnik[0] == "") break;
+
                         Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
                         listaPosetilaca.Add(k);
                     }
