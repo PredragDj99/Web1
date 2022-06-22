@@ -204,10 +204,10 @@
         }
     </table><br />
     <div id="pomeriDesno">
-        <form action="~/Trener/DodajTrening" method="post">
+        <form action="~/Trener/DodajTrening?naziv=@ViewBag.fitnesCentar.Naziv" method="post">
             <input type="submit" value="Dodaj novi trening" />
         </form>
-        <form action="~/Trener/ModifikujTrening" method="post">
+        <form action="~/Trener/ModifikujTrening?naziv=@ViewBag.fitnesCentar.Naziv" method="post">
             <input type="submit" value="Modifikuj trening" />
         </form><br /><br />
     </div>

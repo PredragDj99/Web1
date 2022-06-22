@@ -12,3 +12,4 @@ Grupa D;yoga;MuscleMotion;90 minuta;12/10/2022 20:00;15;;AKTIVAN
 Grupa D;yoga;Fitnes Elastico;60 minuta;14/02/2022 17:00;10;;AKTIVAN
 Deca;Skolica sporta;Fitnes Elastico;45 minuta;14/07/2021 17:00;10;;AKTIVAN
 Grupa D;yoga;Fitnes Elastico;60 minuta;24/10/2022 14:00;10;;AKTIVAN
+Rekreativna grupa;Istezanje misica;Fitnes Elastico;70 minuta;29/06/2022 13:27;12;;AKTIVAN

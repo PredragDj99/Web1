@@ -381,7 +381,7 @@ namespace MyWebApp.Controllers
                 string dat = PodaciTxt.pronadjiDatumIVremeTreningaTrener(item.FitnesCentarOdrzava.Naziv, item.TipTreninga, item.DatumIVremeTreninga.ToString());
                 if (dat == datum)
                 {
-                    ViewBag.spisakPosetilaca = item.SpisakPosetilaca; //datum nece biti dobar
+                    ViewBag.spisakPosetilaca = item.SpisakPosetilaca;
                 }
             }
             ViewBag.naziv = naziv;
@@ -391,25 +391,122 @@ namespace MyWebApp.Controllers
         #endregion
 
         #region Dodaj trening
-        public ActionResult DodajTrening()
+        static string naz = "";
+        public ActionResult DodajTrening(string naziv)
         {
+            ViewBag.naziv = naziv;
+            naz = naziv;
             return View("Dodavanje");
         }
 
         public ActionResult DodajTreningTxt(string naziv, string tipTreninga, string trajanjeTreningaMinute, string datumIVremeTreninga, int? maksimalanBrojPosetioca)
         {
-            ViewBag.dodajTrening = "Trening uspesno napravljen!";
+            ViewBag.naziv = naz;
+            Korisnik user = (Korisnik)Session["user"];
 
+            trajanjeTreningaMinute = trajanjeTreningaMinute + " minuta";
+            string prazniPosetioci = "";
+            string treningAktivan = "AKTIVAN";
+            string maxBrojPosetioca = maksimalanBrojPosetioca.ToString();
+
+            #region 3 dana unapred
+            //termin novog treninga
+            string[] datumVreme = datumIVremeTreninga.Split('T');
+            string d = datumVreme[0];
+            string[] date = d.Split('-');
+            datumIVremeTreninga = date[2]+"/"+date[1]+ "/"+date[0] +" "+ datumVreme[1];
+            //trenutni
+            DateTime trenutni = DateTime.Now;
+            string danasnjiDatum = trenutni.ToString();
+            danasnjiDatum = danasnjiDatum.Substring(0, danasnjiDatum.Length-3);
+            string[] datumVreme2 = danasnjiDatum.ToString().Split(' ');
+            string d2 = datumVreme2[0];
+            string[] date2 = d2.Split('/');
+            int dan = Int32.Parse(date2[1]);        //provera da li je datum 3 dana kasnije
+            dan = dan + 3;
+            date2[1] = dan.ToString();
+            if (date2[0].Count() == 1)
+            {
+                date2[0] = "0" + date2[0];
+            }
+            if (date2[1].Count() == 1)
+            {
+                date2[1] = "0" + date2[1];
+            }
+            string uporedi = date2[1] + "/" + date2[0] + "/" + date2[2] + " " + datumVreme2[1];
+
+            //provera da li je datum 3 dana kasnije
+            DateTime zakazano = DateTime.ParseExact(datumIVremeTreninga, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            DateTime moraBitiBar = DateTime.ParseExact(uporedi, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            if (zakazano < moraBitiBar)
+            {
+                ViewBag.dodajTrening = "Datum mora biti bar 3 dana unapred";
+                return View("Dodavanje");
+            }
+                
+            #endregion
+
+            #region Provera ima li praznih unosa
+            //provera da li je sve popunjeno
+            if (naziv == "")
+            {
+                ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za naziv grupe";
+                return View("Dodavanje");
+            }
+            if (tipTreninga == "")
+            {
+                ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za tip treninga";
+                return View("Dodavanje");
+            }
+            if (trajanjeTreningaMinute == " minuta" || trajanjeTreningaMinute.StartsWith("-") || trajanjeTreningaMinute.StartsWith("0"))
+            {
+                ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za trajanje treninga";
+                return View("Dodavanje");
+            }
+            if (datumIVremeTreninga == "")
+            {
+                ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za datum i vreme treninga";
+                return View("Dodavanje");
+            }
+            if (maksimalanBrojPosetioca == null || maksimalanBrojPosetioca.ToString().StartsWith("0") || maksimalanBrojPosetioca.ToString().StartsWith("-"))
+            {
+                ViewBag.dodajTrening = "Popunite sva polja. Morate popuniti polje za max broj posetioca";
+                return View("Dodavanje");
+            }
+            #endregion
+
+            //Dodaj u treninge
+            string postoji = PodaciTxt.TrenerDodajeNoviTrening(naziv,tipTreninga,user.AngazovanNaFitnesCentar.Naziv,trajanjeTreningaMinute,datumIVremeTreninga, maxBrojPosetioca, prazniPosetioci,treningAktivan);
+            if(postoji=="vec postoji")
+            {
+                ViewBag.dodajTrening = "Termin je zauzet";
+                return View("Dodavanje");
+            }
+            //Idi u listu korisnika i dopisi ga treneru
+            string lepoFormatiranDatumRodjenja = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
+            PodaciTxt.DodajGrupniTreningTreneru(user,lepoFormatiranDatumRodjenja,naziv,datumIVremeTreninga);
+
+            ViewBag.dodajTrening = "Trening uspesno napravljen!";
+            
             return View("Dodavanje");
         }
         #endregion
 
         #region Modifikuj trening
-        public ActionResult ModifikujTrening()
+        static string nazi = "";
+        public ActionResult ModifikujTrening(string naziv)
         {
+            ViewBag.naziv = naziv;
+            nazi = naziv;
             return View("Modifikuj");
         }
+        public ActionResult ModifikujTreningTxt(string naziv, string tipTreninga, string trajanjeTreningaMinute, string datumIVremeTreninga, int? maksimalanBrojPosetioca)
+        {
+            ViewBag.naziv = nazi;
+            ViewBag.modifikujTrening = "Trening uspesno modifikovan!";
 
+            return View("Modifikuj");
+        }
         #endregion
 
         #region Sortiranje starih treninga

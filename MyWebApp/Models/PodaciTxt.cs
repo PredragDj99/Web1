@@ -788,5 +788,157 @@ namespace MyWebApp.Models
             #endregion
         }
         #endregion
+
+        //Trener - kreiranje
+        #region Trener dodaje novi trening
+        public static string TrenerDodajeNoviTrening(string naziv,string tipTreninga,string naz,string trajanjeTreningaMinute,string datumIVremeTreninga,string maxBrojPosetioca, string prazniPosetioci,string treningAktivan)
+        {
+            var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
+            FileStream fs1 = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
+
+            string line;
+            while ((line = sr1.ReadLine()) != null)
+            {
+                if (line.Contains(datumIVremeTreninga) && line.Contains(naz))
+                {
+                    sr1.Close();
+                    fs1.Close();
+                    return "vec postoji";
+                }
+            }
+            sr1.Close();
+            fs1.Close();
+
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            sw.Write(naziv);
+            sw.Write(";");
+
+            sw.Write(tipTreninga);
+            sw.Write(";");
+
+            sw.Write(naz);
+            sw.Write(";");
+
+            sw.Write(trajanjeTreningaMinute);
+            sw.Write(";");
+
+            sw.Write(datumIVremeTreninga);
+            sw.Write(";");
+
+            sw.Write(maxBrojPosetioca);
+            sw.Write(";");
+
+            //sw.Write(prazniPosetioci);
+            sw.Write(";");
+
+            sw.Write(treningAktivan);
+            sw.WriteLine();
+
+            sw.Close();
+            stream.Close();
+
+            return "";
+        }
+        #endregion
+        #region Dodaje grupni trening treneru
+        public static void DodajGrupniTreningTreneru(Korisnik trener, string lepoFormatiranDatumRodjenja, string naziv, string datum)
+        {
+            #region Brisanje
+            var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+
+            string linija;
+            string stariTreninzi = "";
+            while ((linija = sr.ReadLine()) != null)
+            {
+                if (linija.Contains(trener.KorisnickoIme))
+                {
+                    string[] podeli= linija.Split(';');
+                    stariTreninzi = podeli[9];
+                }
+            }
+            string[] podaciTrenera = new string[12];
+
+            podaciTrenera[0] = trener.KorisnickoIme;
+            podaciTrenera[1] = trener.Lozinka;
+            podaciTrenera[2] = trener.Ime;
+            podaciTrenera[3] = trener.Prezime;
+            podaciTrenera[4] = trener.Pol;
+            podaciTrenera[5] = trener.Email;
+            podaciTrenera[6] = lepoFormatiranDatumRodjenja;
+            podaciTrenera[7] = "TRENER";
+            podaciTrenera[8] = "";
+            podaciTrenera[9] = stariTreninzi;
+            podaciTrenera[10] = trener.AngazovanNaFitnesCentar.Naziv;
+            podaciTrenera[11] = "";
+
+            sr.Close();
+            fs.Close();
+
+            FileStream fs1 = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
+
+            string tempFile1 = Path.GetTempFileName();
+            using (var sw1 = new StreamWriter(tempFile1))
+            {
+                string line;
+
+                while ((line = sr1.ReadLine()) != null)
+                {
+                    if (line.Contains(trener.KorisnickoIme))
+                    {
+                        //PRESKOCI TU LINIJU - tj. obrise
+                    }
+                    else
+                    {
+                        sw1.WriteLine(line);
+                    }
+                }
+            }
+            sr1.Close();
+            fs1.Close();
+            File.Delete(path);
+            File.Move(tempFile1, path);
+            #endregion
+
+            #region Dodavanje
+            var path2 = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+
+            FileStream fs3 = new FileStream(path2, FileMode.Open, FileAccess.Read);
+            StreamReader sr3 = new StreamReader(fs3, Encoding.UTF8);
+
+            string tempFile2 = Path.GetTempFileName();
+            using (var sw2 = new StreamWriter(tempFile2))
+            {
+                string line;
+
+                while ((line = sr3.ReadLine()) != null)
+                {
+                    sw2.WriteLine(line);
+                }
+
+                podaciTrenera[9] += "|" + naziv + "_" + datum;
+                for (int i = 0; i < podaciTrenera.Length; i++)
+                {
+                    if (i == 11)
+                    {
+                        sw2.WriteLine();
+                        break;
+                    }
+                    sw2.Write(podaciTrenera[i]);
+                    sw2.Write(";");
+                }
+            }
+            sr3.Close();
+            fs3.Close();
+            File.Delete(path2);
+            File.Move(tempFile2, path2);
+            #endregion
+        }
+        #endregion
     }
 }
