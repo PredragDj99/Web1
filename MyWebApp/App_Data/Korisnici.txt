@@ -9,4 +9,5 @@ Milica;milica;Milica;Milicic;Zenski;milica@gmail.com;26/12/2005;POSETILAC;body p
 Ivana;ivana;Ivana;Ivanic;Zenski;ivana@gmail.com;27/12/1999;POSETILAC;body pump_14/09/2022 15:00;;;
 Dragana;dragana;Dragana;Draganic;Zenski;dragana@gmail.com;17/02/2000;POSETILAC;;;;
 Milojko;milojko;Milojko;Milojkovic;Muski;milojko@gmail.com;21/01/2009;POSETILAC;body pump_14/09/2022 15:00|body pump_25/08/2022 10:00;;;
-trener1;trener1;Milorad;Milidrag;Muski;miloradmilidrag@gmail.com;20/08/1990;TRENER;;Skolica sporta_14/07/2021 17:00|yoga_14/02/2022 17:00|yoga_24/10/2022 14:00|body pump_25/08/2022 10:00|Istezanje misica_30/06/2022 14:21|Kardio_29/06/2022 21:12;Fitnes Elastico;
+trener1;trener1;Milorad;Milidrag;Muski;miloradmilidrag@gmail.com;20/08/1990;TRENER;;Skolica sporta_14/07/2021 17:00|yoga_14/02/2022 17:00|yoga_24/10/2022 14:00|body pump_25/08/2022 10:00|Istezanje misica_30/06/2022 14:21|Kardio_06/07/2022 20:20|Kardio_10/07/2022 11:18;Fitnes Elastico;
+trener2;trener2;Dejan;Cavic;Muski;cavicdeki@gmail.com;19/08/2000;TRENER;;body pump_14/09/2022 15:00;Fitnes Elastico;

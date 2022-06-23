@@ -73,6 +73,11 @@ namespace MyWebApp.Controllers
             List<GrupniTrening> gt = new List<GrupniTrening>();
             foreach (var item in user.ListaTreninziAngazovan)
             {
+                int GRESKA=2;
+                //puca mi na procitajJedanGrupniTreningaTrenera jer sam promenio datum na modifikovanju
+                // a ovde ga prosledjujem
+
+
                 //imam datum,tip
                 string dat = PodaciTxt.pronadjiDatumIVremeTreningaTrener(item.FitnesCentarOdrzava.Naziv,item.TipTreninga,item.DatumIVremeTreninga.ToString());
                 GrupniTrening trebajuMiOviPodaci = PodaciTxt.procitajJedanGrupniTreningTrenera(item.FitnesCentarOdrzava.Naziv,dat);
@@ -94,7 +99,7 @@ namespace MyWebApp.Controllers
                         break;
                     }
                 }
-                
+
                 //Da bi mogao da ih vidi
                 for (int i = 0; i < trebajuMiOviPodaci.SpisakPosetilaca.Count; i++)
                 {
@@ -486,9 +491,11 @@ namespace MyWebApp.Controllers
             string lepoFormatiranDatumRodjenja = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
             PodaciTxt.DodajGrupniTreningTreneru(user,lepoFormatiranDatumRodjenja,tipTreninga,datumIVremeTreninga);
 
+            //Nece prikazati jer radim redirect
             ViewBag.dodajTrening = "Trening uspesno napravljen!";
-            
-            return View("Dodavanje");
+
+            //return View("Dodavanje");
+            return RedirectToAction("DodajTrening","Trener",new { naz });
         }
         #endregion
 
@@ -807,9 +814,11 @@ namespace MyWebApp.Controllers
             string lepoFormatiranDatumRodjenja = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
             PodaciTxt.ModifikujGrupniTreningTreneru(user, lepoFormatiranDatumRodjenja, tipTreninga, stariDatum,datumIVremeTreninga);
 
+            //Nece prikazati jer radim redirect
             ViewBag.modifikujTrening = "Trening uspesno modifikovan!";
 
-            return View("Modifikuj");
+            //return View("Modifikuj");
+            return RedirectToAction("ModifikujTrening","Trener",new { nazi});
         }
         #endregion
 
