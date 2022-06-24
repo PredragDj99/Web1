@@ -7,7 +7,7 @@ namespace MyWebApp.Models
 {
     public class Korisnik
     {
-        public Korisnik(string korisnickoIme, string lozinka, string ime, string prezime, string pol, string email, DateTime datumRodjenja, KorisnikType uloga, List<GrupniTrening> listaGrupnihTreninga, List<GrupniTrening> listaTreninziAngazovan, FitnesCentar angazovanNaFitnesCentar, List<FitnesCentar> listaVlasnickiFitnesCentar)
+        public Korisnik(string korisnickoIme, string lozinka, string ime, string prezime, string pol, string email, DateTime datumRodjenja, KorisnikType uloga, List<GrupniTrening> listaGrupnihTreninga, List<GrupniTrening> listaTreninziAngazovan, FitnesCentar angazovanNaFitnesCentar, List<FitnesCentar> listaVlasnickiFitnesCentar, string trenerBlokiran)
         {
             KorisnickoIme = korisnickoIme;
             Lozinka = lozinka;
@@ -21,6 +21,7 @@ namespace MyWebApp.Models
             ListaTreninziAngazovan = listaTreninziAngazovan;
             AngazovanNaFitnesCentar = angazovanNaFitnesCentar;
             ListaVlasnickiFitnesCentar = listaVlasnickiFitnesCentar;
+            TrenerBlokiran = trenerBlokiran;
         }
 
         public string KorisnickoIme { get; set; }
@@ -35,6 +36,7 @@ namespace MyWebApp.Models
         public List<GrupniTrening> ListaTreninziAngazovan { get; set; } = new List<GrupniTrening>(); //ako je trener
         public FitnesCentar AngazovanNaFitnesCentar { get; set; } //ako je trener
         public List<FitnesCentar> ListaVlasnickiFitnesCentar { get; set; } = new List<FitnesCentar>(); //ako je vlasnik
+        public string TrenerBlokiran { get; set; }
 
         public Korisnik(string ime, string prezime)
         {

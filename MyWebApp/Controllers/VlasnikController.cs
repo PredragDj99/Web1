@@ -9,6 +9,7 @@ namespace MyWebApp.Controllers
 {
     public class VlasnikController : Controller
     {
+        static string naz="";
         // GET: Vlasnik
         public ActionResult Index(string naziv)
         {
@@ -28,7 +29,7 @@ namespace MyWebApp.Controllers
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
 
             //komentari
-            List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
+            List<Komentar> komentari = PodaciTxt.procitajKomentare("~/App_Data/Komentari.txt");
             List<Komentar> filtriraniKomentari = new List<Komentar>();
 
             foreach (var item in komentari)
@@ -62,7 +63,80 @@ namespace MyWebApp.Controllers
             }
             #endregion
 
+            #region Prikaz komentara
+            List<FitnesCentar> vlasnickiFC = new List<FitnesCentar>();
+            vlasnickiFC = PodaciTxt.ProcitajVlasnikoveFC(user.Ime, user.Prezime);
+            ViewBag.vlasnickiFC = vlasnickiFC;
+
+            List<Komentar> basSviKom = PodaciTxt.procitajBasSveKomentare("~/App_Data/Komentari.txt");
+
+            List<Komentar> komentariOvogVlasnika = new List<Komentar>();
+            foreach (var fc in vlasnickiFC)
+            {
+                foreach (var komentar in basSviKom)
+                {
+                    if (fc.Naziv.Contains(komentar.FitnesCentarKomentarisan))
+                    {
+                        komentariOvogVlasnika.Add(komentar);
+                    }
+                }
+            }
+            ViewBag.sviKomentari = komentariOvogVlasnika;
+            #endregion
+
+            #region Prikazi zaposlene trenere
+            List<Korisnik> sviKorisnici = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
+            List<Korisnik> zaposleniTreneri = new List<Korisnik>();
+
+            foreach (var korisnik in sviKorisnici)
+            {
+                if (korisnik.Uloga.ToString() == "TRENER")
+                {
+                    for (int i = 0; i < vlasnickiFC.Count; i++)
+                    {
+                        if (vlasnickiFC[i].Naziv == korisnik.AngazovanNaFitnesCentar.Naziv)
+                        {
+                            zaposleniTreneri.Add(korisnik);
+                            break;
+                        }
+                    }
+                }
+            }
+            ViewBag.zaposleniTreneri = zaposleniTreneri;
+            #endregion
+
+            naz = naziv;
             return View();
         }
+
+        #region Odobri/Odbij komentar
+        public ActionResult Odobri(string komentarise, string fc,string tekst, Int32 ocena)
+        {
+            string naziv = naz;
+
+            PodaciTxt.OdobriKomentar(komentarise,fc,tekst,ocena);
+
+            return RedirectToAction("Index","Vlasnik", new { naziv });
+        }
+        public ActionResult Odbij(string komentarise, string tekst, string fc, Int32 ocena)
+        {
+            string naziv = naz;
+
+            PodaciTxt.OdbijKomentar(komentarise, fc, tekst, ocena);
+
+            return RedirectToAction("Index", "Vlasnik", new { naziv });
+        }
+        #endregion
+
+        #region Blokiraj trenera
+        public ActionResult BlokirajTrenera(string korisnickoIme)
+        {
+            string naziv = naz;
+
+            PodaciTxt.BlokirajTrenera(korisnickoIme);
+
+            return View("Index", new { naziv });
+        }
+        #endregion
     }
 }

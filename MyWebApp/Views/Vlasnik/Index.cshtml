@@ -143,5 +143,98 @@
         <hr />
     }
 
+
+    <h1>Vasi fitnes centri</h1>
+    <table class="predstojeciTreninzi">
+        <tr>
+            <th>Naziv</th>
+            <th>Adresa</th>
+            <th>Godina otvaranja</th>
+            <th>Ime vlasnika</th>
+            <th>Mesecna clanarina</th>
+            <th>Godisnja clanarina</th>
+            <th>Jedan trening</th>
+            <th>Jedan grupni trening</th>
+            <th>Jedan trening sa personalnim trenerom</th>
+        </tr>
+        @foreach (var item in ViewBag.vlasnickiFC)
+        {
+            <tr>
+                <td>@item.Naziv</td>
+                <td>@item.Adresa</td>
+                <td>@item.GodinaOtvaranja</td>
+                <td>@item.Vlasnik.Ime  @item.Vlasnik.Prezime</td>
+                <td>@item.MesecnaClanarina</td>
+                <td>@item.GodisnjaClanarina</td>
+                <td>@item.JedanTrening</td>
+                <td>@item.JedanGrupniTrening</td>
+                <td>@item.JedanSaPersonalnimTrenerom</td>
+            </tr>
+        }
+    </table>
+
+    <h1>Komentari za vase fitnes centre</h1>
+    <table class="predstojeciTreninzi">
+        <tr>
+            <th>Ime korisnika</th>
+            <th>Tekst komentara</th>
+            <th>Naziv fitnes centra</th>
+            <th>Ocena</th>
+            <th>Odobren</th>
+        </tr>
+        @foreach (var item in ViewBag.sviKomentari)
+        {
+            <tr>
+                <td>@item.KoJeOstavioKomentar</td>
+                <td>@item.TekstKomentara</td>
+                <td>@item.FitnesCentarKomentarisan</td>
+                <td>@item.Ocena</td>
+                <td>@item.Odobren</td>
+                @if (item.Odobren == "NIJE ODOBREN")
+                {
+                    <td>
+                        <a class="linkButton" href="/Vlasnik/Odobri?komentarise=@item.KoJeOstavioKomentar&&fc=@item.FitnesCentarKomentarisan&&tekst=@item.TekstKomentara&&ocena=@item.Ocena">Odobri</a>
+                    </td>
+                    <td>
+                        <a class="linkButton" href="/Vlasnik/Odbij?komentarise=@item.KoJeOstavioKomentar&&fc=@item.FitnesCentarKomentarisan&&tekst=@item.TekstKomentara&&ocena=@item.Ocena">Odbij</a>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+
+
+    <h1>Zaposleni treneri</h1>
+    <table class="predstojeciTreninzi">
+        <tr>
+            <th>Korisnicko ime</th>
+            <th>Ime</th>
+            <th>Prezime</th>
+            <th>Email</th>
+            <th>Fitnes centar</th>
+            <th>Blokiran</th>
+        </tr>
+        @foreach (var item in ViewBag.zaposleniTreneri)
+        {
+            <tr>
+                <td>@item.KorisnickoIme</td>
+                <td>@item.Ime</td>
+                <td>@item.Prezime</td>
+                <td>@item.Email</td>
+                <td>@item.AngazovanNaFitnesCentar.Naziv</td>
+                <td>@item.TrenerBlokiran</td>
+                @if (item.TrenerBlokiran == "BLOKIRAN")
+                {
+                    <td>Blokiran</td>
+                }
+                else if (item.TrenerBlokiran == "Ne blokiran")
+                {
+                    <td>
+                        <a class="linkButton" href="/Vlasnik/BlokirajTrenera?korisnickoIme=@item.KorisnickoIme">Blokiraj</a>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
 </body>
 </html>

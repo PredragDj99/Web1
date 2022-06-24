@@ -1,6 +1,7 @@
-﻿Dejan;Compiona;Vrlo posveceni treneri;5;odobren
+Dejan;Compiona;Vrlo posveceni treneri;5;odobren
 Jelena;Fitnes Elastico;Super treninzi, ali losa ventilacija, vazduh je previse suv;4;odobren
 Milica;Compiona;Uslovi za trening su savrseni, treneri su brlo profesionalni;5;odobren
 Mirko;Best Fit;Uslovi za trening su savrseni, treneri su brlo profesionalni;5;odobren
 Zeljana;MuscleMotion;Dosadan trening, uopste mi se ne svidja;1;NIJE ODOBREN
 Zika;Compiona;superiska;5;NIJE ODOBREN
+Zika;Compiona;Prezadovoljan sam!;5;NIJE ODOBREN

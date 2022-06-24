@@ -34,7 +34,7 @@ namespace MyWebApp.Models
 
             sr.Close();
             stream.Close();
-            
+
             return fitnesCentri;
         }
         #endregion
@@ -49,22 +49,27 @@ namespace MyWebApp.Models
             StreamReader sr = new StreamReader(stream);
             string line = "";
 
+            List<GrupniTrening> procitaniGT = procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
+            List<FitnesCentar> procitaniFC = procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
             while ((line = sr.ReadLine()) != null)
             {
                 string[] tokens = line.Split(';');
 
-                //Svakako je null pri registraciji
-                /*
-                string[] listaGrupnihTreninga = tokens[8].Split('|');
-                string[] listaTreninziAngazovan = tokens[9].Split('|');
-                string[] AngazovanNaFitnesCentar = tokens[10].Split('|');
-                string[] ListaVlasnickiFitnesCentar = tokens[11].Split('|');
-                */
-                //ovo sam odradio kod posetioca
-                List <GrupniTrening> grupniTrening = new List<GrupniTrening>();
 
+                string[] listaGrupnihTreninga = tokens[8].Split('|');
+                //ovo sam odradio kod posetioca
+                List<GrupniTrening> grupniTrening = new List<GrupniTrening>();
+                foreach (var item in procitaniGT)
+                {
+                    for (int i = 0; i < item.SpisakPosetilaca.Count; i++)
+                    {
+                        if(item.SpisakPosetilaca[i].Ime==tokens[2] && item.SpisakPosetilaca[i].Prezime == tokens[3])
+                            grupniTrening.Add(item);
+                    }
+                }
                 List<GrupniTrening> treninziAngazovan = new List<GrupniTrening>();
-                
+                string[] AngazovanNaFitnesCentar = tokens[10].Split('|');
+
                 string[] listaTreninziAngazovan = tokens[9].Split('|');
                 for (int i = 0; i < listaTreninziAngazovan.Count(); i++)
                 {
@@ -80,11 +85,29 @@ namespace MyWebApp.Models
                         treninziAngazovan.Add(g);
                     }
                 }
-                
-                FitnesCentar fc = new FitnesCentar();
+
                 List<FitnesCentar> listaFitnesCentara = new List<FitnesCentar>();
-                
-                Korisnik k = new Korisnik(tokens[0],tokens[1],tokens[2],tokens[3],tokens[4],tokens[5], DateTime.ParseExact(tokens[6], "dd/MM/yyyy", CultureInfo.InvariantCulture), (KorisnikType)Enum.Parse(typeof(KorisnikType), tokens[7]), grupniTrening,treninziAngazovan,fc,listaFitnesCentara);
+                string[] ListaVlasnickiFitnesCentar = tokens[11].Split('|');
+                foreach (var item in procitaniFC)
+                {
+                    if (item.Vlasnik.Ime == tokens[2] && item.Vlasnik.Prezime == tokens[3])
+                        listaFitnesCentara.Add(item);
+                }
+
+                FitnesCentar fc = new FitnesCentar();
+                if (tokens[7] == "TRENER" && tokens[10] != "")
+                {
+                    for (int i = 0; i < procitaniFC.Count; i++)
+                    {
+                        if (procitaniFC[i].Naziv == tokens[10])
+                        {
+                            fc = procitaniFC[i];
+                            break;
+                        }
+                    }
+                }
+
+                Korisnik k = new Korisnik(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4], tokens[5], DateTime.ParseExact(tokens[6], "dd/MM/yyyy", CultureInfo.InvariantCulture), (KorisnikType)Enum.Parse(typeof(KorisnikType), tokens[7]), grupniTrening, treninziAngazovan, fc, listaFitnesCentara,tokens[12]);
                 korisnici.Add(k);
             }
 
@@ -114,7 +137,7 @@ namespace MyWebApp.Models
                 string[] posetioci = tokens[6].Split('|');
                 List<Korisnik> listaPosetilaca = new List<Korisnik>();
 
-                foreach(var posetilac in posetioci)
+                foreach (var posetilac in posetioci)
                 {
                     string[] korisnik = posetilac.Split('-');
                     if (korisnik[0] != "")
@@ -129,7 +152,7 @@ namespace MyWebApp.Models
                     }
                 }
 
-                GrupniTrening tr = new GrupniTrening(tokens[0],tokens[1],fc,tokens[3],DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),Int32.Parse(tokens[5]),listaPosetilaca,tokens[7]);
+                GrupniTrening tr = new GrupniTrening(tokens[0], tokens[1], fc, tokens[3], DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture), Int32.Parse(tokens[5]), listaPosetilaca, tokens[7]);
 
                 grupniTreninzi.Add(tr);
             }
@@ -155,7 +178,7 @@ namespace MyWebApp.Models
             {
                 string[] tokens = line.Split(';');
 
-                Komentar kom = new Komentar(tokens[0],tokens[1],tokens[2],Int32.Parse(tokens[3]),tokens[4]);
+                Komentar kom = new Komentar(tokens[0], tokens[1], tokens[2], Int32.Parse(tokens[3]), tokens[4]);
                 if (tokens[4] == "odobren")
                 {
                     komentari.Add(kom);
@@ -177,7 +200,7 @@ namespace MyWebApp.Models
             FileStream stream = new FileStream(path, FileMode.Append);
             StreamWriter sw = new StreamWriter(stream);
 
-            string[] linija = new string[12];
+            string[] linija = new string[13];
 
             linija[0] = korisnik.KorisnickoIme;
             linija[1] = korisnik.Lozinka;
@@ -224,11 +247,19 @@ namespace MyWebApp.Models
             {
                 linija[11] = korisnik.ListaVlasnickiFitnesCentar.ToString();
             }
+            if(korisnik.TrenerBlokiran == null)
+            {
+                linija[12] = prazno;
+            }
+            else
+            {
+                linija[12] = korisnik.TrenerBlokiran;
+            }
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 13; i++)
             {
                 sw.Write(linija[i]);
-                if (i == 11)
+                if (i == 12)
                 {
                     sw.WriteLine();
                 }
@@ -289,7 +320,7 @@ namespace MyWebApp.Models
             FileStream stream = new FileStream(path, FileMode.Append);
             StreamWriter sw = new StreamWriter(stream);
 
-            string[] linija = new string[12];
+            string[] linija = new string[13];
 
             linija[0] = korisnik.KorisnickoIme;
             linija[1] = korisnik.Lozinka;
@@ -307,16 +338,53 @@ namespace MyWebApp.Models
             }
             else
             {
-                linija[8] = korisnik.ListaGrupnihTreninga.ToString();
+                linija[8] = prazno;
+                foreach (var item in korisnik.ListaGrupnihTreninga)
+                {
+                    if (linija[8] == "")
+                    {
+                        string datum = item.DatumIVremeTreninga.ToString();
+                        datum = datum.Substring(0,datum.Length-3);
+                        linija[8] += item.TipTreninga.ToString() + "_" + datum; //UPISUJE DUGACAK DATUM
+                    }
+                    else
+                    {
+                        string datum = item.DatumIVremeTreninga.ToString();
+                        datum = datum.Substring(0, datum.Length - 3);
+                        linija[8] += "|"+ item.TipTreninga.ToString() + "_" + datum;
+                    }
+                }
             }
 
             if (korisnik.ListaTreninziAngazovan == null)
             {
                 linija[9] = prazno;
+                foreach (var item in korisnik.ListaTreninziAngazovan)
+                {
+                    if (linija[9] == "")
+                    {
+                        linija[9] += item.TipTreninga + "_" + item.DatumIVremeTreninga;
+                    }
+                    else
+                    {
+                        linija[9] += "|" + item.TipTreninga + "_" + item.DatumIVremeTreninga;
+                    }
+                }
             }
             else
             {
-                linija[9] = korisnik.ListaTreninziAngazovan.ToString();
+                linija[9] = prazno;
+                foreach (var item in korisnik.ListaTreninziAngazovan)
+                {
+                    if (linija[9] == "")
+                    {
+                        linija[9] += item.TipTreninga + "_" + item.DatumIVremeTreninga;
+                    }
+                    else
+                    {
+                        linija[9] += "|" + item.TipTreninga + "_" + item.DatumIVremeTreninga;
+                    }
+                }
             }
 
             if (korisnik.AngazovanNaFitnesCentar == null)
@@ -334,13 +402,24 @@ namespace MyWebApp.Models
             }
             else
             {
-                linija[11] = korisnik.ListaVlasnickiFitnesCentar.ToString();
+                linija[11] = prazno;
+                foreach (var item in korisnik.ListaVlasnickiFitnesCentar)
+                {
+                    if (linija[9] == "")
+                    {
+                        linija[9] += item.Naziv;
+                    }
+                    else
+                    {
+                        linija[9] += "|" + item.Naziv;
+                    }
+                }
             }
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 13; i++)
             {
                 sw.Write(linija[i]);
-                if (i == 11)
+                if (i == 12)
                 {
                     sw.WriteLine();
                 }
@@ -398,7 +477,7 @@ namespace MyWebApp.Models
                     for (int i = 0; i < delovi.Length; i++)
                     {
                         sw.Write(delovi[i]);
-                        if (i!=7)
+                        if (i != 7)
                         {
                             sw.Write(';');
                         }
@@ -414,7 +493,7 @@ namespace MyWebApp.Models
         }
         #endregion
         #region Dodaje grupni trening u fajl korisnika
-        public static void DodajGrupniTreningKorisniku(Korisnik posetilac,GrupniTrening gt,string lepoFormatiranDatumRodjenja,string tipTreninga, string datumVreme)
+        public static void DodajGrupniTreningKorisniku(Korisnik posetilac, GrupniTrening gt, string lepoFormatiranDatumRodjenja, string tipTreninga, string datumVreme)
         {
             string tempFile = Path.GetTempFileName();
 
@@ -422,7 +501,7 @@ namespace MyWebApp.Models
             FileStream fs1 = new FileStream(path1, FileMode.Open, FileAccess.Read);
             StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
 
-            string[] podaciPosetioca=new string[12];
+            string[] podaciPosetioca = new string[13];
 
             podaciPosetioca[0] = posetilac.KorisnickoIme;
             podaciPosetioca[1] = posetilac.Lozinka;
@@ -452,7 +531,7 @@ namespace MyWebApp.Models
             podaciPosetioca[9] = "";
             podaciPosetioca[10] = "";
             podaciPosetioca[11] = "";
-
+            podaciPosetioca[12] = "";
 
             sr1.Close();
             fs1.Close();
@@ -475,13 +554,13 @@ namespace MyWebApp.Models
                         }
                         else
                         {
-                            podaciPosetioca[8] = podaciPosetioca[8]+"|"+tipTreninga + "_" + datumVreme;
+                            podaciPosetioca[8] = podaciPosetioca[8] + "|" + tipTreninga + "_" + datumVreme;
                         }
 
-                        for (int i = 0; i < 12; i++)
+                        for (int i = 0; i < 13; i++)
                         {
                             sw.Write(podaciPosetioca[i]);
-                            if (i == 11)
+                            if (i == 12)
                             {
                                 sw.WriteLine();
                             }
@@ -536,7 +615,7 @@ namespace MyWebApp.Models
         }
         #endregion
         #region Procitaj datum odrzavanja treninga
-        public static string pronadjiDatumIVremeTreninga(string naziv,string tip,string trajanje, string nazivFC) //Nikako drugacije ne mogu da izvadim validan datum
+        public static string pronadjiDatumIVremeTreninga(string naziv, string tip, string trajanje, string nazivFC) //Nikako drugacije ne mogu da izvadim validan datum
         {
             var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
             FileStream stream = new FileStream(path, FileMode.Open);
@@ -549,7 +628,7 @@ namespace MyWebApp.Models
             {
                 string[] tokens = line.Split(';');
 
-                if (tokens[0] == naziv && tokens[1]==tip && tokens[2]== nazivFC && tokens[3]== trajanje)
+                if (tokens[0] == naziv && tokens[1] == tip && tokens[2] == nazivFC && tokens[3] == trajanje)
                 {
                     datumTreninga = tokens[4];
                     sr.Close();
@@ -565,7 +644,7 @@ namespace MyWebApp.Models
         #endregion
 
         #region Procitaj jedan grupni trening
-        public static bool procitajJedanGrupniTrening(string path,string naziv, string datumVreme,string ime,string prezime)
+        public static bool procitajJedanGrupniTrening(string path, string naziv, string datumVreme, string ime, string prezime)
         {
             path = HostingEnvironment.MapPath(path);
             FileStream stream = new FileStream(path, FileMode.Open);
@@ -591,7 +670,7 @@ namespace MyWebApp.Models
                         string[] korisnik = posetilac.Split('-');
                         Korisnik k = new Korisnik(korisnik[0], korisnik[1]);
 
-                        if (korisnik[0]==ime && korisnik[1] == prezime)
+                        if (korisnik[0] == ime && korisnik[1] == prezime)
                         {
                             sr.Close();
                             return true;
@@ -625,7 +704,7 @@ namespace MyWebApp.Models
 
                 List<Korisnik> listaPosetilaca = new List<Korisnik>();
 
-                string temp= tokens[6];
+                string temp = tokens[6];
                 if (temp != "")
                 {
                     string[] posetioci = tokens[6].Split('|');
@@ -641,7 +720,7 @@ namespace MyWebApp.Models
                         listaPosetilaca.Add(k);
                     }
                 }
-                GrupniTrening tr = new GrupniTrening(tokens[0], tokens[1], fc, tokens[3], DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture), Int32.Parse(tokens[5]), listaPosetilaca,tokens[7]);
+                GrupniTrening tr = new GrupniTrening(tokens[0], tokens[1], fc, tokens[3], DateTime.ParseExact(tokens[4], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture), Int32.Parse(tokens[5]), listaPosetilaca, tokens[7]);
 
                 foreach (var posetilac in listaPosetilaca)
                 {
@@ -658,7 +737,7 @@ namespace MyWebApp.Models
         #endregion
 
         #region Sacuvaj komentar
-        public static void SacuvajKomentar(string koJeOstavioKomentar,string fitnesCentarKomentarisan,Int32 ocena,string tekstKomentara)
+        public static void SacuvajKomentar(string koJeOstavioKomentar, string fitnesCentarKomentarisan, Int32 ocena, string tekstKomentara)
         {
             var path = HostingEnvironment.MapPath("~/App_Data/Komentari.txt");
             FileStream stream = new FileStream(path, FileMode.Append);
@@ -704,7 +783,7 @@ namespace MyWebApp.Models
                 {
                     string[] tokens = line.Split(';');
                     string[] korisnici = tokens[6].Split('|');
-                    
+
                     List<Korisnik> listaKorisnika = new List<Korisnik>();
 
                     for (int i = 0; i < korisnici.Length; i++)
@@ -719,14 +798,14 @@ namespace MyWebApp.Models
                         else
                         {
                             Korisnik k = new Korisnik();    //Ako ne postoji ni jedan korisnik(slucaj kada trener brise)
-                         //   listaKorisnika.Add(k);
+                                                            //   listaKorisnika.Add(k);
                         }
                     }
 
                     FitnesCentar fc = new FitnesCentar(nazivFC);
                     DateTime d = DateTime.ParseExact(datumVreme, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
-                    GrupniTrening gt = new GrupniTrening(tokens[0], tokens[1], fc,tokens[3],d,Int32.Parse(tokens[5]),listaKorisnika,tokens[7]);
+                    GrupniTrening gt = new GrupniTrening(tokens[0], tokens[1], fc, tokens[3], d, Int32.Parse(tokens[5]), listaKorisnika, tokens[7]);
                     sr.Close();
                     return gt; //nesto vrati
                 }
@@ -755,7 +834,7 @@ namespace MyWebApp.Models
                 string[] datum = tokens[4].Split(' ');
 
                 string[] losDatumPodela = losDatum.Split(' ');
-                string vreme = losDatumPodela[1].Substring(0, losDatumPodela[1].Length-3);
+                string vreme = losDatumPodela[1].Substring(0, losDatumPodela[1].Length - 3);
 
                 //uzeo sam samo vreme datuma jer u tom FC ne moze biti 2 trneinga u isto vreme
                 if (tokens[2] == naziv && tokens[1] == tip && datum[1].Equals(vreme))
@@ -774,7 +853,7 @@ namespace MyWebApp.Models
         #endregion
 
         #region ObrisiTrening
-        public static void ObrisiTrening(string naziv,string datum)
+        public static void ObrisiTrening(string naziv, string datum)
         {
             #region Brisanje starog
             string tempFile = Path.GetTempFileName();
@@ -797,7 +876,7 @@ namespace MyWebApp.Models
                     else //Dodavanje dela za neaktivnu liniju
                     {
                         linijaKojuMenjam = line;
-                        linijaKojuMenjam = linijaKojuMenjam.Substring(0, linijaKojuMenjam.Length-7);
+                        linijaKojuMenjam = linijaKojuMenjam.Substring(0, linijaKojuMenjam.Length - 7);
                         linijaKojuMenjam = linijaKojuMenjam + "NeAkt!!";
                         sww.WriteLine(linijaKojuMenjam);
                     }
@@ -813,7 +892,7 @@ namespace MyWebApp.Models
 
         //Trener - kreiranje
         #region Trener dodaje novi trening
-        public static string TrenerDodajeNoviTrening(string naziv,string tipTreninga,string naz,string trajanjeTreningaMinute,string datumIVremeTreninga,string maxBrojPosetioca, string prazniPosetioci,string treningAktivan)
+        public static string TrenerDodajeNoviTrening(string naziv, string tipTreninga, string naz, string trajanjeTreningaMinute, string datumIVremeTreninga, string maxBrojPosetioca, string prazniPosetioci, string treningAktivan)
         {
             var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
             FileStream fs1 = new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -879,11 +958,11 @@ namespace MyWebApp.Models
             {
                 if (linija.Contains(trener.KorisnickoIme))
                 {
-                    string[] podeli= linija.Split(';');
+                    string[] podeli = linija.Split(';');
                     stariTreninzi = podeli[9];
                 }
             }
-            string[] podaciTrenera = new string[12];
+            string[] podaciTrenera = new string[13];
 
             podaciTrenera[0] = trener.KorisnickoIme;
             podaciTrenera[1] = trener.Lozinka;
@@ -897,6 +976,7 @@ namespace MyWebApp.Models
             podaciTrenera[9] = stariTreninzi;
             podaciTrenera[10] = trener.AngazovanNaFitnesCentar.Naziv;
             podaciTrenera[11] = "";
+            podaciTrenera[12] = trener.TrenerBlokiran;
 
             sr.Close();
             fs.Close();
@@ -943,15 +1023,19 @@ namespace MyWebApp.Models
                     sw2.WriteLine(line);
                 }
 
-                podaciTrenera[9] += "|" + naziv + "_" + datum;
+                if (podaciTrenera[9] != "")
+                {
+                    podaciTrenera[9] += "|";
+                }
+                podaciTrenera[9] += naziv + "_" + datum;
                 for (int i = 0; i < podaciTrenera.Length; i++)
                 {
-                    if (i == 11)
+                    sw2.Write(podaciTrenera[i]);
+                    if (i == 12)
                     {
                         sw2.WriteLine();
                         break;
                     }
-                    sw2.Write(podaciTrenera[i]);
                     sw2.Write(";");
                 }
             }
@@ -965,7 +1049,7 @@ namespace MyWebApp.Models
 
         //Modifikovanje
         #region Modifikuj trening
-        public static void ModifikujTrening(string stariDatum,string naziv, string tipTreninga, string naz, string trajanjeTreningaMinute, string datumIVremeTreninga, string maxBrojPosetioca, string prazniPosetioci, string treningAktivan)
+        public static void ModifikujTrening(string stariDatum, string naziv, string tipTreninga, string naz, string trajanjeTreningaMinute, string datumIVremeTreninga, string maxBrojPosetioca, string prazniPosetioci, string treningAktivan)
         {
             #region Brisanje
             var path = HostingEnvironment.MapPath("~/App_Data/GrupniTreninzi.txt");
@@ -984,7 +1068,7 @@ namespace MyWebApp.Models
                     if (line.Contains(stariDatum) && line.Contains(naz))
                     {
                         string[] posetioci = line.Split(';');
-                        
+
                         for (int i = 0; i < posetioci[6].Length; i++)
                         {
                             string[] podeliOpet = posetioci[6].Split('|');
@@ -998,7 +1082,7 @@ namespace MyWebApp.Models
                                 {
                                     if (j == 0)
                                     {
-                                        if(!listaPosetilaca.Contains(podeliOpet[j]))
+                                        if (!listaPosetilaca.Contains(podeliOpet[j]))
                                             listaPosetilaca += podeliOpet[j];
                                     }
                                     else
@@ -1056,7 +1140,7 @@ namespace MyWebApp.Models
         }
         #endregion
         #region Modifikuje grupni trening treneru
-        public static void ModifikujGrupniTreningTreneru(Korisnik trener, string lepoFormatiranDatumRodjenja, string naziv, string stariDatum,string datum)
+        public static void ModifikujGrupniTreningTreneru(Korisnik trener, string lepoFormatiranDatumRodjenja, string naziv, string stariDatum, string datum)
         {
             #region Brisanje
             var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
@@ -1085,13 +1169,13 @@ namespace MyWebApp.Models
                             }
                             else
                             {
-                                stariTreninzi += "|"+izvadiTreningKojiMenjas[i];
+                                stariTreninzi += "|" + izvadiTreningKojiMenjas[i];
                             }
                         }
                     }
                 }
             }
-            string[] podaciTrenera = new string[12];
+            string[] podaciTrenera = new string[13];
 
             podaciTrenera[0] = trener.KorisnickoIme;
             podaciTrenera[1] = trener.Lozinka;
@@ -1105,6 +1189,7 @@ namespace MyWebApp.Models
             podaciTrenera[9] = stariTreninzi;
             podaciTrenera[10] = trener.AngazovanNaFitnesCentar.Naziv;
             podaciTrenera[11] = "";
+            podaciTrenera[12] = trener.TrenerBlokiran;
 
             sr.Close();
             fs.Close();
@@ -1151,15 +1236,19 @@ namespace MyWebApp.Models
                     sw2.WriteLine(line);
                 }
 
-                podaciTrenera[9] += "|" + naziv + "_" + datum;
+                if (podaciTrenera[9] != "")
+                {
+                    podaciTrenera[9] += "|";
+                }
+                podaciTrenera[9] += naziv + "_" + datum;
                 for (int i = 0; i < podaciTrenera.Length; i++)
                 {
-                    if (i == 11)
+                    sw2.Write(podaciTrenera[i]);
+                    if (i == 12)
                     {
                         sw2.WriteLine();
                         break;
                     }
-                    sw2.Write(podaciTrenera[i]);
                     sw2.Write(";");
                 }
             }
@@ -1167,6 +1256,319 @@ namespace MyWebApp.Models
             fs3.Close();
             File.Delete(path2);
             File.Move(tempFile2, path2);
+            #endregion
+        }
+        #endregion
+
+        #region Procitaj vlasnikove FC
+        public static List<FitnesCentar> ProcitajVlasnikoveFC(string imeVlasnika, string prezimeVlasnika)
+        {
+            List<FitnesCentar> fitnesCentri = new List<FitnesCentar>();
+
+            var path = HostingEnvironment.MapPath("~/App_Data/FitnesCentri.txt");
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                if (line.Contains(imeVlasnika) && line.Contains(prezimeVlasnika))
+                {
+                    string[] tokens = line.Split(';');
+                    string[] podaciOVlasniku = tokens[3].Split('|');
+                    Korisnik vlasnik = new Korisnik(podaciOVlasniku[0], podaciOVlasniku[1]);
+                    FitnesCentar fc = new FitnesCentar(tokens[0], tokens[1], Int32.Parse(tokens[2]), vlasnik, Double.Parse(tokens[4]), Double.Parse(tokens[5]), Double.Parse(tokens[6]), Double.Parse(tokens[7]), Double.Parse(tokens[8]));
+
+                    fitnesCentri.Add(fc);
+                }
+            }
+
+            sr.Close();
+            stream.Close();
+
+            return fitnesCentri;
+        }
+        #endregion
+
+        #region Procitaj bas sve komentare
+        public static List<Komentar> procitajBasSveKomentare(string path)
+        {
+            List<Komentar> komentari = new List<Komentar>();
+
+            path = HostingEnvironment.MapPath(path);
+            FileStream stream = new FileStream(path, FileMode.Open);
+            StreamReader sr = new StreamReader(stream);
+            string line = "";
+
+            while ((line = sr.ReadLine()) != null)
+            {
+                string[] tokens = line.Split(';');
+
+                Komentar kom = new Komentar(tokens[0], tokens[1], tokens[2], Int32.Parse(tokens[3]), tokens[4]);
+                komentari.Add(kom);
+            }
+
+            sr.Close();
+            stream.Close();
+
+            return komentari;
+        }
+        #endregion
+
+        #region Odobri/Odbij komentar
+        public static void OdobriKomentar(string komentarise, string fc, string tekst, Int32 ocena)
+        {
+            #region Brisanje
+            var path = HostingEnvironment.MapPath("~/App_Data/Komentari.txt");
+
+            FileStream fs1 = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
+
+            string tempFile1 = Path.GetTempFileName();
+            using (var sw1 = new StreamWriter(tempFile1))
+            {
+                string line;
+
+                while ((line = sr1.ReadLine()) != null)
+                {
+                    if(line.Contains(komentarise) && line.Contains(tekst) && line.Contains(fc) && line.Contains(ocena.ToString()))
+                    {
+                        //Preskoci ga
+                    }
+                    else
+                    {
+                        sw1.WriteLine(line);
+                    }
+                }
+            }
+            sr1.Close();
+            fs1.Close();
+            File.Delete(path);
+            File.Move(tempFile1, path);
+            #endregion
+
+            #region Upisi promenjeno
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            sw.Write(komentarise);
+            sw.Write(";");
+
+            sw.Write(fc);
+            sw.Write(";");
+
+            sw.Write(tekst);
+            sw.Write(";");
+
+            sw.Write(ocena.ToString());
+            sw.Write(";");
+
+            sw.Write("odobren");
+            sw.WriteLine();
+
+            sw.Close();
+            stream.Close();
+            #endregion
+        }
+        public static void OdbijKomentar(string komentarise, string fc, string tekst, Int32 ocena)
+        {
+            #region Brisanje
+            var path = HostingEnvironment.MapPath("~/App_Data/Komentari.txt");
+
+            FileStream fs1 = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
+
+            string tempFile1 = Path.GetTempFileName();
+            using (var sw1 = new StreamWriter(tempFile1))
+            {
+                string line;
+
+                while ((line = sr1.ReadLine()) != null)
+                {
+                    if (line.Contains(komentarise) && line.Contains(tekst) && line.Contains(fc) && line.Contains(ocena.ToString()))
+                    {
+                        //Preskoci ga
+                    }
+                    else
+                    {
+                        sw1.WriteLine(line);
+                    }
+                }
+            }
+            sr1.Close();
+            fs1.Close();
+            File.Delete(path);
+            File.Move(tempFile1, path);
+            #endregion
+
+            #region Upisi promenjeno
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            sw.Write(komentarise);
+            sw.Write(";");
+
+            sw.Write(fc);
+            sw.Write(";");
+
+            sw.Write(tekst);
+            sw.Write(";");
+
+            sw.Write(ocena.ToString());
+            sw.Write(";");
+
+            sw.Write("nije odobren");
+            sw.WriteLine();
+
+            sw.Close();
+            stream.Close();
+            #endregion
+        }
+        #endregion
+
+        #region Blokiraj trenera
+        public static void BlokirajTrenera(string korisnickoIme)
+        {
+            #region Brisanje
+            List<Korisnik> sviKorisnici = procitajKorisnike("~/App_Data/Korisnici.txt");
+            var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+
+            FileStream fs1 = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
+
+            string tempFile1 = Path.GetTempFileName();
+            using (var sw1 = new StreamWriter(tempFile1))
+            {
+                string line;
+
+                while ((line = sr1.ReadLine()) != null)
+                {
+                    if (line.Contains(korisnickoIme))
+                    {
+                        //Preskoci ga
+                    }
+                    else
+                    {
+                        sw1.WriteLine(line);
+                    }
+                }
+            }
+            sr1.Close();
+            fs1.Close();
+            File.Delete(path);
+            File.Move(tempFile1, path);
+            #endregion
+
+            #region Upisi promenjeno
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            foreach (var item in sviKorisnici)
+            {
+                if (item.KorisnickoIme == korisnickoIme)
+                {
+                    sw.Write(item.KorisnickoIme);
+                    sw.Write(";");
+
+                    sw.Write(item.Lozinka);
+                    sw.Write(";");
+
+                    sw.Write(item.Ime);
+                    sw.Write(";");
+
+                    sw.Write(item.Prezime);
+                    sw.Write(";");
+
+                    sw.Write(item.Pol);
+                    sw.Write(";");
+
+                    sw.Write(item.Email);
+                    sw.Write(";");
+
+                    sw.Write(item.DatumRodjenja);
+                    sw.Write(";");
+
+                    sw.Write(item.Uloga);
+                    sw.Write(";");
+
+                    if (item.ListaGrupnihTreninga == null)
+                    {
+                        sw.Write("");
+                        sw.Write(";");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < item.ListaGrupnihTreninga.Count; i++)
+                        {
+                            if(i== item.ListaGrupnihTreninga.Count - 1)
+                            {
+                                sw.Write(item.ListaGrupnihTreninga[i]);
+                                sw.Write(";");
+                            }
+                            else
+                            {
+                                sw.Write(item.ListaGrupnihTreninga[i]);
+                                sw.Write("|");
+                            }
+                        }
+                    }
+
+                    if (item.ListaTreninziAngazovan == null)
+                    {
+                        sw.Write("");
+                        sw.Write(";");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < item.ListaTreninziAngazovan.Count; i++)
+                        {
+                            if (i == item.ListaTreninziAngazovan.Count - 1)
+                            {
+                                sw.Write(item.ListaTreninziAngazovan[i].TipTreninga);
+                                sw.Write("_" + item.ListaTreninziAngazovan[i].DatumIVremeTreninga);
+                                sw.Write(";");
+                            }
+                            else
+                            {
+                                sw.Write(item.ListaTreninziAngazovan[i].TipTreninga);
+                                sw.Write("_" + item.ListaTreninziAngazovan[i].DatumIVremeTreninga);
+                                sw.Write("|");
+                            }
+                        }
+                    }
+
+                    sw.Write(item.AngazovanNaFitnesCentar.Naziv);
+                    sw.Write(";");
+
+                    if (item.ListaVlasnickiFitnesCentar == null)
+                    {
+                        sw.Write("");
+                        sw.Write(";");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < item.ListaVlasnickiFitnesCentar.Count; i++)
+                        {
+                            if (i == item.ListaVlasnickiFitnesCentar.Count - 1)
+                            {
+                                sw.Write(item.ListaVlasnickiFitnesCentar[i]);
+                                sw.Write(";");
+                            }
+                            else
+                            {
+                                sw.Write(item.ListaVlasnickiFitnesCentar[i]);
+                                sw.Write("|");
+                            }
+                        }
+                    }
+
+                    sw.Write("BLOKIRAN");
+                    sw.WriteLine();
+                }
+            }
+
+            sw.Close();
+            stream.Close();
             #endregion
         }
         #endregion

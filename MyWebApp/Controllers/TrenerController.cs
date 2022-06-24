@@ -30,7 +30,7 @@ namespace MyWebApp.Controllers
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
 
             //komentari
-            List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
+            List<Komentar> komentari = PodaciTxt.procitajKomentare("~/App_Data/Komentari.txt");
             List<Komentar> filtriraniKomentari = new List<Komentar>();
 
             foreach (var item in komentari)
@@ -491,11 +491,12 @@ namespace MyWebApp.Controllers
             string lepoFormatiranDatumRodjenja = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
             PodaciTxt.DodajGrupniTreningTreneru(user,lepoFormatiranDatumRodjenja,tipTreninga,datumIVremeTreninga);
 
-            //Nece prikazati jer radim redirect
+            DateTime ovaj = DateTime.ParseExact(datumIVremeTreninga, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            user.ListaTreninziAngazovan.Add(new GrupniTrening(naziv,tipTreninga,user.AngazovanNaFitnesCentar,trajanjeTreningaMinute, ovaj, Int32.Parse(maxBrojPosetioca),new List<Korisnik>(),treningAktivan));
+
             ViewBag.dodajTrening = "Trening uspesno napravljen!";
 
-            //return View("Dodavanje");
-            return RedirectToAction("DodajTrening","Trener",new { naz });
+            return View("Dodavanje");
         }
         #endregion
 
@@ -560,7 +561,8 @@ namespace MyWebApp.Controllers
             }
             #endregion
             #region Prikaz trenerskih tabela
-            List<Korisnik> korisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+            //List<Korisnik> korisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+            List<Korisnik> korisnici = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
 
             List<GrupniTrening> gt = new List<GrupniTrening>();
             foreach (var item in user.ListaTreninziAngazovan)
@@ -811,14 +813,29 @@ namespace MyWebApp.Controllers
             string prazniPosetioci = "";
             string treningAktivan = "AKTIVAN";
             PodaciTxt.ModifikujTrening(stariDatum,naziv, tipTreninga, user.AngazovanNaFitnesCentar.Naziv, trajanjeTreningaMinute, datumIVremeTreninga, maxBrojPosetioca, prazniPosetioci, treningAktivan);
+
             string lepoFormatiranDatumRodjenja = PodaciTxt.pronadjiDatumRodjenjaKorisnika(user.KorisnickoIme);
             PodaciTxt.ModifikujGrupniTreningTreneru(user, lepoFormatiranDatumRodjenja, tipTreninga, stariDatum,datumIVremeTreninga);
 
-            //Nece prikazati jer radim redirect
+            //ovaj treba da bude stari datum
+            DateTime ovajDatum = DateTime.ParseExact(datumIVremeTreninga, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+            foreach (var item in user.ListaTreninziAngazovan)
+            {
+                string ispravanDatum = PodaciTxt.pronadjiDatumIVremeTreningaTrener(item.FitnesCentarOdrzava.Naziv, item.TipTreninga, item.DatumIVremeTreninga.ToString());
+                ispravanDatum = item.DatumIVremeTreninga.ToString("dd/MM/yyyy HH:mm");
+                if (ispravanDatum == stariDatum)
+                {
+                    item.Naziv = naziv;
+                    item.TipTreninga = tipTreninga;
+                    item.TrajanjeTreningaMinute = trajanjeTreningaMinute;
+                    item.DatumIVremeTreninga = ovajDatum;
+                    item.MaksimalanBrojPosetioca = Int32.Parse(maxBrojPosetioca);
+                }
+            }
+
             ViewBag.modifikujTrening = "Trening uspesno modifikovan!";
 
-            //return View("Modifikuj");
-            return RedirectToAction("ModifikujTrening","Trener",new { nazi});
+            return View("Modifikuj");
         }
         #endregion
 

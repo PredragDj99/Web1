@@ -28,7 +28,7 @@ namespace MyWebApp.Controllers
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
 
             //komentari
-            List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
+            List<Komentar> komentari = PodaciTxt.procitajKomentare("~/App_Data/Komentari.txt");
             List<Komentar> filtriraniKomentari = new List<Komentar>();
             
             foreach (var item in komentari)
@@ -88,7 +88,8 @@ namespace MyWebApp.Controllers
 
             List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
 
-            List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
+            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
+            List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
 
             //komentari
@@ -194,6 +195,19 @@ namespace MyWebApp.Controllers
                 }
                 #endregion
             }
+
+            //Odradi refresh tabele nakon novog unosa
+            grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
+            //grupni treninzi ovog fitnes centra
+            listaGrupnihTreninga.Clear();
+            foreach (var item in grupniTreninzi)
+            {
+                if (item.FitnesCentarOdrzava.Naziv.ToString().Equals(naziv) && item.DatumIVremeTreninga > DateTime.Now)
+                {
+                    listaGrupnihTreninga.Add(item);
+                }
+            }
+            ViewBag.grupniTreninzi = listaGrupnihTreninga;
 
             return View("Index");
         }

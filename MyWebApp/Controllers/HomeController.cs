@@ -543,7 +543,7 @@ namespace MyWebApp.Controllers
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
 
             //komentari
-            List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
+            List<Komentar> komentari = PodaciTxt.procitajKomentare("~/App_Data/Komentari.txt");
             List<Komentar> filtriraniKomentari = new List<Komentar>();
             foreach (var item in komentari)
             {
@@ -624,7 +624,7 @@ namespace MyWebApp.Controllers
                 }
             }
 
-
+            #region Validacija
             //provera da li je sve popunjeno
             if (korisnik.KorisnickoIme == null)
             {
@@ -673,6 +673,7 @@ namespace MyWebApp.Controllers
                 ViewBag.Message = "Lozinka mora imati bar 5 karaktera";
                 return View("Index");
             }
+            #endregion
 
             korisnik.Uloga = (KorisnikType)Enum.ToObject(typeof(KorisnikType),0);
             korisnik.ListaGrupnihTreninga = null;
@@ -701,9 +702,17 @@ namespace MyWebApp.Controllers
             List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
             ViewBag.uspesnaPrijava = "nije";
 
+
             //ako korisnicko ime vec postoji
             foreach (Korisnik kor in registrovaniKorisnici)
             {
+                //VLASNIK BLOKIRA TRENERA
+                if (kor.KorisnickoIme == korisnickoIme && kor.Lozinka == lozinka && kor.TrenerBlokiran == "BLOKIRAN")
+                {
+                    ViewBag.prijavljen = "Vlasnik Vas je blokirao!";
+                    break;
+                }
+
                 if (kor.KorisnickoIme == korisnickoIme && kor.Lozinka==lozinka)
                 {
                     ViewBag.uspesnaPrijava = "jeste";
@@ -711,7 +720,8 @@ namespace MyWebApp.Controllers
                     return View("Index");
                 }
             }
-            ViewBag.prijavljen = "Niste uneli dobre podatke!";
+            if(ViewBag.prijavljen != "Vlasnik Vas je blokirao!")
+                ViewBag.prijavljen = "Niste uneli dobre podatke!";
 
             return View("Index");
         }
@@ -753,7 +763,8 @@ namespace MyWebApp.Controllers
         public ActionResult IzmeniProfil(Korisnik korisnik)
         {
             Korisnik user = (Korisnik)Session["user"];
-            List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+            //List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+            List<Korisnik> registrovaniKorisnici = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
 
             //ako korisnicko ime vec postoji
             foreach (Korisnik kor in registrovaniKorisnici)
@@ -765,7 +776,7 @@ namespace MyWebApp.Controllers
                 }
             }
 
-
+            #region Validacija
             //provera da li je sve popunjeno
             if (korisnik.KorisnickoIme == null)
             {
@@ -814,13 +825,29 @@ namespace MyWebApp.Controllers
                 ViewBag.Message = "Lozinka mora imati bar 5 karaktera";
                 return View("Index");
             }
-
+            #endregion
             korisnik.Uloga = (KorisnikType)Enum.ToObject(typeof(KorisnikType), 0);
-            korisnik.ListaGrupnihTreninga = null;
-            korisnik.ListaTreninziAngazovan = null;
-            korisnik.AngazovanNaFitnesCentar = null;
-            korisnik.ListaVlasnickiFitnesCentar = null;
-
+            if (user.ListaGrupnihTreninga != null)
+            {
+                foreach (var item in user.ListaGrupnihTreninga)
+                {
+                    korisnik.ListaGrupnihTreninga.Add(item);
+                }
+            }
+            if (user.ListaTreninziAngazovan != null)
+            {
+                foreach (var item in user.ListaTreninziAngazovan)
+                {
+                    korisnik.ListaTreninziAngazovan.Add(item);
+                }
+            }
+            if (user.ListaVlasnickiFitnesCentar != null)
+            {
+                foreach (var item in user.ListaVlasnickiFitnesCentar)
+                {
+                    korisnik.ListaVlasnickiFitnesCentar.Add(item);
+                }
+            }
             //brisem starog
             registrovaniKorisnici.Remove(user);
             //dodajem novog
