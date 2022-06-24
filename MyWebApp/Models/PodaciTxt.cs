@@ -1485,13 +1485,13 @@ namespace MyWebApp.Models
                     sw.Write(item.Email);
                     sw.Write(";");
 
-                    sw.Write(item.DatumRodjenja);
+                    sw.Write(item.DatumRodjenja.ToString("dd/MM/yyyy"));
                     sw.Write(";");
 
                     sw.Write(item.Uloga);
                     sw.Write(";");
 
-                    if (item.ListaGrupnihTreninga == null)
+                    if (item.ListaGrupnihTreninga.Count == 0)
                     {
                         sw.Write("");
                         sw.Write(";");
@@ -1513,25 +1513,25 @@ namespace MyWebApp.Models
                         }
                     }
 
-                    if (item.ListaTreninziAngazovan == null)
+                    if (item.ListaTreninziAngazovan.Count == 0)
                     {
                         sw.Write("");
                         sw.Write(";");
                     }
                     else
                     {
-                        for (int i = 0; i < item.ListaTreninziAngazovan.Count; i++)
+                        for (int i = 0; i < item.ListaTreninziAngazovan.Count; i++) //ovde upisuje
                         {
                             if (i == item.ListaTreninziAngazovan.Count - 1)
                             {
                                 sw.Write(item.ListaTreninziAngazovan[i].TipTreninga);
-                                sw.Write("_" + item.ListaTreninziAngazovan[i].DatumIVremeTreninga);
+                                sw.Write("_" + item.ListaTreninziAngazovan[i].DatumIVremeTreninga.ToString("dd/MM/yyyy HH:mm"));
                                 sw.Write(";");
                             }
                             else
                             {
                                 sw.Write(item.ListaTreninziAngazovan[i].TipTreninga);
-                                sw.Write("_" + item.ListaTreninziAngazovan[i].DatumIVremeTreninga);
+                                sw.Write("_" + item.ListaTreninziAngazovan[i].DatumIVremeTreninga.ToString("dd/MM/yyyy HH:mm"));
                                 sw.Write("|");
                             }
                         }
@@ -1540,7 +1540,7 @@ namespace MyWebApp.Models
                     sw.Write(item.AngazovanNaFitnesCentar.Naziv);
                     sw.Write(";");
 
-                    if (item.ListaVlasnickiFitnesCentar == null)
+                    if (item.ListaVlasnickiFitnesCentar.Count == 0)
                     {
                         sw.Write("");
                         sw.Write(";");

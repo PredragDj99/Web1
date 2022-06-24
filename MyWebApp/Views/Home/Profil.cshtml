@@ -81,13 +81,13 @@
     </div>
     <div id="seconddiv">
         <form action="~/Home/IzmeniProfil" method="post">
-            Korisnicko ime:<input type="text" name="korisnickoIme" /><br />
-            Lozinka:<input type="password" name="lozinka" /><br />
-            Ime:<input type="text" name="ime" /><br />
-            Prezime:<input type="text" name="prezime" /><br />
+            Korisnicko ime:<input type="text" name="korisnickoIme" value="@ViewBag.trenutniProfil.KorisnickoIme" /><br />
+            Lozinka:<input type="password" name="lozinka" value="@ViewBag.trenutniProfil.Lozinka" /><br />
+            Ime:<input type="text" name="ime" value="@ViewBag.trenutniProfil.Ime" /><br />
+            Prezime:<input type="text" name="prezime" value="@ViewBag.trenutniProfil.Prezime" /><br />
             Pol:<input type="radio" id="muski" name="pol" value="Muski" /><label id="muski">Muski</label>
             <input type="radio" id="zenski" name="pol" value="Zenski" /><label id="zenski">Zenski</label><br />
-            Email:<input type="email" name="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" /><br />
+            Email:<input type="email" name="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" value="@ViewBag.trenutniProfil.Email" /><br />
             Datum rodjenja:<input type="date" name="datumRodjenja" /><br /><br />
             <input type="submit" value="Potvrdi izmenu" />
         </form>

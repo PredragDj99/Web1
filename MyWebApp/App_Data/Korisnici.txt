@@ -11,5 +11,5 @@ Milojko;milojko;Milojko;Milojkovic;Muski;milojko@gmail.com;21/01/2009;POSETILAC;
 Teodora;teodora;Teodora;Todorovic;Zenski;todorovicc@gmail.com;27/12/2004;POSETILAC;Kardio_06/07/2022 20:20;;;;
 Dragana;dragana;Dragana;Draganic;Zenski;dragana1@gmail.com;30/06/2022;POSETILAC;HIT_7/27/2022 12:30:00|yoga_2/14/2022 17:00:00|Istezanje misica_30/06/2022 14:21;;;;
 Ivana;ivana;Ivana;Ivanic;Zenski;ivana@gmail.com;03/02/1999;POSETILAC;yoga_10/24/2022 14:00|Istezanje misica_6/30/2022 14:21|body pump_09/07/2022 17:02;;;;
-trener1;trener1;Milorad;Milidrag;Muski;miloradmilidrag@gmail.com;20/08/1990;TRENER;;Skolica sporta_14/07/2021 17:00|yoga_14/02/2022 17:00|yoga_24/10/2022 14:00|body pump_25/08/2022 10:00|Istezanje misica_30/06/2022 14:21|Kardio_06/07/2022 20:20|Kardio_10/07/2022 11:18;Fitnes Elastico;;Ne blokiran
 trener2;trener2;Dejan;Cavic;Muski;cavicdeki@gmail.com;19/08/2000;TRENER;;les mills tone_10/07/2022 17:00|les mills tone_10/07/2022 17:00|body pump_10/07/2022 11:30;Fitnes Elastico;;Ne blokiran
+trener1;trener1;Milorad;Milidrag;Muski;miloradmilidrag@gmail.com;20/08/1990;TRENER;;Skolica sporta_14/07/2021 17:00|yoga_14/02/2022 17:00|yoga_24/10/2022 14:00|Istezanje misica_30/06/2022 14:21|Kardio_06/07/2022 20:20|Kardio_16/07/2022 20:50|body pump_25/08/2022 16:54;Fitnes Elastico;;Ne blokiran

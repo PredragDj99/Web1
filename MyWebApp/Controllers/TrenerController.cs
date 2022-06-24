@@ -73,11 +73,6 @@ namespace MyWebApp.Controllers
             List<GrupniTrening> gt = new List<GrupniTrening>();
             foreach (var item in user.ListaTreninziAngazovan)
             {
-                int GRESKA=2;
-                //puca mi na procitajJedanGrupniTreningaTrenera jer sam promenio datum na modifikovanju
-                // a ovde ga prosledjujem
-
-
                 //imam datum,tip
                 string dat = PodaciTxt.pronadjiDatumIVremeTreningaTrener(item.FitnesCentarOdrzava.Naziv,item.TipTreninga,item.DatumIVremeTreninga.ToString());
                 GrupniTrening trebajuMiOviPodaci = PodaciTxt.procitajJedanGrupniTreningTrenera(item.FitnesCentarOdrzava.Naziv,dat);
@@ -650,18 +645,18 @@ namespace MyWebApp.Controllers
 
             foreach (var item in komentari)
             {
-                if (item.FitnesCentarKomentarisan.ToString().Equals(naziv))
+                if (item.FitnesCentarKomentarisan.ToString().Equals(nazi))
                 {
                     filtriraniKomentari.Add(item);
                 }
             }
-            ViewBag.naziv = naziv;
+            ViewBag.naziv = nazi;
             ViewBag.komentari = filtriraniKomentari;
 
             //grupni treninzi ovog fitnes centra
             foreach (var item in grupniTreninzi)
             {
-                if (item.FitnesCentarOdrzava.Naziv.ToString().Equals(naziv) && item.DatumIVremeTreninga > DateTime.Now)
+                if (item.FitnesCentarOdrzava.Naziv.ToString().Equals(nazi) && item.DatumIVremeTreninga > DateTime.Now)
                 {
                     if (item.Obrisan == "AKTIVAN")
                     {
@@ -674,7 +669,7 @@ namespace MyWebApp.Controllers
             //detalji za ovaj fitnes centar
             foreach (var fc in fitnesCentri)
             {
-                if (fc.Naziv.ToString().Equals(naziv))
+                if (fc.Naziv.ToString().Equals(nazi))
                 {
                     ViewBag.fitnesCentar = fc;
                     break;
@@ -821,8 +816,7 @@ namespace MyWebApp.Controllers
             DateTime ovajDatum = DateTime.ParseExact(datumIVremeTreninga, "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
             foreach (var item in user.ListaTreninziAngazovan)
             {
-                string ispravanDatum = PodaciTxt.pronadjiDatumIVremeTreningaTrener(item.FitnesCentarOdrzava.Naziv, item.TipTreninga, item.DatumIVremeTreninga.ToString());
-                ispravanDatum = item.DatumIVremeTreninga.ToString("dd/MM/yyyy HH:mm");
+                string ispravanDatum = item.DatumIVremeTreninga.ToString("dd/MM/yyyy HH:mm");
                 if (ispravanDatum == stariDatum)
                 {
                     item.Naziv = naziv;

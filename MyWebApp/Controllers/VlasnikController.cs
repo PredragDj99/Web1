@@ -135,7 +135,7 @@ namespace MyWebApp.Controllers
 
             PodaciTxt.BlokirajTrenera(korisnickoIme);
 
-            return View("Index", new { naziv });
+            return RedirectToAction("Index", new { naziv });
         }
         #endregion
     }

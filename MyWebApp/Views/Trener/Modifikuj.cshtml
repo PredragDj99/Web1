@@ -105,11 +105,11 @@
                             <td>@item.SpisakPosetilaca.Count</td>
                             <td class="modifikovanje">
                                 <form action="~/Trener/ModifikujTreningTxt?stariDatum=@Convert.ToDateTime(item.DatumIVremeTreninga).ToString("dd/MM/yyyy HH:mm")" method="post">
-                                    Grupa:<input type="text" name="naziv" /><br />
-                                    Tip treninga:<input type="text" name="tipTreninga" /><br />
+                                    Grupa:<input type="text" name="naziv" value="@item.Naziv" /><br />
+                                    Tip treninga:<input type="text" name="tipTreninga" value="@item.TipTreninga" /><br />
                                     Trajanje u minutama:<input type="number" name="trajanjeTreningaMinute" /><br />
                                     Datum i vreme odrzavanja:<input type="datetime-local" name="datumIVremeTreninga" /><br />
-                                    Maksimalan broj posetioca:<input type="number" name="maksimalanBrojPosetioca" /><br /><br />
+                                    Maksimalan broj posetioca:<input type="number" name="maksimalanBrojPosetioca" value="@item.MaksimalanBrojPosetioca" /><br /><br />
                                     <input type="submit" value="Modifikuj trening" />
                                 </form>
                             </td>
