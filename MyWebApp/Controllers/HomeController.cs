@@ -17,7 +17,7 @@ namespace MyWebApp.Controllers
                 ViewBag.uspesnaPrijava = "jeste";
             }
 
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
 
             List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
             sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
@@ -480,7 +480,7 @@ namespace MyWebApp.Controllers
                 ViewBag.uspesnaPrijava = "jeste";
             }
 
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
             List<FitnesCentar> sortiraniCentri = new List<FitnesCentar>();
 
             if (sort.Equals("rastuce"))
@@ -534,9 +534,8 @@ namespace MyWebApp.Controllers
                 ViewBag.uspesnaPrijava = "jeste";
             }
 
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
 
-            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
             //Kada obrisem jedan trening onda se prcitaju ponovo da bih lepo prikazao
             List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
 
@@ -606,13 +605,13 @@ namespace MyWebApp.Controllers
             }
 
             //za slucaj da pukne registracija imam default view
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
             List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
             sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
             ViewBag.fitnesCentri = sortiraniLista;
             //kraj
 
-            List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+            List<Korisnik> registrovaniKorisnici = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
 
             //ako korisnicko ime vec postoji
             foreach (Korisnik kor in registrovaniKorisnici)
@@ -731,7 +730,7 @@ namespace MyWebApp.Controllers
         public ActionResult Logout()
         {
             //za slucaj da pukne imam default view
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
             List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
             sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
             ViewBag.fitnesCentri = sortiraniLista;
@@ -763,7 +762,6 @@ namespace MyWebApp.Controllers
         public ActionResult IzmeniProfil(Korisnik korisnik)
         {
             Korisnik user = (Korisnik)Session["user"];
-            //List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
             List<Korisnik> registrovaniKorisnici = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
 
             //ako korisnicko ime vec postoji

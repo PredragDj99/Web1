@@ -419,17 +419,6 @@ namespace MyWebApp.Models
             if (korisnik.ListaTreninziAngazovan == null)
             {
                 linija[9] = prazno;
-                foreach (var item in korisnik.ListaTreninziAngazovan)
-                {
-                    if (linija[9] == "")
-                    {
-                        linija[9] += item.TipTreninga + "_" + item.DatumIVremeTreninga;
-                    }
-                    else
-                    {
-                        linija[9] += "|" + item.TipTreninga + "_" + item.DatumIVremeTreninga;
-                    }
-                }
             }
             else
             {
@@ -465,13 +454,13 @@ namespace MyWebApp.Models
                 linija[11] = prazno;
                 foreach (var item in korisnik.ListaVlasnickiFitnesCentar)
                 {
-                    if (linija[9] == "")
+                    if (linija[11] == "")
                     {
-                        linija[9] += item.Naziv;
+                        linija[11] += item.Naziv;
                     }
                     else
                     {
-                        linija[9] += "|" + item.Naziv;
+                        linija[11] += "|" + item.Naziv;
                     }
                 }
             }
@@ -1624,6 +1613,148 @@ namespace MyWebApp.Models
 
                     sw.Write("BLOKIRAN");
                     sw.WriteLine();
+                }
+            }
+
+            sw.Close();
+            stream.Close();
+            #endregion
+        }
+        #endregion
+
+        #region DodajFC
+        public static void DodajFC(FitnesCentar fc)
+        {
+            var path = HostingEnvironment.MapPath("~/App_Data/FitnesCentri.txt");
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            string[] linija = new string[9];
+
+            linija[0] = fc.Naziv;
+            linija[1] = fc.Adresa;
+            linija[2] = fc.GodinaOtvaranja.ToString();
+            linija[3] = fc.Vlasnik.Ime.ToString() + "|" + fc.Vlasnik.Prezime.ToString();
+            linija[4] = fc.MesecnaClanarina.ToString();
+            linija[5] = fc.GodisnjaClanarina.ToString();
+            linija[6] = fc.JedanTrening.ToString();
+            linija[7] = fc.JedanGrupniTrening.ToString();
+            linija[8] = fc.JedanSaPersonalnimTrenerom.ToString();
+
+            for (int i = 0; i < 9; i++)
+            {
+                sw.Write(linija[i]);
+                if (i == 8)
+                {
+                    sw.WriteLine();
+                }
+                else
+                {
+                    sw.Write(";");
+                }
+            }
+
+            sw.Close();
+            stream.Close();
+        }
+        #endregion
+
+        #region Dodaj FC vlasniku u fajl
+        public static void UpisiVlasniku(string naziv,string korisnickoIme)
+        {
+            List<Korisnik> sviKor= PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
+            Korisnik vlasnik = new Korisnik();
+
+            foreach (var item in sviKor)
+            {
+                if (item.KorisnickoIme == korisnickoIme)
+                {
+                    vlasnik = item;
+                }
+            }
+
+            #region Brisanje starih podataka
+            //Brisanje starog
+            string tempFile2 = Path.GetTempFileName();
+
+            var path3 = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream fsRead2 = new FileStream(path3, FileMode.Open, FileAccess.Read);
+            StreamReader sr2 = new StreamReader(fsRead2, Encoding.UTF8);
+
+            using (var sww = new StreamWriter(tempFile2))
+            {
+                string line;
+
+                while ((line = sr2.ReadLine()) != null)
+                {
+                    if (!line.Contains(korisnickoIme)) //zbog ovoga brise liniju u kojoj se nalazi stari
+                        sww.WriteLine(line);
+                }
+            }
+            sr2.Close();
+            fsRead2.Close();
+            File.Delete(path3);
+            File.Move(tempFile2, path3);
+            #endregion
+
+            //Ako ovo nemam obrisace mi tog jednog kog sam promenio
+            #region Dodavanje novih podataka
+            var path = HostingEnvironment.MapPath("~/App_Data/Korisnici.txt");
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            string[] linija = new string[13];
+
+            linija[0] = vlasnik.KorisnickoIme;
+            linija[1] = vlasnik.Lozinka;
+            linija[2] = vlasnik.Ime;
+            linija[3] = vlasnik.Prezime;
+            linija[4] = vlasnik.Pol;
+            linija[5] = vlasnik.Email;
+            linija[6] = vlasnik.DatumRodjenja.ToString("dd/MM/yyyy");
+            linija[7] = vlasnik.Uloga.ToString();
+
+            linija[8] = "";
+            linija[9] = "";
+            linija[10] = "";
+            if(vlasnik.ListaVlasnickiFitnesCentar.Count == 0)
+            {
+                linija[11] = "";
+            }
+            else
+            {
+                linija[11] = "";
+                foreach (var item in vlasnik.ListaVlasnickiFitnesCentar)
+                {
+                    if (linija[11] == "")
+                    {
+                        linija[11] += item.Naziv;
+                    }
+                    else
+                    {
+                        linija[11] += "|" + item.Naziv;
+                    }
+                }
+            }
+            if (linija[11] == "")
+            {
+                linija[11] += naziv;
+            }
+            else
+            {
+                linija[11] += "|" + naziv;
+            }
+
+            for (int i = 0; i < 13; i++)
+            {
+                sw.Write(linija[i]);
+                if (i == 12)
+                {
+                    sw.WriteLine();
+                }
+                else
+                {
+                    sw.Write(";");
                 }
             }
 

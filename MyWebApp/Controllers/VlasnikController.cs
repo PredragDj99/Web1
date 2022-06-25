@@ -20,9 +20,8 @@ namespace MyWebApp.Controllers
                 ViewBag.uspesnaPrijava = "jeste";
             }
 
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
 
-            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
             //Kada obrisem jedan trening onda se prcitaju ponovo da bih lepo prikazao
             List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
 
@@ -158,9 +157,8 @@ namespace MyWebApp.Controllers
                 ViewBag.uspesnaPrijava = "jeste";
             }
 
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
 
-            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
             //Kada obrisem jedan trening onda se prcitaju ponovo da bih lepo prikazao
             List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
 
@@ -332,6 +330,150 @@ namespace MyWebApp.Controllers
             PodaciTxt.SacuvajKorisnika(trener);
 
             return View("Index");
+        }
+        #endregion
+
+        #region Dodaj trening
+        public ActionResult DodajFC()
+        {
+            ViewBag.naziv = naz;
+            return View("DodavanjeFC");
+        }
+
+        public ActionResult DodajFCTxt(string naziv,string ulica,int? broj,string grad,int? postanskibr,string mesecnaClanarina,string godisnjaClanarina,string jedanTrening,string jedanGrupniTrening,string jedanSaPersonalnimTrenerom)
+        {
+            ViewBag.naziv = naz;
+            Korisnik user = (Korisnik)Session["user"];
+
+            FitnesCentar fitnesCentar = new FitnesCentar();
+
+            ViewBag.upis = "Greska";
+
+            #region Validacija
+            if (naziv == "")
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Popunite polje za naziv";
+                return View("DodavanjeFC");
+            }
+            else if (ulica == "")
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Popunite polje za ulicu";
+                return View("DodavanjeFC");
+            }
+            else if (broj.ToString() == "" || broj.ToString().StartsWith("-") || broj.ToString().StartsWith("0"))
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Popunite polje za broj";
+                return View("DodavanjeFC");
+            }
+            else if (postanskibr.ToString() == "" || postanskibr.ToString().StartsWith("-"))
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Popunite polje za postanki broj";
+                return View("DodavanjeFC");
+            }
+            else if(mesecnaClanarina == "")
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Mesecna clanarina ne moze biti prazna";
+                return View("DodavanjeFC");
+            }
+            else if(godisnjaClanarina == "")
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Godisnja clanarina ne moze biti prazna";
+                return View("DodavanjeFC");
+            }
+            else if(jedanGrupniTrening == "")
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Cena grupnog treninga ne moze biti prazna";
+                return View("DodavanjeFC");
+            }
+            else if (jedanTrening == "")
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Cena jednog treninga ne moze biti prazna";
+                return View("DodavanjeFC");
+            }
+            else if (jedanSaPersonalnimTrenerom == "")
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Cena jednog treninga sa personalnim trenerom ne moze biti prazna";
+                return View("DodavanjeFC");
+            }
+
+
+            double.TryParse(mesecnaClanarina, out double mesecnaClanarinaa);
+            if (mesecnaClanarinaa == 0)
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Mesecna clanarina mora biti broj";
+                return View("DodavanjeFC");
+            }
+            double.TryParse(godisnjaClanarina, out double godisnjaClanarinaa);
+            if (godisnjaClanarinaa == 0)
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Mesecna godinja mora biti broj";
+                return View("DodavanjeFC");
+            }
+            double.TryParse(jedanTrening, out double jedanTreningg);
+            if (jedanTreningg == 0)
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Cena treninga mora biti broj";
+                return View("DodavanjeFC");
+            }
+            double.TryParse(jedanGrupniTrening, out double jedanGrupniTreningg);
+            if (jedanGrupniTreningg == 0)
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Cena grupnog treninga mora biti broj";
+                return View("DodavanjeFC");
+            }
+            double.TryParse(jedanSaPersonalnimTrenerom, out double jedanSaPersonalnimTreneromm);
+            if (jedanSaPersonalnimTreneromm == 0)
+            {
+                ViewBag.upis = "Morate popuniti sve podatke. Cena trenera sa personalnim trenerom mora biti broj";
+                return View("DodavanjeFC");
+            }
+
+            List<FitnesCentar> sviFC = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
+            foreach (var item in sviFC)
+            {
+                if(item.Adresa == ulica + " " + broj + ", " + grad + ", " + postanskibr)
+                {
+                    ViewBag.upis = "Ova adresa je zauzeta drugim fitnes centrom";
+                    return View("DodavanjeFC");
+                }
+            }
+            #endregion
+
+            fitnesCentar.Naziv = naziv;
+            fitnesCentar.Adresa = ulica + " " + broj + ", " + grad + ", " + postanskibr;
+            fitnesCentar.MesecnaClanarina = mesecnaClanarinaa;
+            fitnesCentar.GodisnjaClanarina = godisnjaClanarinaa;
+            fitnesCentar.JedanTrening = jedanTreningg;
+            fitnesCentar.JedanGrupniTrening = jedanGrupniTreningg;
+            fitnesCentar.JedanSaPersonalnimTrenerom = jedanSaPersonalnimTreneromm;
+            fitnesCentar.GodinaOtvaranja = Int32.Parse(DateTime.Now.Year.ToString());
+            fitnesCentar.Vlasnik = user;
+
+            user.ListaVlasnickiFitnesCentar.Add(fitnesCentar);
+            PodaciTxt.UpisiVlasniku(fitnesCentar.Naziv,user.KorisnickoIme);
+            PodaciTxt.DodajFC(fitnesCentar);
+            //user.ListaVlasnickiFitnesCentar.RemoveAt(1);
+
+            ViewBag.upis = "Uspesno kreiran fitnes centar!";
+
+            return View("DodavanjeFC");
+        }
+        #endregion
+
+        #region Modifikuj trening
+        static string nazi = "";
+        public ActionResult ModifikujFC()
+        {
+            ViewBag.naziv = nazi;
+            
+
+            return View("ModifikovanjeFC");
+        }
+        public ActionResult ModifikujFCTxt(string stariDatum, string naziv, string tipTreninga, string trajanjeTreningaMinute, string datumIVremeTreninga, int? maksimalanBrojPosetioca)
+        {
+            ViewBag.naziv = nazi;
+
+            return View("Modifikuj");
         }
         #endregion
     }

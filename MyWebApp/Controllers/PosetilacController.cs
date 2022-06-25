@@ -20,9 +20,8 @@ namespace MyWebApp.Controllers
                 ViewBag.uspesnaPrijava = "jeste";
             }
 
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
 
-            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
             //Kada obrisem jedan trening onda se prcitaju ponovo da bih lepo prikazao
             List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
@@ -86,14 +85,13 @@ namespace MyWebApp.Controllers
                 ViewBag.uspesnaPrijava = "jeste";
             }
 
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
 
-            //List<GrupniTrening> grupniTreninzi = (List<GrupniTrening>)HttpContext.Application["grupniTreninzi"];
             List<GrupniTrening> grupniTreninzi = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
             List<GrupniTrening> listaGrupnihTreninga = new List<GrupniTrening>();
 
             //komentari
-            List<Komentar> komentari = (List<Komentar>)HttpContext.Application["komentari"];
+            List<Komentar> komentari = PodaciTxt.procitajKomentare("~/App_Data/Komentari.txt");
             List<Komentar> filtriraniKomentari = new List<Komentar>();
 
             foreach (var item in komentari)

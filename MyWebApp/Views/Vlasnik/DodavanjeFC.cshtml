@@ -1,0 +1,65 @@
+﻿
+@{
+    Layout = null;
+    ViewBag.Title = "DodavanjeFC";
+}
+
+<html>
+<head>
+    <style type="text/css">
+        #pomeri {
+            margin-top: 20px;
+            margin-left: 30px; /*od ivice*/
+            padding-left: 10px; /*od ivice diva*/
+            padding-right: 10px;
+            width: auto;
+            height: auto;
+            float: left;
+        }
+
+        a.linkZaPocetnu:link, a.linkZaPocetnu:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid red;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+            float: left;
+        }
+
+        h3{
+            float:left;
+        }
+
+        a.linkZaPocetnu:hover, a.linkZaPocetnu:active {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+    <h3><a href="~/Vlasnik/Index?naziv=@ViewBag.naziv" class="linkZaPocetnu">Nazad na prethodnu stranicu</a></h3>
+    <br /><br /><br />
+
+    <h1>Dodavanje novog fitnes centra</h1>
+    <div id="pomeri">
+        <form action="DodajFCTxt" method="post">
+            Naziv:<input type="text" name="naziv" /><br />
+            Ulica:<input type="text" name="ulica" /><br />
+            Broj:<input type="number" name="broj" /><br />
+            Mesto/Grad:<input type="text" name="grad" /><br />
+            Postanski broj:<input type="number" name="postanskibr" /><br />
+            Mesecna clanarina:<input type="text" name="mesecnaClanarina" /><br />
+            Godisnja clanarina:<input type="text" name="godisnjaClanarina" /><br />
+            Cena jednog treninga:<input type="text" name="jedanTrening" /><br />
+            Cena jednog grupnog treninga:<input type="text" name="jedanGrupniTrening" /><br />
+            Cena treninga sa personalnim trenerom:<input type="text" name="jedanSaPersonalnimTrenerom" /><br />
+            <input type="submit" value="Napravi fitnes centar" />
+        </form>
+        <h3>@ViewBag.upis</h3>
+    </div>
+</body>
+</html>

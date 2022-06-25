@@ -182,6 +182,8 @@
     <Content Include="Views\Trener\Dodavanje.cshtml" />
     <Content Include="Views\Trener\Modifikuj.cshtml" />
     <Content Include="Views\Trener\SpisakPosetilaca.cshtml" />
+    <Content Include="Views\Vlasnik\DodavanjeFC.cshtml" />
+    <Content Include="Views\Vlasnik\ModifikovanjeFC.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

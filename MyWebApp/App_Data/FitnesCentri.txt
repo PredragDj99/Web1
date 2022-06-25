@@ -1,4 +1,6 @@
-﻿Fitnes Elastico;Zeleznicka 23;2002;Marko|Markovic;4000;15000;500;2000;1000
-Compiona;Safarikova 12;1998;Milica|Ivanov;3000;14000;600;1500;900
-MuscleMotion;Branka Bajica 17A;2000;Marko|Markovic;3500;17000;500;1900;1100
+﻿Fitnes Elastico;Zeleznicka 23, Novi Sad, 21000;2002;Marko|Markovic;4000;15000;500;2000;1000
+Compiona;Safarikova 12, Novi Sad, 21000;1998;Milica|Ivanov;3000;14000;600;1500;900
+MuscleMotion;Branka Bajica 17A, Novi Sad, 21000;2000;Marko|Markovic;3500;17000;500;1900;1100
 Best Fit;Filipa Visnjica 44;2006;Marko|Markovic;3500;20000;600;2000;900
+STAR;Novosadski put 19, Novi Sad, 21000;2022;Milica|Ivanov;1500;10000;200;150;500
+STAR;Cvecarska 15, Novi Sad, 21000;2022;Milica|Ivanov;1500;10000;200;150;500
