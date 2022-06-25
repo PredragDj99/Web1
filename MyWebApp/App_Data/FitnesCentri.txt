@@ -3,4 +3,3 @@ Compiona;Safarikova 12, Novi Sad, 21000;1998;Milica|Ivanov;3000;14000;600;1500;9
 MuscleMotion;Branka Bajica 17A, Novi Sad, 21000;2000;Marko|Markovic;3500;17000;500;1900;1100
 Best Fit;Filipa Visnjica 44;2006;Marko|Markovic;3500;20000;600;2000;900
 STAR;Novosadski put 19, Novi Sad, 21000;2022;Milica|Ivanov;1500;10000;200;150;500
-STAR;Cvecarska 15, Novi Sad, 21000;2022;Milica|Ivanov;1500;10000;200;150;500

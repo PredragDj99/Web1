@@ -436,6 +436,11 @@ namespace MyWebApp.Controllers
                     ViewBag.upis = "Ova adresa je zauzeta drugim fitnes centrom";
                     return View("DodavanjeFC");
                 }
+                if(item.Naziv == naziv)
+                {
+                    ViewBag.upis = "Vec postoji fitnes centar sa ovim nazivom";
+                    return View("DodavanjeFC");
+                }
             }
             #endregion
 

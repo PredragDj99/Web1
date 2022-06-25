@@ -15,4 +15,4 @@ trener1;trener1;Milorad;Milidrag;Muski;miloradmilidrag@gmail.com;20/08/1990;TREN
 Trener;trener;Marija;Posa;Zenski;marijaposa@gmail.com;17/07/1997;TRENER;;;Best Fit;;Ne blokiran
 Dejan;dejan;Dejan;Dejanovic;Muski;dejanovicdejan@gmail.com;16/05/2001;POSETILAC;body pump_25/08/2022 16:54|body pump_25/08/2022 16:54|Kardio_16/07/2022 20:50|Kardio_16/07/2022 20:50|body pump_09/07/2022 17:02|body pump_09/07/2022 17:02|Kardio_06/07/2022 20:20|Kardio_06/07/2022 20:20|Istezanje misica_30/06/2022 14:21|Istezanje misica_30/06/2022 14:21|yoga_24/10/2022 14:00|yoga_24/10/2022 14:00;;;;
 trener2;trener2;Dragojlo;Dragojlovic;Muski;dragojlo@gmail.com;16/06/1983;TRENER;;Body pump_22/07/2022 14:37|yoga_21/07/2022 14:38;MuscleMotion;;BLOKIRAN
-Admin2;admin2;Milica;Ivanov;Zenski;milicaivanov@gmail.com;15/11/1985;VLASNIK;;;;Compiona|STAR|STAR;
+Admin2;admin2;Milica;Ivanov;Zenski;milicaivanov@gmail.com;15/11/1985;VLASNIK;;;;Compiona|STAR;
