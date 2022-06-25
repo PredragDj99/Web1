@@ -4,4 +4,5 @@ Milica;Compiona;Uslovi za trening su savrseni, treneri su brlo profesionalni;5;o
 Mirko;Best Fit;Uslovi za trening su savrseni, treneri su brlo profesionalni;5;odobren
 Zeljana;MuscleMotion;Dosadan trening, uopste mi se ne svidja;1;NIJE ODOBREN
 Zika;Compiona;superiska;5;NIJE ODOBREN
-Zika;Compiona;Prezadovoljan sam!;5;NIJE ODOBREN
+Zika;Compiona;Prezadovoljan sam!;5;odobren
+Zika;Compiona;Super;4;nije odobren

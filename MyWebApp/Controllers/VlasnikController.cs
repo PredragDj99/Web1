@@ -135,6 +135,15 @@ namespace MyWebApp.Controllers
 
             PodaciTxt.BlokirajTrenera(korisnickoIme);
 
+            List<Korisnik>svi = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
+            foreach (var item in svi)
+            {
+                if (item.KorisnickoIme == korisnickoIme)
+                {
+                    item.TrenerBlokiran = "BLOKIRAN";
+                }
+            }
+
             return RedirectToAction("Index", new { naziv });
         }
         #endregion

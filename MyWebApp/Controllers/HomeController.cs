@@ -676,10 +676,10 @@ namespace MyWebApp.Controllers
             #endregion
 
             korisnik.Uloga = (KorisnikType)Enum.ToObject(typeof(KorisnikType),0);
-            korisnik.ListaGrupnihTreninga = null;
-            korisnik.ListaTreninziAngazovan = null;
-            korisnik.AngazovanNaFitnesCentar = null;
-            korisnik.ListaVlasnickiFitnesCentar = null;
+            korisnik.ListaGrupnihTreninga = new List<GrupniTrening>();
+            korisnik.ListaTreninziAngazovan = new List<GrupniTrening>();
+            korisnik.AngazovanNaFitnesCentar = new FitnesCentar();
+            korisnik.ListaVlasnickiFitnesCentar = new List<FitnesCentar>();
 
             registrovaniKorisnici.Add(korisnik);
             PodaciTxt.SacuvajKorisnika(korisnik);
@@ -693,13 +693,13 @@ namespace MyWebApp.Controllers
         public ActionResult Prijava(string korisnickoIme,string lozinka)
         {
             //za slucaj da pukne prijava imam default view
-            List<FitnesCentar> fitnesCentri = (List<FitnesCentar>)HttpContext.Application["fitnesCentri"];
+            List<FitnesCentar> fitnesCentri = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
             List<FitnesCentar> sortiraniLista = new List<FitnesCentar>();
             sortiraniLista = fitnesCentri.OrderBy(f => f.Naziv).ToList();
             ViewBag.fitnesCentri = sortiraniLista;
             //kraj
 
-            List<Korisnik> registrovaniKorisnici = (List<Korisnik>)HttpContext.Application["korisnici"];
+            List<Korisnik> registrovaniKorisnici = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
             ViewBag.uspesnaPrijava = "nije";
 
 
@@ -721,7 +721,7 @@ namespace MyWebApp.Controllers
                 }
             }
             if(ViewBag.prijavljen != "Vlasnik Vas je blokirao!")
-                ViewBag.prijavljen = "Niste uneli dobre podatke!";
+                ViewBag.prijavljen = "Niste uneli dobre podatke";
 
             return View("Index");
         }

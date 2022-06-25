@@ -70,19 +70,22 @@ namespace MyWebApp.Models
                 List<GrupniTrening> treninziAngazovan = new List<GrupniTrening>();
                 string[] AngazovanNaFitnesCentar = tokens[10].Split('|');
 
-                string[] listaTreninziAngazovan = tokens[9].Split('|');
-                for (int i = 0; i < listaTreninziAngazovan.Count(); i++)
+                if (tokens[9] != "")
                 {
-                    if (tokens[7] == "TRENER")
+                    string[] listaTreninziAngazovan = tokens[9].Split('|');
+                    for (int i = 0; i < listaTreninziAngazovan.Count(); i++)
                     {
-                        string[] podeli = listaTreninziAngazovan[i].Split('_');
-                        DateTime date = DateTime.ParseExact(podeli[1], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+                        if (tokens[7] == "TRENER")
+                        {
+                            string[] podeli = listaTreninziAngazovan[i].Split('_');
+                            DateTime date = DateTime.ParseExact(podeli[1], "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
-                        FitnesCentar nazivFitnesCentra = new FitnesCentar(tokens[10]);
-                        //Prodji grupne treninge i za onaj koji ima ove parametre pokupi ostalo
+                            FitnesCentar nazivFitnesCentra = new FitnesCentar(tokens[10]);
+                            //Prodji grupne treninge i za onaj koji ima ove parametre pokupi ostalo
 
-                        GrupniTrening g = new GrupniTrening(podeli[0], date, nazivFitnesCentra);
-                        treninziAngazovan.Add(g);
+                            GrupniTrening g = new GrupniTrening(podeli[0], date, nazivFitnesCentra);
+                            treninziAngazovan.Add(g);
+                        }
                     }
                 }
 
@@ -268,7 +271,7 @@ namespace MyWebApp.Models
                 }
             }
 
-            if (korisnik.AngazovanNaFitnesCentar == null)
+            if (korisnik.AngazovanNaFitnesCentar.Naziv == null)
             {
                 linija[10] = prazno;
             }
