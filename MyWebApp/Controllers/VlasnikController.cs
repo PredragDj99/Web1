@@ -139,6 +139,7 @@ namespace MyWebApp.Controllers
         }
         #endregion
 
+        #region Registracija trenera
         public ActionResult RegistracijaTrenera(Korisnik trener)
         {
             #region Isto kao home controller -> stranica detalji
@@ -323,5 +324,6 @@ namespace MyWebApp.Controllers
 
             return View("Index");
         }
+        #endregion
     }
 }

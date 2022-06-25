@@ -212,32 +212,60 @@ namespace MyWebApp.Models
             linija[7] = korisnik.Uloga.ToString();
 
             string prazno = "";
-            if (korisnik.ListaGrupnihTreninga == null)
+            if (korisnik.ListaGrupnihTreninga.Count == 0)
             {
                 linija[8] = prazno;
             }
             else
             {
-                if (korisnik.ListaGrupnihTreninga.Count == 0)
+                for (int i = 0; i < korisnik.ListaGrupnihTreninga.Count; i++)
                 {
-                    linija[8] = prazno;
-                }
-                else
-                {
-                    foreach (var item in korisnik.ListaGrupnihTreninga)
+                    if (i == korisnik.ListaGrupnihTreninga.Count - 1)
                     {
-                        linija[8] += item.ToString();
+                        linija[8] += korisnik.ListaGrupnihTreninga[i];
+                        sw.Write(korisnik.ListaGrupnihTreninga[i]);
+                        sw.Write(";");
+                    }
+                    else
+                    {
+                        if (i == 0)
+                        {
+                            linija[8] += korisnik.ListaGrupnihTreninga[i];
+                        }
+                        else
+                        {
+                            linija[8] += "|" + korisnik.ListaGrupnihTreninga[i];
+                        }
                     }
                 }
             }
 
-            if (korisnik.ListaTreninziAngazovan == null)
+            if (korisnik.ListaTreninziAngazovan.Count ==0)
             {
                 linija[9] = prazno;
             }
             else
             {
-                linija[9] = korisnik.ListaTreninziAngazovan.ToString();
+                for (int i = 0; i < korisnik.ListaTreninziAngazovan.Count; i++)
+                {
+                    if (i == korisnik.ListaTreninziAngazovan.Count - 1)
+                    {
+                        linija[9] += korisnik.ListaTreninziAngazovan[i];
+                        sw.Write(korisnik.ListaTreninziAngazovan[i]);
+                        sw.Write(";");
+                    }
+                    else
+                    {
+                        if (i == 0)
+                        {
+                            linija[9] += korisnik.ListaTreninziAngazovan[i];
+                        }
+                        else
+                        {
+                            linija[9] += "|" + korisnik.ListaTreninziAngazovan[i];
+                        }
+                    }
+                }
             }
 
             if (korisnik.AngazovanNaFitnesCentar == null)
@@ -246,16 +274,35 @@ namespace MyWebApp.Models
             }
             else
             {
-                linija[10] = korisnik.AngazovanNaFitnesCentar.ToString();
+                linija[10] = korisnik.AngazovanNaFitnesCentar.Naziv.ToString();
             }
 
-            if (korisnik.ListaVlasnickiFitnesCentar == null)
+            if (korisnik.ListaVlasnickiFitnesCentar.Count == 0)
             {
                 linija[11] = prazno;
             }
             else
             {
-                linija[11] = korisnik.ListaVlasnickiFitnesCentar.ToString();
+                for (int i = 0; i < korisnik.ListaVlasnickiFitnesCentar.Count; i++)
+                {
+                    if (i == korisnik.ListaVlasnickiFitnesCentar.Count - 1)
+                    {
+                        linija[11] += korisnik.ListaVlasnickiFitnesCentar[i];
+                        sw.Write(korisnik.ListaVlasnickiFitnesCentar[i]);
+                        sw.Write(";");
+                    }
+                    else
+                    {
+                        if (i == 0)
+                        {
+                            linija[11] += korisnik.ListaVlasnickiFitnesCentar[i];
+                        }
+                        else
+                        {
+                            linija[11] += "|" + korisnik.ListaVlasnickiFitnesCentar[i];
+                        }
+                    }
+                }
             }
             if(korisnik.TrenerBlokiran == null)
             {
