@@ -74,6 +74,15 @@
             .linkButton:hover {
                 background-color: green;
             }
+        #pomeri {
+            margin-top: 20px;
+            margin-left: 20px; /*od ivice*/
+            padding-left: 10px; /*od ivice diva*/
+            padding-right: 10px;
+            width: auto;
+            height: auto;
+            float: left;
+        }
     </style>
 </head>
 <body>
@@ -236,5 +245,23 @@
             </tr>
         }
     </table>
+
+    <div id="pomeri">
+        <h2>Registruj novog trenera</h2>
+        <form action="~/Vlasnik/RegistracijaTrenera" method="post">
+            Korisnicko ime:<input type="text" name="korisnickoIme" /><br />
+            Lozinka:<input type="password" name="lozinka" /><br />
+            Ime:<input type="text" name="ime" /><br />
+            Prezime:<input type="text" name="prezime" /><br />
+            Pol:<input type="radio" id="muski" name="pol" value="Muski" /><label id="muski">Muski</label>
+            <input type="radio" id="zenski" name="pol" value="Zenski" /><label id="zenski">Zenski</label><br />
+            Email:<input type="email" name="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" /><br />
+            Datum rodjenja:<input type="date" name="datumRodjenja" /><br /><br />
+            Angazovan na fitnes centru:<input type="text" name="angazovanNaFitnesCentar.Naziv" />
+            <input type="submit" value="Potvrdi registraciju trenera" /><br /><br />
+        </form>
+        <h3>@ViewBag.korisnik</h3>
+        <h3>@ViewBag.registracija</h3><br /><br />
+    </div>
 </body>
 </html>

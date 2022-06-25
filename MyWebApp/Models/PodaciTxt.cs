@@ -218,7 +218,17 @@ namespace MyWebApp.Models
             }
             else
             {
-                linija[8] = korisnik.ListaGrupnihTreninga.ToString();
+                if (korisnik.ListaGrupnihTreninga.Count == 0)
+                {
+                    linija[8] = prazno;
+                }
+                else
+                {
+                    foreach (var item in korisnik.ListaGrupnihTreninga)
+                    {
+                        linija[8] += item.ToString();
+                    }
+                }
             }
 
             if (korisnik.ListaTreninziAngazovan == null)

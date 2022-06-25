@@ -665,12 +665,12 @@ namespace MyWebApp.Controllers
             //ogranicenja
             if (korisnik.KorisnickoIme.Length < 3)
             {
-                ViewBag.Message = "Korisnicko ime mora biti imati bar 3 karaktera";
+                ViewBag.korisnik = "Korisnicko ime mora biti imati bar 3 karaktera";
                 return View("Index");
             }
             if (korisnik.Lozinka.Length < 4)
             {
-                ViewBag.Message = "Lozinka mora imati bar 5 karaktera";
+                ViewBag.korisnik = "Lozinka mora imati bar 5 karaktera";
                 return View("Index");
             }
             #endregion
