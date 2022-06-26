@@ -632,6 +632,7 @@ namespace MyWebApp.Models
             File.Move(tempFile, path);
         }
         #endregion
+
         //Ovo mi je potrebno zbog ovih gore
         #region Procitaj korisnikov datum rodjenja
         public static string pronadjiDatumRodjenjaKorisnika(string korisnickoIme) //Nikako drugacije ne mogu da izvadim validan datum
@@ -1757,6 +1758,77 @@ namespace MyWebApp.Models
                     sw.Write(";");
                 }
             }
+
+            sw.Close();
+            stream.Close();
+            #endregion
+        }
+        #endregion
+
+        #region Modifikuj fitnes centar
+        public static void ModifikujFC(Korisnik user, string staraAdresa, string naziv, string adresa, int? godinaOtvaranja, string mesecnaClanarina, string godisnjaClanarina, string jedanTrening, string jedanGrupniTrening, string jedanSaPersonalnimTrenerom)
+        {
+            #region Brisanje
+            var path = HostingEnvironment.MapPath("~/App_Data/FitnesCentri.txt");
+
+            FileStream fs1 = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
+
+            string tempFile1 = Path.GetTempFileName();
+            using (var sw1 = new StreamWriter(tempFile1))
+            {
+                string line;
+
+                while ((line = sr1.ReadLine()) != null)
+                {
+                    if (line.Contains(staraAdresa))
+                    {
+                        //preskoci liniju
+                    }
+                    else
+                    {
+                        sw1.WriteLine(line);
+                    }
+                }
+            }
+            sr1.Close();
+            fs1.Close();
+            File.Delete(path);
+            File.Move(tempFile1, path);
+            #endregion
+
+            #region Upisi promenjeno
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            sw.Write(naziv);
+            sw.Write(";");
+
+            sw.Write(adresa);
+            sw.Write(";");
+
+            sw.Write(godinaOtvaranja);
+            sw.Write(";");
+
+            sw.Write(user.Ime.ToString());
+            sw.Write("|");
+            sw.Write(user.Prezime.ToString());
+            sw.Write(";");
+
+            sw.Write(mesecnaClanarina);
+            sw.Write(";");
+
+            sw.Write(godisnjaClanarina);
+            sw.Write(";");
+
+            sw.Write(jedanTrening);
+            sw.Write(";");
+
+            sw.Write(jedanGrupniTrening);
+            sw.Write(";");
+
+            sw.Write(jedanSaPersonalnimTrenerom);
+            sw.WriteLine();
 
             sw.Close();
             stream.Close();

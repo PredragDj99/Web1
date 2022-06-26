@@ -4,5 +4,127 @@
     ViewBag.Title = "ModifikovanjeFC";
 }
 
-<h2>ModifikovanjeFC</h2>
+<html>
+<head>
+    <style type="text/css">
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+        }
 
+        h2.fc {
+            text-shadow: 1px 1px 1px red, 2px 2px 1px red;
+        }
+
+        p.ocena {
+            text-decoration: underline blue;
+        }
+
+        h2, p {
+            margin-left: 20px;
+            color: crimson;
+        }
+
+        table.predstojeciTreninzi, th, td {
+            border: 2px solid;
+            padding: 8px;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+            border-left-color: blue;
+            border-right-color: crimson;
+            border-top-color: blue;
+            border-bottom-color: crimson;
+        }
+
+            td.modifikovanje {
+                border: 2px solid;
+                padding: 8px;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto;
+                border-left-color: blue;
+                border-right-color: crimson;
+                border-top-color: blue;
+                border-bottom-color: crimson;
+                width: 400px;
+            }
+
+            #smanji{
+                width: 150px;
+            }
+
+        a.linkZaPocetnu:link, a.linkZaPocetnu:visited {
+            background-color: white;
+            color: black;
+            border: 2px solid red;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin-left: 40px;
+            float: left;
+        }
+
+        a.linkZaPocetnu:hover, a.linkZaPocetnu:active {
+            background-color: red;
+            color: white;
+        }
+
+        #centar {
+            margin-left: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div id="pomeri">
+        <h3><a href="~/Home/Index" class="linkZaPocetnu">Vrati se na pocetnu stranicu</a></h3>
+        <h3><a href="~/Vlasnik/Index?naziv=@ViewBag.naziv" class="linkZaPocetnu">Nazad na prethodnu stranicu</a></h3>
+        <br /><br />
+    </div>
+    <div id="centar">
+        <h1>Vasi predstojeci treninzi</h1>
+        <h2>@ViewBag.modifikujFC</h2>
+        <table class="predstojeciTreninzi">
+            <tr>
+                <th>Naziv</th>
+                <th>Adresa</th>
+                <th>Godina otvaranja</th>
+                <th>Godisnja clanarina</th>
+                <th>Cena jednog treninga</th>
+                <th>Cena jednog grupnog treninga</th>
+                <th>Cena jednog treninga sa personalnim trenerom</th>
+            </tr>
+            @if (ViewBag.fitnesCentri != null)
+            {
+                foreach (var item in ViewBag.fitnesCentri)
+                {
+                    <tr>
+                        <td>@item.Naziv</td>
+                        <td>@item.Adresa</td>
+                        <td>@item.GodinaOtvaranja</td>
+                        <td>@item.MesecnaClanarina</td>
+                        <td>@item.GodisnjaClanarina</td>
+                        <td id="smanji">@item.JedanTrening</td>
+                        <td id="smanji">@item.JedanGrupniTrening</td>
+                        <td id="smanji">@item.JedanSaPersonalnimTrenerom</td>
+                        <td class="modifikovanje">
+                            <form action="~/Vlasnik/ModifikujFCTxt?staraAdresa=@item.Adresa" method="post">
+                                Naziv:<input type="text" name="naziv" value="@item.Naziv" /><br />
+                                Adresa:<input type="text" name="adresa" value="@item.Adresa" /><br />
+                                Godina otvaranja:<input type="number" name="godinaOtvaranja" value="@item.GodinaOtvaranja" /><br />
+                                Mesecna clanarina:<input type="text" name="mesecnaClanarina" value="@item.MesecnaClanarina" /><br />
+                                Godisnja clanarina:<input type="text" name="godisnjaClanarina" value="@item.GodisnjaClanarina" /><br />
+                                Cena jednog treninga:<input type="text" name="jedanTrening" value="@item.JedanTrening" /><br />
+                                Cena jednog grupnog treninga:<input type="text" name="jedanGrupniTrening" value="@item.JedanGrupniTrening" /><br />
+                                Cena jednog treninga sa personalnim trenerom:<input type="text" name="jedanSaPersonalnimTrenerom" value="@item.JedanSaPersonalnimTrenerom" /><br /><br />
+                                <input type="submit" value="Modifikuj trening" />
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </table><br />
+    </div>
+</body>
+</html>

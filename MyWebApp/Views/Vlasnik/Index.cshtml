@@ -74,6 +74,7 @@
             .linkButton:hover {
                 background-color: green;
             }
+
         #pomeri {
             margin-top: 20px;
             margin-left: 20px; /*od ivice*/
@@ -178,6 +179,9 @@
                 <td>@item.JedanTrening</td>
                 <td>@item.JedanGrupniTrening</td>
                 <td>@item.JedanSaPersonalnimTrenerom</td>
+                <td>
+                    <a class="linkButton" href="/Vlasnik/ObrisiFC?adresaFC=@item.Adresa">Obrisi</a>
+                </td>
             </tr>
         }
     </table>
@@ -188,7 +192,7 @@
         <form action="~/Vlasnik/ModifikujFC" method="post">
             <input type="submit" value="Modifikuj fitnes centar" />
         </form><br /><br />
-    </div>
+    </div><br /><br /><br />
 
 
     <h1>Komentari za vase fitnes centre</h1>
