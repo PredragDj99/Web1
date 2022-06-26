@@ -55,6 +55,43 @@
             padding-left: 10px; /*od ivice diva*/
             padding-right: 10px;
         }
+        .button {
+            background-color: white;
+            border: none;
+            color: black;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border: 2px solid #008CBA;
+        }
+        .button:hover {
+            background-color: #008CBA;
+            color: white;
+        }
+        .button2 {
+            background-color: white;
+            border: none;
+            color: black;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border: 2px solid #f44336;
+        }
+
+        .button2:hover {
+            background-color: #f44336;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -65,16 +102,16 @@
             Adresa:<input type="text" name="adresa" /><br />
             Godina otvaranja od:<input type="text" name="godinaOtvaranjaOd" /><br />
             Godina otvaranja do:<input type="text" name="godinaOtvaranjaDo" /><br />
-            <input type="submit" value="Pretrazi" />
+            <input type="submit" class="button" value="Pretrazi" />
         </form><br />
 
         <h1>Sortiraj</h1>
         <form action="~/Home/Sortiraj" method="post">
             Rastuce <input type="radio" name="sort" value="rastuce" checked="checked" /><br />
             Opadajuce <input type="radio" name="sort" value="opadajuce" /><br />
-            <button type="submit" name="submit" value="naziv">Sortiraj po nazivu</button><br />
-            <button type="submit" name="submit" value="adresa">Sortiraj po adresi</button><br />
-            <button type="submit" name="submit" value="godinaOtvaranja">Sortiraj po godini otvaranja</button><br />
+            <button type="submit" class="button" name="submit" value="naziv">Sortiraj po nazivu</button><br />
+            <button type="submit" class="button" name="submit" value="adresa">Sortiraj po adresi</button><br />
+            <button type="submit" class="button" name="submit" value="godinaOtvaranja">Sortiraj po godini otvaranja</button><br />
         </form><br />
 
         <h2>Fitnes centri</h2>
@@ -88,12 +125,15 @@
                 </tr>
                 @foreach (var fitnesCentar in ViewBag.fitnesCentri) //moras inicijalizovati(ili u global.asax) bar 1 ako kaze 'Object reference not set to an instance of an object.'
                 {
-                    <tr>
-                        <td>@fitnesCentar.Naziv</td>
-                        <td>@fitnesCentar.Adresa</td>
-                        <td>@fitnesCentar.GodinaOtvaranja</td>
-                        <td><a class="linkButton" href="/Home/Detalji?naziv=@fitnesCentar.Naziv">Detalji</a></td>
-                    </tr>
+                    if (fitnesCentar.ObrisanFC != "ObrisanFC")
+                    {
+                        <tr>
+                            <td>@fitnesCentar.Naziv</td>
+                            <td>@fitnesCentar.Adresa</td>
+                            <td>@fitnesCentar.GodinaOtvaranja</td>
+                            <td><a class="linkButton" href="/Home/Detalji?naziv=@fitnesCentar.Naziv">Detalji</a></td>
+                        </tr>
+                    }
                 }
             </table>
         </form>
@@ -109,7 +149,7 @@
             <input type="radio" id="zenski" name="pol" value="Zenski" /><label id="zenski">Zenski</label><br />
             Email:<input type="email" name="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" /><br />
             Datum rodjenja:<input type="date" name="datumRodjenja" /><br /><br />
-            <input type="submit" value="Registruj se" />
+            <input type="submit" class="button" value="Registruj se" />
         </form>
         <h2> @ViewBag.korisnik</h2>
     </div>
@@ -118,12 +158,12 @@
         <div id="third">
             <form action="~/Home/Logout" method="post">
                 <h1>Izloguj se:</h1><br />
-                <input type="submit" value="Izloguj se" />
+                <input type="submit" class="button2" value="Izloguj se" />
             </form>
             <hr />
             <form action="~/Home/UrediProfil" method="post">
                 <h1>Uredi svoj profil:</h1><br />
-                <input type="submit" value="Moj profil" />
+                <input type="submit" class="button2" value="Moj profil" />
             </form>
         </div>
     }
@@ -134,7 +174,7 @@
                 <h1>Prijavi se:</h1><br />
                 Korisnicko ime:<input type="text" name="korisnickoIme" /><br />
                 Lozinka:<input type="password" name="lozinka" /><br /><br />
-                <input type="submit" value="Prijavi se" />
+                <input type="submit" class="button2" value="Prijavi se" />
                 <br />
                 <h2> @ViewBag.prijavljen</h2>
             </form>

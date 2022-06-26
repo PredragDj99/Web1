@@ -68,6 +68,25 @@
         #centar {
             margin-left: 80px;
         }
+        .button {
+            background-color: white;
+            border: none;
+            color: black;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border: 2px solid #555555;
+        }
+
+            .button:hover {
+                background-color: #555555;
+                color: white;
+            }
     </style>
 </head>
 <body>
@@ -110,7 +129,7 @@
                                     Trajanje u minutama:<input type="number" name="trajanjeTreningaMinute" /><br />
                                     Datum i vreme odrzavanja:<input type="datetime-local" name="datumIVremeTreninga" /><br />
                                     Maksimalan broj posetioca:<input type="number" name="maksimalanBrojPosetioca" value="@item.MaksimalanBrojPosetioca" /><br /><br />
-                                    <input type="submit" value="Modifikuj trening" />
+                                    <input type="submit" class="button" value="Modifikuj trening" />
                                 </form>
                             </td>
                         </tr>

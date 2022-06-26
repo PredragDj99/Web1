@@ -701,6 +701,15 @@ namespace MyWebApp.Controllers
             List<Korisnik> registrovaniKorisnici = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
             ViewBag.uspesnaPrijava = "nije";
 
+            List<FitnesCentar> sviFC = PodaciTxt.procitajFitnesCentre("~/App_Data/FitnesCentri.txt");
+            List<FitnesCentar> obrisaniFC = new List<FitnesCentar>();
+            foreach (var item in sviFC)
+            {
+                if (item.ObrisanFC == "ObrisanFC")
+                {
+                    obrisaniFC.Add(item);
+                }
+            }
 
             //ako korisnicko ime vec postoji
             foreach (Korisnik kor in registrovaniKorisnici)
@@ -712,6 +721,16 @@ namespace MyWebApp.Controllers
                     break;
                 }
 
+                //Blokiranje trenera ako je FC obrisan
+                foreach (var item in obrisaniFC)
+                {
+                    if(item.Naziv == kor.AngazovanNaFitnesCentar.Naziv && korisnickoIme==kor.KorisnickoIme)
+                    {
+                        ViewBag.prijavljen = "Fitnes centar u kome radite je obrisan!";
+                        return View("Index");
+                    }
+                }
+
                 if (kor.KorisnickoIme == korisnickoIme && kor.Lozinka==lozinka)
                 {
                     ViewBag.uspesnaPrijava = "jeste";
@@ -719,6 +738,7 @@ namespace MyWebApp.Controllers
                     return View("Index");
                 }
             }
+
             if(ViewBag.prijavljen != "Vlasnik Vas je blokirao!")
                 ViewBag.prijavljen = "Niste uneli dobre podatke";
 
@@ -764,6 +784,8 @@ namespace MyWebApp.Controllers
             Korisnik user = (Korisnik)Session["user"];
             List<Korisnik> registrovaniKorisnici = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
 
+            ViewBag.trenutniProfil = user;
+
             //ako korisnicko ime vec postoji
             foreach (Korisnik kor in registrovaniKorisnici)
             {
@@ -779,49 +801,49 @@ namespace MyWebApp.Controllers
             if (korisnik.KorisnickoIme == null)
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za korisnicko ime";
-                return View("Index");
+                return View("Profil");
             }
             if (korisnik.Lozinka == null)
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za lozinku";
-                return View("Index");
+                return View("Profil");
             }
             if (korisnik.Ime == null)
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za ime";
-                return View("Index");
+                return View("Profil");
             }
             if (korisnik.Prezime == null)
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za prezime";
-                return View("Index");
+                return View("Profil");
             }
             if (korisnik.Pol == null)
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za pol";
-                return View("Index");
+                return View("Profil");
             }
             if (korisnik.Email == null)
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za email";
-                return View("Index");
+                return View("Profil");
             }
-            if (korisnik.DatumRodjenja == null)
+            if (korisnik.DatumRodjenja == null || korisnik.DatumRodjenja.ToString() == "1/1/0001 00:00:00")
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za datum rodjenja";
-                return View("Index");
+                return View("Profil");
             }
 
             //ogranicenja
             if (korisnik.KorisnickoIme.Length < 3)
             {
                 ViewBag.Message = "Korisnicko ime mora biti imati bar 3 karaktera";
-                return View("Index");
+                return View("Profil");
             }
             if (korisnik.Lozinka.Length < 4)
             {
                 ViewBag.Message = "Lozinka mora imati bar 5 karaktera";
-                return View("Index");
+                return View("Profil");
             }
             #endregion
             korisnik.Uloga = (KorisnikType)Enum.ToObject(typeof(KorisnikType), 0);

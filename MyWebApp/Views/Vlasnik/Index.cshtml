@@ -84,6 +84,25 @@
             height: auto;
             float: left;
         }
+        .button {
+            background-color: white;
+            border: none;
+            color: black;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border: 2px solid #4CAF50;
+        }
+
+            .button:hover {
+                background-color: #4CAF50;
+                color: white;
+            }
     </style>
 </head>
 <body>
@@ -169,28 +188,27 @@
         </tr>
         @foreach (var item in ViewBag.vlasnickiFC)
         {
-            <tr>
-                <td>@item.Naziv</td>
-                <td>@item.Adresa</td>
-                <td>@item.GodinaOtvaranja</td>
-                <td>@item.Vlasnik.Ime  @item.Vlasnik.Prezime</td>
-                <td>@item.MesecnaClanarina</td>
-                <td>@item.GodisnjaClanarina</td>
-                <td>@item.JedanTrening</td>
-                <td>@item.JedanGrupniTrening</td>
-                <td>@item.JedanSaPersonalnimTrenerom</td>
-                <td>
-                    <a class="linkButton" href="/Vlasnik/ObrisiFC?adresaFC=@item.Adresa">Obrisi</a>
-                </td>
-            </tr>
+        <tr>
+            <td>@item.Naziv</td>
+            <td>@item.Adresa</td>
+            <td>@item.GodinaOtvaranja</td>
+            <td>@item.Vlasnik.Ime  @item.Vlasnik.Prezime</td>
+            <td>@item.MesecnaClanarina</td>
+            <td>@item.GodisnjaClanarina</td>
+            <td>@item.JedanTrening</td>
+            <td>@item.JedanGrupniTrening</td>
+            <td>@item.JedanSaPersonalnimTrenerom</td>
+            <td>@item.ObrisanFC</td>
+            <td><a class="linkButton" href="/Vlasnik/ObrisiFC?adresaFC=@item.Adresa">Obrisi</a></td>
+        </tr>
         }
     </table>
     <div id="pomeri">
         <form action="~/Vlasnik/DodajFC" method="post">
-            <input type="submit" value="Dodaj novi fitnes centar" />
+            <input type="submit" class="button" value="Dodaj novi fitnes centar" />
         </form>
         <form action="~/Vlasnik/ModifikujFC" method="post">
-            <input type="submit" value="Modifikuj fitnes centar" />
+            <input type="submit" class="button" value="Modifikuj fitnes centar" />
         </form><br /><br />
     </div><br /><br /><br />
 
@@ -271,7 +289,7 @@
             Email:<input type="email" name="email" pattern="^[a-zA-Z0-9._+-]+&#64;[a-zA-Z0-9.-]+\.[a-zA-Z]{2,9}$" /><br />
             Datum rodjenja:<input type="date" name="datumRodjenja" /><br /><br />
             Angazovan na fitnes centru:<input type="text" name="angazovanNaFitnesCentar.Naziv" />
-            <input type="submit" value="Potvrdi registraciju trenera" /><br /><br />
+            <input type="submit" class="button" value="Potvrdi registraciju trenera" /><br /><br />
         </form>
         <h3>@ViewBag.korisnik</h3>
         <h3>@ViewBag.registracija</h3><br /><br />

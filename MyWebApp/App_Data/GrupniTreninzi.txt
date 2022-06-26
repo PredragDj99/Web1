@@ -1,20 +1,21 @@
 Grupa A7;Istezanje misica;Compiona;75 minuta;12/12/2021 17:50;10;Zika-Zikic;AKTIVAN
 Grupa A7;body pump;Compiona;75 minuta;26/02/2022 18:00;15;Zika-Zikic;AKTIVAN
 Grupa B2;Kondicioni trening;Fitnes Elastico;60 minuta;18/04/2022 10:00;10;;AKTIVAN
-Grupa pocetnici;HIT;Compiona;90 minuta;27/07/2022 12:30;30;Dragana-Draganic;AKTIVAN
+Grupa pocetnici;HIT;Compiona;90 minuta;27/07/2022 12:30;30;Dragana-Draganic|Predrag-Djoric;AKTIVAN
 Grupa za decu;Razgibavanje;Compiona;60 minuta;17/01/2022 18:30;20;;AKTIVAN
 Grupa za decu;les mills tone;Compiona;60 minuta;15/08/2022 18:00;10;;AKTIVAN
 Grupa D;yoga;MuscleMotion;60 minuta;15/08/2022 20:00;10;;NeAkt!!
 Grupa D;yoga;MuscleMotion;90 minuta;12/10/2022 20:00;15;;AKTIVAN
 Grupa D;yoga;Fitnes Elastico;60 minuta;14/02/2022 17:00;10;;AKTIVAN
 Deca;Skolica sporta;Fitnes Elastico;45 minuta;14/07/2021 17:00;10;;AKTIVAN
-Grupa D;yoga;Fitnes Elastico;60 minuta;24/10/2022 14:00;10;Zika-Zikic|Dragana-Draganic|Ivana-Ivanic|Dejan-Dejanovic;AKTIVAN
-Rekreativna grupa;Istezanje misica;Fitnes Elastico;70 minuta;30/06/2022 14:21;12;Zika-Zikic|Dragana-Draganic|Ivana-Ivanic|Dejan-Dejanovic;AKTIVAN
+Grupa D;yoga;Fitnes Elastico;60 minuta;24/10/2022 14:00;10;Zika-Zikic|Dragana-Draganic|Ivana-Ivanic|Dejan-Dejanovic|Predrag-Djoric;AKTIVAN
+Rekreativna grupa;Istezanje misica;Fitnes Elastico;70 minuta;30/06/2022 14:21;12;Zika-Zikic|Dragana-Draganic|Ivana-Ivanic|Dejan-Dejanovic|Predrag-Djoric;AKTIVAN
 Profesionalni sportisti;Kardio;Fitnes Elastico;65 minuta;06/07/2022 20:20;14;Teodora-Todorovic|Dejan-Dejanovic;AKTIVAN
 Grupa B2;body pump;Fitnes Elastico;120 minuta;09/07/2022 17:02;12;Marko-Markoni|Nedeljko-Nedeljkovic|Milunka-Maric|Milica-Milicic|Nevena-Djenov|Milojko-Milojkovic|Teodora-Todorovic|Ivana-Ivanic|Dejan-Dejanovic;AKTIVAN
 G15;les mills tone;Fitnes Elastico;70 minuta;10/07/2022 17:00;12;;NeAkt!!
 G17;body pump;Fitnes Elastico;90 minuta;10/07/2022 11:30;15;;AKTIVAN
-Grupa A2;Kardio;Fitnes Elastico;65 minuta;16/07/2022 20:50;12;Dejan-Dejanovic;AKTIVAN
 Profesionalni sportisti;body pump;Fitnes Elastico;115 minuta;25/08/2022 16:54;15;Zika-Zikic|Marko-Markoni|Nedeljko-Nedeljkovic|Nevena-Djenov|Milojko-Milojkovic|Dejan-Dejanovic;AKTIVAN
 Rekreativna grupa;Body pump;MuscleMotion;60 minuta;22/07/2022 14:37;12;;NeAkt!!
 Rekreativna grupa;yoga;MuscleMotion;70 minuta;21/07/2022 14:38;10;;AKTIVAN
+Rekreativna grupa;les mills tone;Fitnes Elastico;60 minuta;30/06/2022 20:10;15;;NeAkt!!
+Grupa A2;Kardio;Fitnes Elastico;60 minuta;08/07/2022 16:07;12;Dejan-Dejanovic;AKTIVAN

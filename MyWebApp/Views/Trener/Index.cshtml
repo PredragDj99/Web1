@@ -78,6 +78,25 @@
         #pomeriDesno{
             margin-left:40px;
         }
+        .button {
+            background-color: white;
+            border: none;
+            color: black;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin: 4px 2px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border: 2px solid #4CAF50;
+        }
+
+            .button:hover {
+                background-color: #4CAF50;
+                color: white;
+            }
     </style>
 </head>
 <body>
@@ -205,10 +224,10 @@
     </table><br />
     <div id="pomeriDesno">
         <form action="~/Trener/DodajTrening?naziv=@ViewBag.fitnesCentar.Naziv" method="post">
-            <input type="submit" value="Dodaj novi trening" />
+            <input type="submit" class="button" value="Dodaj novi trening" />
         </form>
         <form action="~/Trener/ModifikujTrening?naziv=@ViewBag.fitnesCentar.Naziv" method="post">
-            <input type="submit" value="Modifikuj trening" />
+            <input type="submit" class="button" value="Modifikuj trening" />
         </form><br /><br />
     </div>
 
@@ -254,9 +273,9 @@
         <form action="~/Trener/Sortiraj?nazivFC=@ViewBag.fitnesCentar.Naziv" method="post">
             Rastuce <input type="radio" name="sort" value="rastuce" checked="checked" /><br />
             Opadajuce <input type="radio" name="sort" value="opadajuce" /><br />
-            <button type="submit" name="submit" value="naziv">Sortiraj po nazivu</button><br />
-            <button type="submit" name="submit" value="tipTreninga">Sortiraj po tipu treninga</button><br />
-            <button type="submit" name="submit" value="datumIVremeTreninga">Sortiraj po datumu i vremenu</button><br />
+            <button type="submit" class="button" name="submit" value="naziv">Sortiraj po nazivu</button><br />
+            <button type="submit" class="button" name="submit" value="tipTreninga">Sortiraj po tipu treninga</button><br />
+            <button type="submit" class="button" name="submit" value="datumIVremeTreninga">Sortiraj po datumu i vremenu</button><br />
         </form>
     </div>
 
@@ -268,7 +287,7 @@
             Godina otvaranja od:<input type="text" name="godinaOtvaranjaOd" /><br />
             Godina otvaranja do:<input type="text" name="godinaOtvaranjaDo" /><br />
             <br /><p>Obratiti paznju! Pretraga po godini otvaranja fitnes centra!</p>
-            <input type="submit" value="Pretrazi" />
+            <input type="submit" class="button" value="Pretrazi" />
         </form>
     </div>
 </body>

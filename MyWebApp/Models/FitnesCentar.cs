@@ -7,7 +7,7 @@ namespace MyWebApp.Models
 {
     public class FitnesCentar
     {
-        public FitnesCentar(string naziv, string adresa, int godinaOtvaranja, Korisnik vlasnik, double mesecnaClanarina, double godisnjaClanarina, double jedanTrening, double jedanGrupniTrening, double jedanSaPersonalnimTrenerom)
+        public FitnesCentar(string naziv, string adresa, int godinaOtvaranja, Korisnik vlasnik, double mesecnaClanarina, double godisnjaClanarina, double jedanTrening, double jedanGrupniTrening, double jedanSaPersonalnimTrenerom, string obrisanFC)
         {
             Naziv = naziv;
             Adresa = adresa;
@@ -18,6 +18,7 @@ namespace MyWebApp.Models
             JedanTrening = jedanTrening;
             JedanGrupniTrening = jedanGrupniTrening;
             JedanSaPersonalnimTrenerom = jedanSaPersonalnimTrenerom;
+            ObrisanFC = obrisanFC;
         }
 
         public string Naziv { get; set; }
@@ -29,6 +30,7 @@ namespace MyWebApp.Models
         public double JedanTrening { get; set; }
         public double JedanGrupniTrening { get; set; }
         public double JedanSaPersonalnimTrenerom { get; set; }
+        public string ObrisanFC { get; set; }
 
         public FitnesCentar(string naziv)
         {

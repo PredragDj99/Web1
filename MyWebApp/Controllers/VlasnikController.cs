@@ -250,6 +250,15 @@ namespace MyWebApp.Controllers
                     return View("Index");
                 }
             }
+            List<Korisnik> kor = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
+            foreach (var item in kor)
+            {
+                if(item.KorisnickoIme == trener.KorisnickoIme)
+                {
+                    ViewBag.korisnik = "Ovaj trener je vec registrovan u fitnes centru drugog vlasnika";
+                    return View("Index");
+                }
+            }
 
             #region Validacija
             //provera da li je sve popunjeno
@@ -603,6 +612,7 @@ namespace MyWebApp.Controllers
         #region Obrisi fitnes centar
         public ActionResult ObrisiFC(string adresaFC)
         {
+            ViewBag.naziv = naz;
             string naziv = naz;
             Korisnik user = (Korisnik)Session["user"];
 
@@ -621,16 +631,32 @@ namespace MyWebApp.Controllers
                     fc = item;
                 }
             }
+
             List<GrupniTrening> sviGT = PodaciTxt.procitajGrupneTreninge("~/App_Data/GrupniTreninzi.txt");
+            fc.ObrisanFC = "ObrisanFC";
+            ViewBag.adresaNeobrisanog = adresaFC; //u ovom slucaju obrisanog
             foreach (var item in sviGT)
             {
-                if(item.FitnesCentarOdrzava.Naziv == fc.Naziv)
+                if (item.FitnesCentarOdrzava.Naziv == fc.Naziv)
                 {
-                    //fc.ObrisiFC = "obrisanFC";
+                    ViewBag.adresaNeobrisanog = adresaFC;
+                    ViewBag.obrisanFC = "Nemoguce obrisati jer ima predstojecih treninga";
+                    return RedirectToAction("Index", new {naziv});
+                }
+            }
+            PodaciTxt.ObrisiFC(user, fc);
+
+            //Treneru menjam u listi na Obrisan
+            List<Korisnik> svi = PodaciTxt.procitajKorisnike("~/App_Data/Korisnici.txt");
+            foreach (var item in svi)
+            {
+                if(item.AngazovanNaFitnesCentar.Naziv == fc.Naziv)
+                {
+                    item.AngazovanNaFitnesCentar.ObrisanFC = "ObrisanFC";
                 }
             }
 
-            return View("Index", new { naziv });
+            return RedirectToAction("Index", new { naziv });
         }
         #endregion
     }

@@ -11,8 +11,11 @@ Teodora;teodora;Teodora;Todorovic;Zenski;todorovicc@gmail.com;27/12/2004;POSETIL
 Dragana;dragana;Dragana;Draganic;Zenski;dragana1@gmail.com;30/06/2022;POSETILAC;HIT_7/27/2022 12:30:00|yoga_2/14/2022 17:00:00|Istezanje misica_30/06/2022 14:21;;;;
 Ivana;ivana;Ivana;Ivanic;Zenski;ivana@gmail.com;03/02/1999;POSETILAC;yoga_10/24/2022 14:00|Istezanje misica_6/30/2022 14:21|body pump_09/07/2022 17:02;;;;
 Dejan;dejan;Dejan;Dejanovic;Muski;dejanovicdejan@gmail.com;16/05/2001;POSETILAC;body pump_25/08/2022 16:54|body pump_25/08/2022 16:54|Kardio_16/07/2022 20:50|Kardio_16/07/2022 20:50|body pump_09/07/2022 17:02|body pump_09/07/2022 17:02|Kardio_06/07/2022 20:20|Kardio_06/07/2022 20:20|Istezanje misica_30/06/2022 14:21|Istezanje misica_30/06/2022 14:21|yoga_24/10/2022 14:00;;;;
-trener1;trener1;Milorad;Milidrag;Muski;miloradmilidrag@gmail.com;20/08/1990;TRENER;;Skolica sporta_14/07/2021 17:00|yoga_14/02/2022 17:00|yoga_24/10/2022 14:00|Istezanje misica_30/06/2022 14:21|Kardio_06/07/2022 20:20|Kardio_16/07/2022 20:50|body pump_25/08/2022 16:54;Fitnes Elastico;;Ne blokiran
 Trener;trener;Marija;Posa;Zenski;marijaposa@gmail.com;17/07/1997;TRENER;;;Best Fit;;Ne blokiran
 Dejan;dejan;Dejan;Dejanovic;Muski;dejanovicdejan@gmail.com;16/05/2001;POSETILAC;body pump_25/08/2022 16:54|body pump_25/08/2022 16:54|Kardio_16/07/2022 20:50|Kardio_16/07/2022 20:50|body pump_09/07/2022 17:02|body pump_09/07/2022 17:02|Kardio_06/07/2022 20:20|Kardio_06/07/2022 20:20|Istezanje misica_30/06/2022 14:21|Istezanje misica_30/06/2022 14:21|yoga_24/10/2022 14:00|yoga_24/10/2022 14:00;;;;
 trener2;trener2;Dragojlo;Dragojlovic;Muski;dragojlo@gmail.com;16/06/1983;TRENER;;Body pump_22/07/2022 14:37|yoga_21/07/2022 14:38;MuscleMotion;;BLOKIRAN
 Admin2;admin2;Milica;Ivanov;Zenski;milicaivanov@gmail.com;15/11/1985;VLASNIK;;;;Compiona|STAR;
+trener3;trener3;trener3;trener3;Muski;trener3@gmail.com;31/05/2022;TRENER;;;STAR;;Ne blokiran
+Predrag;predrag;Predrag;Djoric;Muski;predrag@gmail.com;14/01/1999;POSETILAC;yoga_10/24/2022 14:00|Istezanje misica_6/30/2022 14:21|HIT_27/07/2022 12:30;;;;
+trener1;trener1;Milorad;Milidrag;Muski;miloradmilidrag@gmail.com;20/08/1990;TRENER;;Skolica sporta_14/07/2021 17:00|yoga_14/02/2022 17:00|yoga_24/10/2022 14:00|Istezanje misica_30/06/2022 14:21|Kardio_06/07/2022 20:20|body pump_25/08/2022 16:54|les mills tone_30/06/2022 20:10|Kardio_08/07/2022 16:07;Fitnes Elastico;;Ne blokiran
+trener4;trener4;Natasa;Kondic;Zenski;natasa@gmail.com;13/06/1996;TRENER;;;STAR;;BLOKIRAN

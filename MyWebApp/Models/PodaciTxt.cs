@@ -27,7 +27,7 @@ namespace MyWebApp.Models
                 string[] tokens = line.Split(';');
                 string[] podaciOVlasniku = tokens[3].Split('|');
                 Korisnik vlasnik = new Korisnik(podaciOVlasniku[0], podaciOVlasniku[1]);
-                FitnesCentar fc = new FitnesCentar(tokens[0], tokens[1], Int32.Parse(tokens[2]), vlasnik, Double.Parse(tokens[4]), Double.Parse(tokens[5]), Double.Parse(tokens[6]), Double.Parse(tokens[7]), Double.Parse(tokens[8]));
+                FitnesCentar fc = new FitnesCentar(tokens[0], tokens[1], Int32.Parse(tokens[2]), vlasnik, Double.Parse(tokens[4]), Double.Parse(tokens[5]), Double.Parse(tokens[6]), Double.Parse(tokens[7]), Double.Parse(tokens[8]),tokens[9]);
 
                 fitnesCentri.Add(fc);
             }
@@ -599,11 +599,11 @@ namespace MyWebApp.Models
                     {
                         if (podaciPosetioca[8] == "")
                         {
-                            podaciPosetioca[8] += tipTreninga + "_" + datumVreme;
+                            podaciPosetioca[8] += tipTreninga.ToString() + "_" + datumVreme;
                         }
                         else
                         {
-                            podaciPosetioca[8] = podaciPosetioca[8] + "|" + tipTreninga + "_" + datumVreme;
+                            podaciPosetioca[8] = podaciPosetioca[8] + "|" + tipTreninga.ToString() + "_" + datumVreme;
                         }
 
                         for (int i = 0; i < 13; i++)
@@ -1327,7 +1327,7 @@ namespace MyWebApp.Models
                     string[] tokens = line.Split(';');
                     string[] podaciOVlasniku = tokens[3].Split('|');
                     Korisnik vlasnik = new Korisnik(podaciOVlasniku[0], podaciOVlasniku[1]);
-                    FitnesCentar fc = new FitnesCentar(tokens[0], tokens[1], Int32.Parse(tokens[2]), vlasnik, Double.Parse(tokens[4]), Double.Parse(tokens[5]), Double.Parse(tokens[6]), Double.Parse(tokens[7]), Double.Parse(tokens[8]));
+                    FitnesCentar fc = new FitnesCentar(tokens[0], tokens[1], Int32.Parse(tokens[2]), vlasnik, Double.Parse(tokens[4]), Double.Parse(tokens[5]), Double.Parse(tokens[6]), Double.Parse(tokens[7]), Double.Parse(tokens[8]),tokens[9]);
 
                     fitnesCentri.Add(fc);
                 }
@@ -1630,7 +1630,7 @@ namespace MyWebApp.Models
             FileStream stream = new FileStream(path, FileMode.Append);
             StreamWriter sw = new StreamWriter(stream);
 
-            string[] linija = new string[9];
+            string[] linija = new string[10];
 
             linija[0] = fc.Naziv;
             linija[1] = fc.Adresa;
@@ -1641,11 +1641,12 @@ namespace MyWebApp.Models
             linija[6] = fc.JedanTrening.ToString();
             linija[7] = fc.JedanGrupniTrening.ToString();
             linija[8] = fc.JedanSaPersonalnimTrenerom.ToString();
+            linija[9] = fc.ObrisanFC;
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 10; i++)
             {
                 sw.Write(linija[i]);
-                if (i == 8)
+                if (i == 9)
                 {
                     sw.WriteLine();
                 }
@@ -1828,6 +1829,83 @@ namespace MyWebApp.Models
             sw.Write(";");
 
             sw.Write(jedanSaPersonalnimTrenerom);
+            sw.Write(";");
+
+            sw.Write("Nije obrisan");
+            sw.WriteLine();
+
+            sw.Close();
+            stream.Close();
+            #endregion
+        }
+        #endregion
+
+        #region Obrisi fitnes centar
+        public static void ObrisiFC(Korisnik user, FitnesCentar fc)
+        {
+            #region Brisanje
+            var path = HostingEnvironment.MapPath("~/App_Data/FitnesCentri.txt");
+
+            FileStream fs1 = new FileStream(path, FileMode.Open, FileAccess.Read);
+            StreamReader sr1 = new StreamReader(fs1, Encoding.UTF8);
+
+            string tempFile1 = Path.GetTempFileName();
+            using (var sw1 = new StreamWriter(tempFile1))
+            {
+                string line;
+
+                while ((line = sr1.ReadLine()) != null)
+                {
+                    if (line.Contains(fc.Adresa))
+                    {
+                        //preskoci liniju
+                    }
+                    else
+                    {
+                        sw1.WriteLine(line);
+                    }
+                }
+            }
+            sr1.Close();
+            fs1.Close();
+            File.Delete(path);
+            File.Move(tempFile1, path);
+            #endregion
+
+            #region Upisi promenjeno
+            FileStream stream = new FileStream(path, FileMode.Append);
+            StreamWriter sw = new StreamWriter(stream);
+
+            sw.Write(fc.Naziv);
+            sw.Write(";");
+
+            sw.Write(fc.Adresa);
+            sw.Write(";");
+
+            sw.Write(fc.GodinaOtvaranja);
+            sw.Write(";");
+
+            sw.Write(user.Ime.ToString());
+            sw.Write("|");
+            sw.Write(user.Prezime.ToString());
+            sw.Write(";");
+
+            sw.Write(fc.MesecnaClanarina);
+            sw.Write(";");
+
+            sw.Write(fc.GodinaOtvaranja);
+            sw.Write(";");
+
+            sw.Write(fc.JedanTrening);
+            sw.Write(";");
+
+            sw.Write(fc.JedanGrupniTrening);
+            sw.Write(";");
+
+            sw.Write(fc.JedanSaPersonalnimTrenerom);
+            sw.Write(";");
+
+            sw.Write("ObrisanFC");
             sw.WriteLine();
 
             sw.Close();
