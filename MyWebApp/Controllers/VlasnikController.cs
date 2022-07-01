@@ -292,7 +292,7 @@ namespace MyWebApp.Controllers
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za email";
                 return View("Index");
             }
-            if (trener.DatumRodjenja == null)
+            if (trener.DatumRodjenja == null || trener.DatumRodjenja.ToString("dd/MM/yyyy")=="01/01/0001")
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za datum rodjenja";
                 return View("Index");

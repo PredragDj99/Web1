@@ -655,7 +655,7 @@ namespace MyWebApp.Controllers
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za email";
                 return View("Index");
             }
-            if (korisnik.DatumRodjenja == null)
+            if (korisnik.DatumRodjenja == null || korisnik.DatumRodjenja.ToString("dd/MM/yyyy")=="01/01/0001")
             {
                 ViewBag.korisnik = "Popunite sva polja. Morate popuniti polje za datum rodjenja";
                 return View("Index");
